@@ -138,7 +138,7 @@ class RegistrationPageState extends State<RegistrationPage> {
                       child: SizedBox(
                         width: double.infinity,
                         height: 48.0,
-                        child:CustomTextButtonWidget("Register", Colors.green, ()=> {}),
+                        child:CustomTextButtonWidget("Create", Colors.green, ()=> {}),
                       ),
                     ),
                   ],
