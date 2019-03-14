@@ -8,6 +8,7 @@ import 'CustomWidgets/CustomMultiLineTextFieldWidget.dart';
 import 'CustomWidgets/CustomTextButtonWidget.dart';
 import 'CustomWidgets/CustomDropDownWidget.dart';
 import 'Helper/AppHelper.dart';
+import 'CustomWidgets/CustomELAWidget.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -125,6 +126,12 @@ class RegistrationPageState extends State<RegistrationPage> {
                     Padding(
                       padding: const EdgeInsets.only(top:8.0),
                       child:CustomMultiLineTextFieldWidget("Address", Colors.white)
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top:12.0),
+                        child: CustomELAWidget(),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 1.0,top:16.0,right:1.0),
