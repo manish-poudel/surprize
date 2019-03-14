@@ -9,10 +9,12 @@ class CustomLabelTextFieldWidget extends StatefulWidget{
   String _label ="";
   _CustomLabelTextFieldWidgetState _state;
   Color _color = Colors.white;
+  bool _enabled = true;
 
-  CustomLabelTextFieldWidget(String label, Color color){
+  CustomLabelTextFieldWidget(String label, Color color, {bool enabled}){
     _label = label;
     _color = color;
+    _enabled = enabled;
   }
 
 
@@ -22,7 +24,7 @@ class CustomLabelTextFieldWidget extends StatefulWidget{
   }
 
   State<StatefulWidget> createState(){
-     _state = new _CustomLabelTextFieldWidgetState(_label, _color);
+     _state = new _CustomLabelTextFieldWidgetState(_label, _color, _enabled);
      return _state;
   }
 }
@@ -30,13 +32,15 @@ class CustomLabelTextFieldWidget extends StatefulWidget{
 class _CustomLabelTextFieldWidgetState extends State <CustomLabelTextFieldWidget>
 {
   String _label = "";
+  bool _enabled = true;
   String _value ="";
   Color _color = Colors.white;
   final textFldcontroller = TextEditingController();
 
-  _CustomLabelTextFieldWidgetState(String label, Color color){
+  _CustomLabelTextFieldWidgetState(String label, Color color , bool enabled){
     _label = label;
     _color = color;
+    _enabled = enabled;
   }
 
   String getValue()
@@ -52,6 +56,7 @@ class _CustomLabelTextFieldWidgetState extends State <CustomLabelTextFieldWidget
         TextFormField(controller: textFldcontroller,
         decoration: InputDecoration(
           filled: true,
+          enabled: true,
           labelText:_label,
           fillColor: _color,
           border:InputBorder.none,

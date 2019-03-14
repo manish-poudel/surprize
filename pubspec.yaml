@@ -19,6 +19,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  flutter_cupertino_date_picker: ^0.3.0
+  country_code_picker: ^1.1.2
+  flutter_country_picker: ^0.1.2
+
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +56,10 @@ flutter:
         - asset: fonts/Roboto-Thin.ttf
         - asset: fonts/Roboto-Thin.ttf
         - asset: fonts/Roboto-ThinItalic.ttf
+
+    - family: zfraktur
+      fonts:
+        - asset: fonts/zfraktur-eYe-FS.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

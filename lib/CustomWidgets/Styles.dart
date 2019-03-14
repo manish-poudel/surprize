@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../AppColor.dart';
+import 'package:surprize/Helper/AppColor.dart';
 
 /***
  * Definitions of various elements and styles used throughout the application
