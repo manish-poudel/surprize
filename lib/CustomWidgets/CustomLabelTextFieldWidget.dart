@@ -4,73 +4,69 @@ import 'package:flutter/material.dart';
  * Custom text field  widget with a label
  */
 
-class CustomLabelTextFieldWidget extends StatefulWidget{
+class CustomLabelTextFieldWidget extends StatefulWidget {
 
-  String _label ="";
+  String _label = "";
   _CustomLabelTextFieldWidgetState _state;
   Color _color = Colors.white;
-  bool _enabled = true;
+  Function _validation;
 
-  CustomLabelTextFieldWidget(String label, Color color, {bool enabled}){
+  CustomLabelTextFieldWidget(String label, Color color, {Function validation}) {
     _label = label;
     _color = color;
-    _enabled = enabled;
+    _validation = validation;
   }
 
-
-  String getValue()
-  {
+  String getValue() {
     return _state.getValue();
   }
 
-  State<StatefulWidget> createState(){
-     _state = new _CustomLabelTextFieldWidgetState(_label, _color, _enabled);
-     return _state;
+  State<StatefulWidget> createState() {
+    _state = new _CustomLabelTextFieldWidgetState(_label, _color, _validation);
+    return _state;
   }
 }
 
-class _CustomLabelTextFieldWidgetState extends State <CustomLabelTextFieldWidget>
-{
+class _CustomLabelTextFieldWidgetState
+    extends State<CustomLabelTextFieldWidget> {
   String _label = "";
-  bool _enabled = true;
-  String _value ="";
+  Function _validation;
+  String _value = "";
   Color _color = Colors.white;
   final textFldcontroller = TextEditingController();
 
-  _CustomLabelTextFieldWidgetState(String label, Color color , bool enabled){
+  _CustomLabelTextFieldWidgetState(String label, Color color, Function validation) {
     _label = label;
     _color = color;
-    _enabled = enabled;
+    _validation = validation;
   }
 
-  String getValue()
-  {
+  String getValue() {
     return textFldcontroller.text;
   }
 
   @override
   Widget build(context) {
-    return Container(child: Row(
-      children:<Widget>[
-        Flexible(child:
-        TextFormField(controller: textFldcontroller,
+    return Container(
+        child: Row(children: <Widget>[
+      Flexible(
+          child: TextFormField(
+        controller: textFldcontroller,
+        keyboardType: TextInputType.emailAddress,
+        validator: _validation,
+        onSaved: (String val){
+          _value = val;
+        },
         decoration: InputDecoration(
-          filled: true,
-          enabled: true,
-          labelText:_label,
-          fillColor: _color,
-          border:InputBorder.none,
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 0.0)
-          )
-
-        ),)
-
-        
-        )
-      ]
-
-    ));
+            filled: true,
+            enabled: true,
+            labelText: _label,
+            fillColor: _color,
+            border: InputBorder.none,
+            enabledBorder:
+                OutlineInputBorder(borderSide: BorderSide(width: 0.0))),
+      ))
+    ]));
   }
-}
 
+}

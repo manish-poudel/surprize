@@ -16,7 +16,7 @@ class CustomDropDownWidget extends StatefulWidget {
 
   List<String> _listItems;
   String _label;
-  String _selectedItem;
+  String _selectedItem = 'Male';
 
   CustomDropDownWidgetState(this._listItems, this._label);
 

@@ -24,6 +24,7 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String _phoneNumberValue;
     // TODO: implement build
     return Container(
       height: 58.0,
@@ -41,7 +42,12 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
          Expanded(
            child:TextFormField(
              controller: controller ,
-             decoration: InputDecoration.collapsed(
+             keyboardType: TextInputType.emailAddress,
+              validator: validateMobile,
+                onSaved: (String val){
+                  _phoneNumberValue = val;
+                  },
+                 decoration: InputDecoration.collapsed(
                hintText: "Phone number"
              ),
            )
@@ -50,4 +56,18 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
       ),
     );
   }
+
+  /*
+  Validate mobile
+   */
+  static String validateMobile(String value) {
+    if(value.isEmpty){
+      return null;
+    }
+    if(double.tryParse(value) == null){
+      return 'Enter correct digits';
+    }
+    return null;
+  }
+
 }
