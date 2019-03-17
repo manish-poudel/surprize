@@ -28,6 +28,9 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
   bool _properDateSelected = false;
   bool _showValidation = false;
 
+  /*
+  Check for proper validation. If not, also set validation message.
+   */
   bool isProperlyValidate(){
     if(!_properDateSelected){
       setState(() {

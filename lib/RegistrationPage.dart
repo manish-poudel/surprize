@@ -162,10 +162,8 @@ class RegistrationPageState extends State<RegistrationPage> {
   Validate inputs
    */
   void validateInputs(){
-    if(_datePickerWidget.isProperlyValidated()){
 
-    }
-    if(_formKey.currentState.validate()){
+    if(_formKey.currentState.validate() && _datePickerWidget.isProperlyValidated()){
       _formKey.currentState.save();
     }
     else{

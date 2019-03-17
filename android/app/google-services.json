@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "632716178229",
+    "firebase_url": "https://surprize-5b596.firebaseio.com",
+    "project_id": "surprize-5b596",
+    "storage_bucket": "surprize-5b596.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632716178229:android:cc797ec681483a1f",
+        "android_client_info": {
+          "package_name": "com.siliconguy.surprize"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "632716178229-cpekh5tvnk9h53o8n5drsiaqe26g382e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7zfrbnnmzDFyYwmEtYNNx0f5EI2szrfg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
