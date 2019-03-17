@@ -71,14 +71,14 @@ class RegistrationPageState extends State<RegistrationPage> {
                 children: <Widget>[
                   IconButton(
                       icon: Icon(Icons.arrow_back, color: Colors.white),
-                      tooltip: 'Go back',
+                      tooltip: StringResources.goBackToolTipText,
                       onPressed: () {
                         AppHelper.pop(context);
                       }
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 32.0),
-                    child: Text("Create account",
+                    child: Text(StringResources.registrationPageCreateAccountTitleDisplay,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
@@ -93,7 +93,7 @@ class RegistrationPageState extends State<RegistrationPage> {
         Divider(color: Colors.white, height: 12.0),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-          child: Text("Login Information",
+          child: Text(StringResources.registrationPageCreateAccountTitleDisplay,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
@@ -103,7 +103,7 @@ class RegistrationPageState extends State<RegistrationPage> {
 
         Padding(
           padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-          child: Text("Personal Information",
+          child: Text(StringResources.registrationPagePersonalInformationHeaderDisplay,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
@@ -156,7 +156,7 @@ class RegistrationPageState extends State<RegistrationPage> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 48.0,
-                  child: CustomTextButtonWidget("Create", Colors.green, () => validateAndRegisterPlayer()),
+                  child: CustomTextButtonWidget(StringResources.buttonCreateAccountText, Colors.green, () => validateAndRegisterPlayer()),
                 ),
               ),
             ],
@@ -216,10 +216,10 @@ class RegistrationPageState extends State<RegistrationPage> {
       FirestoreOperations().createData(StringResources.userCollectionName, docId, playerMap).then((value){
         _customRegistrationProgressBar.stopAndEndProgressBar(context);
         AppHelper.showSnackBar(StringResources.snackBarRegistrationSuccessMessage, _scaffoldKey);
+        AppHelper.goToPage(context, true, '/playerDashboard');
       }).catchError((error){
         _customRegistrationProgressBar.stopAndEndProgressBar(context);
         AppHelper.showSnackBar(error.toString(), _scaffoldKey);
-
       });
   }
 }

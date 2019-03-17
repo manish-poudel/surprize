@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/Resources/StringResources.dart';
 
 class CustomELAWidget extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class CustomELAWidgetState extends State<CustomELAWidget> {
       children: <Widget>[
         RichText(
           text: TextSpan(
-            text:'By creating account, you agree to our ',
+            text: StringResources.elaText,
             style: TextStyle(color: Colors.blueAccent)
           ),
         ),
@@ -25,7 +26,7 @@ class CustomELAWidgetState extends State<CustomELAWidget> {
           padding: const EdgeInsets.only(top:4.0),
           child: GestureDetector(
             child: RichText(text: TextSpan(
-              text:'Terms and Conditions',
+              text:StringResources.elaTextButton,
                 style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline, color: Colors.blue)
             )
             )
