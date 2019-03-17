@@ -91,4 +91,11 @@ class AppHelper{
       return null;
   }
 
+  /*
+  Show Snackbar
+   */
+  static void showSnackBar(String value, GlobalKey<ScaffoldState> scaffoldKey){
+    scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(value)));
+  }
+
 }

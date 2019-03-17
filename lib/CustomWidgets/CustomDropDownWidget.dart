@@ -3,13 +3,19 @@ class CustomDropDownWidget extends StatefulWidget {
 
   List<String> _listItems;
   String _label;
+  CustomDropDownWidgetState _state;
 
   CustomDropDownWidget(this._listItems, this._label);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomDropDownWidgetState(_listItems, _label);
+    _state = CustomDropDownWidgetState(_listItems, _label);
+    return _state;
+  }
+
+  String selectedItem(){
+    return _state._selectedItem;
   }
 }
   class CustomDropDownWidgetState extends State<CustomDropDownWidget>{
@@ -19,6 +25,10 @@ class CustomDropDownWidget extends StatefulWidget {
   String _selectedItem = 'Male';
 
   CustomDropDownWidgetState(this._listItems, this._label);
+
+  String returnSelectedItem(){
+    return _selectedItem;
+  }
 
   void onChanged(String value){
     setState(() {

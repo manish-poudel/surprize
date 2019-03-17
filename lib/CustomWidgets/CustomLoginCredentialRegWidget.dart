@@ -4,10 +4,25 @@ import 'CustomLabelTextFieldWidget.dart';
 import 'CustomRegPasswordEntryWidget.dart';
 
 class CustomLoginCredentialRegWidget extends StatefulWidget{
+
+  CustomLoginCredentialRegWidgetState _state;
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomLoginCredentialRegWidgetState();
+    _state =  CustomLoginCredentialRegWidgetState();
+    return _state;
+  }
+
+  String getEmail(){
+    return _state.getEmail();
+  }
+
+  String getPassword(){
+    return _state.getPassword();
+  }
+
+  String getPasswordAgain(){
+    return _state.getPasswordAgain();
   }
 }
 

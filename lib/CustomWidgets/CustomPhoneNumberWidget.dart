@@ -2,19 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
 class CustomPhoneNumberWidget extends StatefulWidget {
+
+  CustomPhoneNumberWidgetState _state;
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomPhoneNumberWidgetState();
+    _state = CustomPhoneNumberWidgetState();
+    return _state;
+  }
+
+  String getCountryCode(){
+    return _state.getCountryCode();
+  }
+
+  String getPhoneNumber(){
+    return _state.getPhoneNumber();
+  }
+
+  String getCountryName() {
+    return _state._countryName;
   }
 }
 
 class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
-  String countryCode;
+  String _countryCode;
+  String _countryName;
+
   final TextEditingController controller = TextEditingController();
 
   String getCountryCode(){
-    return countryCode;
+    return _countryCode;
   }
 
   String getPhoneNumber(){
@@ -35,7 +52,8 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
         children: <Widget>[
          CountryCodePicker(
                 onChanged: (code) {
-                  countryCode = code.toString();
+                  _countryCode = code.toString();
+                  _countryName = code.name;
                 },
                 initialSelection: 'USA',
          ),

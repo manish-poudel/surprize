@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppColor.dart';
+import 'package:surprize/Models/Player.dart';
+import 'package:surprize/Resources/StringResources.dart';
 
 import 'CustomWidgets/CustomLabelTextFieldWidget.dart';
 import 'CustomWidgets/CustomPhoneNumberWidget.dart';
@@ -10,6 +13,7 @@ import 'CustomWidgets/CustomDropDownWidget.dart';
 import 'Helper/AppHelper.dart';
 import 'CustomWidgets/CustomELAWidget.dart';
 import 'CustomWidgets/CustomLoginCredentialRegWidget.dart';
+import 'CustomWidgets/CustomProgressbarWidget.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -21,24 +25,28 @@ class RegistrationPage extends StatefulWidget {
 
 class RegistrationPageState extends State<RegistrationPage> {
 
+  // keys
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   bool _autoValidate = false;
 
-
   // Form widgets
-  CustomLoginCredentialRegWidget customLoginCredentialRegWidget=  CustomLoginCredentialRegWidget();
+  CustomLoginCredentialRegWidget _customLoginCredentialRegWidget=  CustomLoginCredentialRegWidget();
   CustomLabelTextFieldWidget _nameField = CustomLabelTextFieldWidget("Name", Colors.white, validation: AppHelper.validateName);
   CustomDropDownWidget _genderDropDownWidget=  CustomDropDownWidget(['Male', 'Female', 'Other'], "Gender");
-  CustomDatePickerWidget _datePickerWidget = CustomDatePickerWidget();
+  CustomDatePickerWidget _dobDatePickerWidget = CustomDatePickerWidget();
   CustomPhoneNumberWidget _phoneNumberWidget = CustomPhoneNumberWidget();
-  CustomMultiLineTextFieldWidget _multiLineTextFieldWidget = CustomMultiLineTextFieldWidget("Address", Colors.white);
+  CustomMultiLineTextFieldWidget _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", Colors.white);
   CustomELAWidget _customELAWidget = new CustomELAWidget();
+  CustomProgressbarWidget _customRegistrationProgressBar = new CustomProgressbarWidget();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
       home: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: AppColor.colorPrimary,
         body: SingleChildScrollView(
           child: new Form(
@@ -91,7 +99,7 @@ class RegistrationPageState extends State<RegistrationPage> {
                   fontSize: 18.0,
                   fontFamily: 'Roboto')),
         ),
-        customLoginCredentialRegWidget,
+        _customLoginCredentialRegWidget,
 
         Padding(
           padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
@@ -125,7 +133,7 @@ class RegistrationPageState extends State<RegistrationPage> {
 
               Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: _datePickerWidget
+                  child: _dobDatePickerWidget
               ),
 
               Padding(
@@ -135,7 +143,7 @@ class RegistrationPageState extends State<RegistrationPage> {
 
               Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: _multiLineTextFieldWidget
+                  child: _multiLineAddressTextFieldWidget
               ),
               Center(
                 child: Padding(
@@ -148,7 +156,7 @@ class RegistrationPageState extends State<RegistrationPage> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 48.0,
-                  child: CustomTextButtonWidget("Create", Colors.green, () => validateInputs()),
+                  child: CustomTextButtonWidget("Create", Colors.green, () => validateAndRegisterPlayer()),
                 ),
               ),
             ],
@@ -161,10 +169,10 @@ class RegistrationPageState extends State<RegistrationPage> {
   /*
   Validate inputs
    */
-  void validateInputs(){
-
-    if(_formKey.currentState.validate() && _datePickerWidget.isProperlyValidated()){
-      _formKey.currentState.save();
+  void validateAndRegisterPlayer(){
+    if(_formKey.currentState.validate() && _dobDatePickerWidget.isProperlyValidated()){
+      _customRegistrationProgressBar.startProgressBar(context, StringResources.registrationProgressInformationDisplayMessage);
+      registerUser(_customLoginCredentialRegWidget.getEmail(), _customLoginCredentialRegWidget.getPassword());
     }
     else{
       setState(() {
@@ -173,6 +181,47 @@ class RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
+  /*
+  Create authentication information
+   */
+
+  void registerUser(String email, String password){
+    // Creating authentication
+    FirestoreOperations().regUser(email, password).then((firebaseUser){
+
+      // Save user profile information to the database
+      registerPlayer(firebaseUser.uid, Player(
+        firebaseUser.uid, // Player Id
+        _nameField.getValue(), // Player Name
+        _dobDatePickerWidget.getSelectedDate(), // Player DOB
+        _multiLineAddressTextFieldWidget.getValue(), // Player Address
+        _phoneNumberWidget.getCountryName(), // Player country
+        _genderDropDownWidget.selectedItem(), // Player Gender
+        email, // Player Email
+        _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber(), // Player phone number
+        DateTime.now(), // Player membership date
+        "" // Player profile Image URL (To be updated later)
+      ).toMap());
+
+    }).catchError((error){
+      _customRegistrationProgressBar.stopAndEndProgressBar(context);
+      AppHelper.showSnackBar(error.toString(), _scaffoldKey);
+    });
+  }
+
+  /*
+  Register player information
+   */
+  void registerPlayer(String docId, Map playerMap){
+      FirestoreOperations().createData(StringResources.userCollectionName, docId, playerMap).then((value){
+        _customRegistrationProgressBar.stopAndEndProgressBar(context);
+        AppHelper.showSnackBar(StringResources.snackBarRegistrationSuccessMessage, _scaffoldKey);
+      }).catchError((error){
+        _customRegistrationProgressBar.stopAndEndProgressBar(context);
+        AppHelper.showSnackBar(error.toString(), _scaffoldKey);
+
+      });
+  }
 }
 
 
