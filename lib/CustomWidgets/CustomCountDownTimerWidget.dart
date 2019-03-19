@@ -41,6 +41,13 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
     controller.reverse(from: controller.value == 0.0 ? 1.0 : controller.value);
   }
 
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
