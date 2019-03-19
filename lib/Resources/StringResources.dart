@@ -40,7 +40,7 @@ class StringResources{
   static final String setReminderButtonText = "Set reminder";
   static final String exitButtonText = "Exit";
   static final String countDownTimeString ="Game starts at";
-  static final String setReminderTitle = "Daily quiz challenge Reminder";
-  static final String setReminderDescription = "Reminding for the daily quiz challenger";
+  static final String setReminderTitle = "Daily quiz challenge time";
+  static final String setReminderDescription = "Let's play the daily quiz challenge!!!!";
 
 }
