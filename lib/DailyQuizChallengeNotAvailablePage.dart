@@ -18,11 +18,20 @@ class DailyQuizChallengeNotAvailablePage extends StatefulWidget {
 
 class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNotAvailablePage>{
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  /*
+  Set reminder for the daily quiz challenge game
+   */
   void setReminderForTheGame(){
+    // adding event
     CalendarEventManagement().addEventToCalendar(StringResources.setReminderTitle,
         StringResources.setReminderDescription,
         DateTime.now(),
-        DateTime.now());
+        DateTime.now()).then((value){
+    }).catchError((error){
+      print(error);
+    });
   }
 
   @override
@@ -30,6 +39,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
     // TODO: implement build
     return MaterialApp(
       home: new Scaffold(
+        key: _scaffoldKey,
         backgroundColor: AppColor.colorPrimary,
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
