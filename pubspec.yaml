@@ -25,6 +25,7 @@ dependencies:
   cloud_firestore: ^0.8.2
   firebase_auth: ^0.7.0
   firebase_storage: 1.0.4
+  add_2_calendar: ^1.2.2
 
 
 dev_dependencies:
@@ -46,6 +47,7 @@ flutter:
     - assets/images/gift_icon.png
     - assets/images/gift_colorful.png
     - assets/images/daily_quiz_challenge_logo.png
+
   fonts:
     - family: Roboto
       fonts:

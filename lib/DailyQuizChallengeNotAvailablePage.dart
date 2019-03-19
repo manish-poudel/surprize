@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/CustomWidgets/CalendarEventManagement.dart';
 import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
 import 'package:surprize/Helper/AppColor.dart';
@@ -16,6 +17,14 @@ class DailyQuizChallengeNotAvailablePage extends StatefulWidget {
 }
 
 class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNotAvailablePage>{
+
+  void setReminderForTheGame(){
+    CalendarEventManagement().addEventToCalendar(StringResources.setReminderTitle,
+        StringResources.setReminderDescription,
+        DateTime.now(),
+        DateTime.now());
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -38,7 +47,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
             ),
             Padding(
               padding: const EdgeInsets.only(top:16.0, bottom:16.0),
-              child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => {}),
+              child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => setReminderForTheGame()),
             ),
             Padding(
               padding: const EdgeInsets.only(top:16.0, bottom:8.0),

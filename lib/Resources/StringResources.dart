@@ -37,8 +37,10 @@ class StringResources{
 
   // Related to daily quiz challenge page
   static final String noCurrentGameText = "No quiz happening right now. Set reminder so we can let you know when next game is on!!!";
-  static final String setReminderButtonText = "Set Reminder";
+  static final String setReminderButtonText = "Set reminder";
   static final String exitButtonText = "Exit";
   static final String countDownTimeString ="Game starts at";
+  static final String setReminderTitle = "Daily quiz challenge Reminder";
+  static final String setReminderDescription = "Reminding for the daily quiz challenger";
 
 }
