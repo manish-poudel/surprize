@@ -33,12 +33,15 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
               child: Text(StringResources.noCurrentGameText, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Roboto')),
             ),
             Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: CustomCountDownTimerWidget(new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString),
+            ),
+            Padding(
               padding: const EdgeInsets.only(top:16.0, bottom:16.0),
               child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => {}),
             ),
-            CustomCountDownTimerWidget(new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString),
             Padding(
-              padding: const EdgeInsets.only(top:32.0, bottom:8.0),
+              padding: const EdgeInsets.only(top:16.0, bottom:8.0),
               child: CustomTextButtonWidget(StringResources.exitButtonText, Colors.red, () => AppHelper.pop(context)),
             )
           ],
