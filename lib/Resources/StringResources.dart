@@ -35,4 +35,10 @@ class StringResources{
   static final String elaTextButton = "Terms and Conditions";
   static final String goBackToolTipText = 'Go back';
 
+  // Related to daily quiz challenge page
+  static final String noCurrentGameText = "No quiz happening right now. Set reminder so we can let you know when next game is on!!!";
+  static final String setReminderButtonText = "Set Reminder";
+  static final String exitButtonText = "Exit";
+  static final String countDownTimeString ="Game starts at";
+
 }

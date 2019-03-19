@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
+import 'package:surprize/DailyQuizChallengePage.dart';
 import 'package:surprize/Helper/AppHelper.dart';
 
 class PlayerDashboard extends StatefulWidget{
@@ -35,7 +36,8 @@ class PlayerDashboardState extends State<PlayerDashboard>{
         body: SingleChildScrollView(child: Column(
           children: <Widget>[
             Text("Welcome"),
-            CustomTextButtonWidget("Logout", Colors.blueAccent, ()=> logoutUser())
+            CustomTextButtonWidget("Logout", Colors.blueAccent, ()=> logoutUser()),
+            CustomTextButtonWidget("Play Quiz", Colors.blueAccent, ()=> DailyQuizChallengePage().openPage(context))
           ],
         ),)
       ),

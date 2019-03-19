@@ -5,7 +5,6 @@ class AppHelper{
    */
   static void popAndPushReplacement(context, String dest){
     try {
-      pop(context);
       Navigator.of(context).pushReplacementNamed(dest);
     }
     catch(error){

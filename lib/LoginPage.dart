@@ -32,8 +32,8 @@ class LoginPage extends StatefulWidget {
     */
     void loginUser(){
       _customProgressBarWidget.startProgressBar(context, StringResources.loginProgressInformationDisplay);
-      FirestoreOperations().loginUser(_emailField.getValue(), _passwordField.getValue()).then((firebaseUser) async {
-        await _customProgressBarWidget.stopAndEndProgressBar(context);
+      FirestoreOperations().loginUser(_emailField.getValue(), _passwordField.getValue()).then((firebaseUser)  {
+        _customProgressBarWidget.stopAndEndProgressBar(context);
         AppHelper.goToPage(context, true, '/playerDashboard');
       }).catchError((error){
         _customProgressBarWidget.stopAndEndProgressBar(context);

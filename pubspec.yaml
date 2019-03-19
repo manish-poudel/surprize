@@ -45,6 +45,7 @@ flutter:
   assets:
     - assets/images/gift_icon.png
     - assets/images/gift_colorful.png
+    - assets/images/daily_quiz_challenge_logo.png
   fonts:
     - family: Roboto
       fonts:
