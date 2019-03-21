@@ -93,7 +93,7 @@ class RegistrationPageState extends State<RegistrationPage> {
         Divider(color: Colors.white, height: 12.0),
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-          child: Text(StringResources.registrationPageCreateAccountTitleDisplay,
+          child: Text(StringResources.registrationPageLoginCredentialHeaderDisplay,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
