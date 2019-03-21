@@ -85,7 +85,7 @@ class LoginPage extends StatefulWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.only(top: 24, left:16.0, right: 16.0),
                       child: GestureDetector(
                         child: Text(StringResources.buttonForgotPasswordText,
                             style: TextStyle(color:Colors.white, fontSize: 18.0, fontFamily: 'Roboto', decoration: TextDecoration.underline)
@@ -96,7 +96,7 @@ class LoginPage extends StatefulWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(32.0),
                       child: CustomTextButtonWidget(StringResources.buttonRegisterAccountText, Colors.green,
                               ()=> AppHelper.goToPage(context, false, '/registrationPage')),
                     ),

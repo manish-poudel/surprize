@@ -51,6 +51,7 @@ class _CustomLabelTextFieldWidgetState
         child: Row(children: <Widget>[
       Flexible(
           child: TextFormField(
+
         controller: textFldcontroller,
         keyboardType: TextInputType.emailAddress,
         validator: _validation,
@@ -59,10 +60,10 @@ class _CustomLabelTextFieldWidgetState
         },
         decoration: InputDecoration(
             filled: true,
+            border: UnderlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
             enabled: true,
             labelText: _label,
             fillColor: _color,
-            border: InputBorder.none,
             enabledBorder:
                 OutlineInputBorder(borderSide: BorderSide(width: 0.0))),
       ))
