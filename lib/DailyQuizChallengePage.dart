@@ -8,9 +8,15 @@ class DailyQuizChallengePage{
     if(!_checkIfDailyQuizGameIsOn()){
       AppHelper.goToPage(context, false, '/dailyQuizChallengeNotAvailablePage');
     }
+    if(_checkIfDailyQuizGameIsOn()){
+      AppHelper.goToPage(context, false, '/dailyQuizChallengeGamePlayPage');
+    }
   }
 
+  /*
+  Check if quiz is on
+   */
   bool _checkIfDailyQuizGameIsOn(){
-    return false;
+    return true;
   }
 }

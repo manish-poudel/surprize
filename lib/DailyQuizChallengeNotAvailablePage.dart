@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/CountDownTimerTypeEnum.dart';
 import 'package:surprize/CustomWidgets/CalendarEventManagement.dart';
 import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
@@ -53,7 +54,8 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: CustomCountDownTimerWidget(new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString),
+              child: CustomCountDownTimerWidget(new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString, 180.0, 180.0,
+                  Colors.blueAccent, Colors.white, CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
             ),
             Padding(
               padding: const EdgeInsets.only(top:16.0, bottom:16.0),

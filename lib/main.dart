@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:surprize/CustomWidgets/SplashScreen.dart';
+import 'package:surprize/DailyQuizChallengeGamePlayPage.dart';
+import 'package:surprize/SplashScreen.dart';
 import 'package:surprize/DailyQuizChallengeNotAvailablePage.dart';
 import 'package:surprize/PlayerDashboard.dart';
 import 'LoginPage.dart';
@@ -18,7 +19,8 @@ class EntryPoint extends StatelessWidget{
         '/loginPage': (BuildContext context) => LoginPage(),
         '/registrationPage': (BuildContext context) => RegistrationPage(),
         '/playerDashboard': (BuildContext context) => PlayerDashboard(),
-        '/dailyQuizChallengeNotAvailablePage': (BuildContext context) => DailyQuizChallengeNotAvailablePage()
+        '/dailyQuizChallengeNotAvailablePage': (BuildContext context) => DailyQuizChallengeNotAvailablePage(),
+        '/dailyQuizChallengeGamePlayPage': (BuildContext context) => DailyQuizChallengeGamePlayPage()
       },
     );
   }

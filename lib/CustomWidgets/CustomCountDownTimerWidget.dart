@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/CountDownTimerTypeEnum.dart';
 import 'dart:math' as math;
 
 class CustomCountDownTimerWidget extends StatefulWidget{
 
   Duration _duration;
   String _countDownString;
+  double _height;
+  double _width;
+  Color _textColor;
+  Color _circleColor;
+  CountDownTimeTypeEnum _countDownTimeTypeEnum;
 
-  CustomCountDownTimerWidget(this._duration, this._countDownString);
+  CustomCountDownTimerWidget(this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomCountDownTimerWidgetState(_duration,_countDownString);
+    return CustomCountDownTimerWidgetState(_duration,_countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
   }
 
 }
@@ -20,14 +26,56 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
 
   Duration _duration;
   String _countDownString;
+  double _height;
+  double _width;
+  Color _textColor;
+  Color _circleColor;
+  CountDownTimeTypeEnum _countDownTimeTypeEnum;
 
-  CustomCountDownTimerWidgetState(this._duration, this._countDownString);
+  CustomCountDownTimerWidgetState(this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
   AnimationController controller;
 
 
   String get timerString{
     Duration duration = controller.duration * controller.value;
-    return '${(duration.inHours).toString().padLeft(2, '0')}: ${(duration.inMinutes.toString().padLeft(2, '0'))}: ${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+    if(_countDownTimeTypeEnum == CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE) {
+      return '${(duration.inHours).toString().padLeft(2, '0')}: ${(duration
+          .inMinutes.toString().padLeft(2, '0'))}: ${(duration.inSeconds % 60)
+          .toString()
+          .padLeft(2, '0')}';
+    }
+
+    if(_countDownTimeTypeEnum == CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY){
+      return '${(duration.inSeconds % 60)
+          .toString()
+          .padLeft(2, '0')}';
+    }
+
+    return '${(duration.inHours).toString().padLeft(2, '0')}: ${(duration
+        .inMinutes.toString().padLeft(2, '0'))}: ${(duration.inSeconds % 60)
+        .toString()
+        .padLeft(2, '0')}';
+  }
+
+   List<Widget> getValue(){
+     AnimatedBuilder builder =  AnimatedBuilder(
+         animation: controller,
+         builder: (BuildContext context, Widget child){
+           return new Text(
+               timerString,
+               style: TextStyle(color: _textColor, fontSize: 32.0, fontFamily: 'Roboto')
+           );
+         });
+    if(_countDownTimeTypeEnum == CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY){
+      return [
+          builder
+      ];
+    }
+    return [
+      Text(_countDownString, style: TextStyle(color: Colors.green, fontSize: 18.0, fontFamily: 'Roboto')),
+        builder
+    ];
+
   }
 
 
@@ -52,8 +100,8 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
   Widget build(BuildContext context) {
     // TODO: implement build
     return  Container(
-      height: 180.0,
-      width: 180.0,
+      height: _height,
+      width: _width,
       child: Padding(padding: EdgeInsets.all(8.0),
         child: Column(children: <Widget>[
           Expanded(
@@ -69,7 +117,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
                                 painter: TimerPainter(
                                     animation: controller,
                                     backgroundColor: Colors.white,
-                                    color:Colors.blueAccent
+                                    color:_circleColor
                                 )
                             );
                           },
@@ -79,17 +127,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(_countDownString, style: TextStyle(color: Colors.green, fontSize: 18.0, fontFamily: 'Roboto')),
-                              AnimatedBuilder(
-                                  animation: controller,
-                                  builder: (BuildContext context, Widget child){
-                                    return new Text(
-                                      timerString,
-                                        style: TextStyle(color: Colors.white, fontSize: 32.0, fontFamily: 'Roboto')
-                                    );
-                                  }),
-                            ],
+                            children: getValue(),
                           ),
                         )
                       ],

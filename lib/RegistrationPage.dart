@@ -11,8 +11,8 @@ import 'CustomWidgets/CustomMultiLineTextFieldWidget.dart';
 import 'CustomWidgets/CustomTextButtonWidget.dart';
 import 'CustomWidgets/CustomDropDownWidget.dart';
 import 'Helper/AppHelper.dart';
-import 'CustomWidgets/CustomELAWidget.dart';
-import 'CustomWidgets/CustomLoginCredentialRegWidget.dart';
+import 'package:surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
+import 'package:surprize/CustomWidgets/LoginPage/CustomLoginCredentialRegWidget.dart';
 import 'CustomWidgets/CustomProgressbarWidget.dart';
 
 class RegistrationPage extends StatefulWidget {
