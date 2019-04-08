@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppColor.dart';
 import 'package:surprize/Models/Player.dart';
+import 'package:surprize/Resources/ImageResources.dart';
 import 'package:surprize/Resources/StringResources.dart';
 
 import 'CustomWidgets/CustomLabelTextFieldWidget.dart';
@@ -48,11 +49,16 @@ class RegistrationPageState extends State<RegistrationPage> {
       home: Scaffold(
         key: _scaffoldKey,
         backgroundColor: AppColor.colorPrimary,
-        body: SingleChildScrollView(
-          child: new Form(
-            key: _formKey,
-            autovalidate: _autoValidate,
-            child: registrationFormUI(context),
+        body: Container(
+          decoration: BoxDecoration(
+              image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
+          ),
+          child: SingleChildScrollView(
+            child: new Form(
+              key: _formKey,
+              autovalidate: _autoValidate,
+              child: registrationFormUI(context),
+            ),
           ),
         ),
       ),

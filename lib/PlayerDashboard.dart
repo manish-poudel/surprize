@@ -27,6 +27,7 @@ class PlayerDashboardState extends State<PlayerDashboard>{
       print(error);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,6 +38,8 @@ class PlayerDashboardState extends State<PlayerDashboard>{
           children: <Widget>[
             Text("Welcome"),
             CustomTextButtonWidget("Logout", Colors.blueAccent, ()=> logoutUser()),
+            CustomTextButtonWidget("no available", Colors.blueAccent, () => AppHelper.goToPage(context, false, '/dailyQuizChallengeNotAvailablePage')),
+            CustomTextButtonWidget("available", Colors.blueAccent, () => AppHelper.goToPage(context, false, '/dailyQuizChallengeGamePlayPage')),
             CustomTextButtonWidget("Play Quiz", Colors.blueAccent, ()=> DailyQuizChallengePage().openPage(context))
           ],
         ),)

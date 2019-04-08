@@ -34,10 +34,10 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
   CustomQuizAnswerButtonWidget _customQuizAnswerButtonWidget;
 
   List<Color> _colorList = [
-    Colors.blue[900],
-    Colors.blue[800],
-    Colors.blue[700],
-    Colors.blue[600],
+    Colors.deepPurple[900],
+    Colors.deepPurple[800],
+    Colors.deepPurple[700],
+    Colors.deepPurple[600],
   ];
 
   /*

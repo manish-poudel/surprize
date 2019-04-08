@@ -27,20 +27,20 @@ class CustomQuizQuestionHolderWidgetState extends State<CustomQuizQuestionHolder
       padding: const EdgeInsets.only(left:8, right:8,top:8.0),
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.indigo,
+            color: Colors.white,
           boxShadow: [
             BoxShadow(
-                color:Colors.black,
-                offset: Offset(1.0, 1.0),
-                blurRadius: 3.0
+                color:Colors.black12,
+                offset: Offset(1.0, 5.0),
+                blurRadius: 25.0
             ),
           ],
-          border: new Border.all(color: Colors.green, width: 2),
-            borderRadius:  new BorderRadius.all(Radius.circular(18.0))
+          border: new Border.all(color: Colors.white54, width: 0.5),
+            borderRadius:  new BorderRadius.all(Radius.circular(32.0))
         ),
         child: Center(
           child: Padding(padding: EdgeInsets.all(16.0),
-          child: Text(_quizQuestion, style: TextStyle(color: Colors.white, fontSize: 18.0,
+          child: Text(_quizQuestion, style: TextStyle(color: Colors.purple, fontSize: 21.0, fontWeight: FontWeight.w500,
                 fontFamily: 'Roboto')) ,
           ),
         ),

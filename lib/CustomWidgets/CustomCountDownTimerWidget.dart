@@ -11,13 +11,40 @@ class CustomCountDownTimerWidget extends StatefulWidget{
   Color _textColor;
   Color _circleColor;
   CountDownTimeTypeEnum _countDownTimeTypeEnum;
+  CustomCountDownTimerWidgetState _state;
+  bool _startCountDownImmediately;
 
-  CustomCountDownTimerWidget(this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
+  /*
+  Start countdown
+   */
+  void startCountdown(){
+    if(_state != null) {
+      _state._startController();
+    }
+  }
+
+  /*
+  stop countdown
+   */
+  void stopCountdown(){
+    _state._stopController();
+  }
+
+  void resetCountdown(){
+    _state._resetController();
+  }
+
+  void repeatCountdown(){
+    _state._repeatController();
+  }
+
+  CustomCountDownTimerWidget(this._startCountDownImmediately,this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomCountDownTimerWidgetState(_duration,_countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
+    _state =  CustomCountDownTimerWidgetState( _duration,_countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
+    return _state;
   }
 
 }
@@ -86,7 +113,39 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
         vsync: this,
         duration:_duration
     );
-    controller.reverse(from: controller.value == 0.0 ? 1.0 : controller.value);
+
+    if(widget._startCountDownImmediately) {
+      _startController();
+    }
+  }
+
+  /*
+  Start controller
+   */
+  void _startController(){
+      controller.reverse(
+          from: controller.value == 0.0 ? 1.0 : controller.value);
+  }
+
+  /*
+  stop controller
+   */
+  void _stopController(){
+    controller.stop();
+  }
+
+  /*
+  Reset controller
+   */
+  void _resetController(){
+    controller.reset();
+  }
+
+  /*
+  Repeat controller
+   */
+  void _repeatController(){
+    controller.repeat();
   }
 
 

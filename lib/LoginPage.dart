@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
-import 'package:surprize/Helper/AppColor.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 import 'package:surprize/Resources/StringResources.dart';
 import 'CustomWidgets/CustomLabelTextFieldWidget.dart';
@@ -48,62 +47,63 @@ class LoginPage extends StatefulWidget {
     return MaterialApp(
       home:Scaffold(
         key: _scaffoldKey,
-        backgroundColor: AppColor.colorPrimary,
-        body: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                  child: Image.asset(ImageResources.appMainLogo),
-                  padding: EdgeInsets.only(top:48.0),
-                  alignment: FractionalOffset.center
-              ),
-              Text("Surprize !",
-                  style: TextStyle(color:Colors.white, fontSize: 32.0, fontFamily: 'Roboto')
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 32.0, left: 16.0, right: 16.0),
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                    Text(StringResources.loginHeadingDisplay,
-                        style: TextStyle(color:Colors.white, fontSize: 16.0, fontFamily: 'Roboto' )
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top:16.0),
-                      child: _emailField,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top:8.0),
-                      child: _passwordField,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 1.0,top:8.0,right:1.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 48.0,
-                        child:CustomTextButtonWidget(StringResources.buttonLoginText, Colors.blueAccent, ()=> loginUser()),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24, left:16.0, right: 16.0),
-                      child: GestureDetector(
-                        child: Text(StringResources.buttonForgotPasswordText,
-                            style: TextStyle(color:Colors.white, fontSize: 18.0, fontFamily: 'Roboto', decoration: TextDecoration.underline)
-                        ),
-                        onTap: (){
-
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: CustomTextButtonWidget(StringResources.buttonRegisterAccountText, Colors.green,
-                              ()=> AppHelper.goToPage(context, false, '/registrationPage')),
-                    ),
-                  ],),
+        body: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
+            ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                    child: Image.asset(ImageResources.appMainLogo),
+                    padding: EdgeInsets.only(top:36.0),
+                    alignment: FractionalOffset.center
                 ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                      Text(StringResources.loginHeadingDisplay,
+                          style: TextStyle(color:Colors.white, decorationColor: Colors.deepPurpleAccent ,fontSize: 18.0, fontWeight: FontWeight.w500,fontFamily: 'Roboto' )
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:16.0),
+                        child: _emailField,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:8.0),
+                        child: _passwordField,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 1.0,top:8.0,right:1.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 48.0,
+                          child:CustomTextButtonWidget(StringResources.buttonLoginText, Colors.deepPurple, ()=> loginUser()),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 24, left:16.0, right: 16.0),
+                        child: GestureDetector(
+                          child: Text(StringResources.buttonForgotPasswordText,
+                              style: TextStyle(color:Colors.white, fontSize: 18.0, fontFamily: 'Roboto', decoration: TextDecoration.underline)
+                          ),
+                          onTap: (){
+
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: CustomTextButtonWidget(StringResources.buttonRegisterAccountText, Colors.deepPurpleAccent,
+                                ()=> AppHelper.goToPage(context, false, '/registrationPage')),
+                      ),
+                    ],),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ) ,

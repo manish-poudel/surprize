@@ -72,4 +72,23 @@ class FirestoreOperations extends FirestoreAuthOperations with FirestoreStorage,
     return getDocumentSnapshot(collection, docId).setData(map, merge: merge);
   }
 
+  @override
+  Stream<QuerySnapshot> getMainCollectionSnapshot(String collection) {
+    // TODO: implement getCollection
+    return Firestore.instance.collection(collection).snapshots();
+  }
+
+  @override
+  Stream<DocumentSnapshot> getSnapshotStream(String collection, String docId) {
+    // TODO: implement getSnapshotStream
+    return getDocumentSnapshot(collection, docId).snapshots();
+  }
+
+  @override
+  CollectionReference getNestedCollectionReference(String collection, String collection2, String docId) {
+    // TODO: implement getNestedCollectionReference
+    CollectionReference userCollectionReference = Firestore.instance.collection(collection).document(docId).collection(collection2);
+    return userCollectionReference;
+  }
+
 }

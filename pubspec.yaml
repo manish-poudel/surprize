@@ -32,6 +32,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: "^0.7.0"
+
+flutter_icons:
+  android: 'launcher_icon'
+  ios: true
+  image_path: "assets/images/app-icon.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -44,9 +51,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/gift_icon.png
-    - assets/images/gift_colorful.png
-    - assets/images/daily_quiz_challenge_logo.png
+    - assets/images/app-background.png
+    - assets/images/app-logo.png
+    - assets/images/daily-quiz-challenge-text-logo.png
+    - assets/images/surprize-text-logo.png
+    - assets/images/surprize-text-logo-with-background.png
+    - assets/images/quiz_answer_background.jpg
 
   fonts:
     - family: Roboto

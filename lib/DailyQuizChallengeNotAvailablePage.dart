@@ -42,30 +42,37 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
       home: new Scaffold(
         key: _scaffoldKey,
         backgroundColor: AppColor.colorPrimary,
-        body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0,left: 48.0),
-              child: Image.asset(ImageResources.dailyQuizChallengeLogo),
+        body: Container(
+            decoration: BoxDecoration(
+                image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0,left: 32.0, right: 32.0),
-              child: Text(StringResources.noCurrentGameText, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Roboto')),
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top:8.0),
+                child: Center(
+                  child: Image.asset(ImageResources.dailyQuizChallengeLogo, height: 220, width: 320,),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 32.0, right: 32.0),
+                child: Text(StringResources.noCurrentGameText, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Roboto')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: CustomCountDownTimerWidget(true,new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString, 180.0, 180.0,
+                    Colors.blueAccent, Colors.white, CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:16.0, bottom:16.0),
+                child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => setReminderForTheGame()),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:16.0, bottom:8.0),
+                child: CustomTextButtonWidget(StringResources.exitButtonText, Colors.red, () => AppHelper.pop(context)),
+              )
+            ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: CustomCountDownTimerWidget(new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString, 180.0, 180.0,
-                  Colors.blueAccent, Colors.white, CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:16.0, bottom:16.0),
-              child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => setReminderForTheGame()),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:16.0, bottom:8.0),
-              child: CustomTextButtonWidget(StringResources.exitButtonText, Colors.red, () => AppHelper.pop(context)),
-            )
-          ],
           ),
         )
       ),
