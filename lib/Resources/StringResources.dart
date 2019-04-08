@@ -43,4 +43,6 @@ class StringResources{
   static final String setReminderTitle = "Daily quiz challenge time";
   static final String setReminderDescription = "Let's play the daily quiz challenge!!!!";
   static final String setReminderSuccessMessage = "Reminder for daily quiz challenge has been set";
+  static final String headingText = "Let's play daily quiz challenge!";
+  static final String getReadyForQuizText ="Get Ready! Question will be on your screen soon!";
 }

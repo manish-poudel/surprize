@@ -1,15 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:surprize/CountDownTimerTypeEnum.dart';
 import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:surprize/CustomWidgets/DailyQuizChallenge/CustomQuizAnswerButtonWidget.dart';
 import 'package:surprize/CustomWidgets/DailyQuizChallenge/CustomQuizQuestionHolderWidget.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
-import 'package:surprize/Helper/AppColor.dart';
 import 'package:surprize/Helper/AppHelper.dart';
+import 'package:surprize/Helper/SoundHelper.dart';
 import 'package:surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
 import 'package:surprize/Models/DailyQuizChallenge/QuizState.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
 import 'package:surprize/Resources/ImageResources.dart';
+import 'package:surprize/Resources/SoundResources.dart';
+import 'package:surprize/Resources/StringResources.dart';
 
 class DailyQuizChallengeGamePlayPage extends StatefulWidget {
 
@@ -32,17 +36,30 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
  static final int quizFourButtonCode = 4;
 
   QuizState _quizState;
-  DailyQuizChallengeQnA _quizChallengeQnA;
-  List<DailyQuizChallengeQnA> _dailyQuizChallengeQnAList;
 
-  String quizFirstAnswerOption = 'Donald Trump';
-  String quizSecondAnswerOption = 'KP Oli';
-  String quizThirdAnswerOption = 'Narendra Modi';
-  String quizFourthAnswerOption = 'Barack Obama';
+  List<DailyQuizChallengeQnA> _dailyQuizChallengeQnAList;
+  DailyQuizChallengeQnA _quizChallengeQnA;
+
+  CustomQuizQuestionHolderWidget _quizQuestion;
+  CustomQuizAnswerButtonWidget _firstAnswer;
+  CustomQuizAnswerButtonWidget _secondAnswer;
+  CustomQuizAnswerButtonWidget _thirdAnswer;
+  CustomQuizAnswerButtonWidget _fourthAnswer;
+
+  CustomCountDownTimerWidget _customCountDownTimerWidget = CustomCountDownTimerWidget(true, new Duration(seconds: 10),
+      "", countDownTimerHeight, countDownTimerWidth,
+      Colors.white,
+      Colors.red[900],
+      CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY);
 
   bool _clickableButton = true;
   bool _hasQuizStateBeenRetrieved = false;
   bool _hasQuizListBeenRetrieved = false;
+  bool _isGameFinished = false;
+
+  int currentIndex = 0;
+
+ SoundHelper _soundHelper;
 
   static final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
@@ -52,32 +69,53 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   void initState() {
     super.initState();
     initQuizQuestion();
-    listenForQuizState();
+   listenForQuizState();
+   _soundHelper = SoundHelper();
+   _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
+       SoundResources.dailyQuizChallengeBackgroundMusic);
   }
 
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    if(_soundHelper != null) {
+      _soundHelper.stopSound();
+    }
+  }
 
   void setButtonClickable(bool clickable){
     _clickableButton = clickable;
   }
 
   /*
-  Start quiz
+  Initialize question and answer for the first time
    */
-  void startQuiz(){
-  }
+  void initializeQuestionAndAnswer(int currentIndex){
 
-  /*
-  Stop quiz
-   */
-  void stopQuiz(){
+    // setting quiz question
+    _quizQuestion = CustomQuizQuestionHolderWidget(_dailyQuizChallengeQnAList[currentIndex].question);
 
+    // Setting answer button for the quiz
+    _firstAnswer =  CustomQuizAnswerButtonWidget(onButtonSelect, quizFirstButtonCode, _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0),
+        EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 8));
+
+    _secondAnswer = CustomQuizAnswerButtonWidget(onButtonSelect, quizSecondButtonCode,   _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1),
+        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
+
+    _thirdAnswer = CustomQuizAnswerButtonWidget(onButtonSelect, quizThirdButtonCode,  _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2),
+        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
+
+    _fourthAnswer= CustomQuizAnswerButtonWidget(onButtonSelect, quizFourButtonCode,  _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3),
+        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8.0));
   }
 
   /*
   Check if given answer is correct answer
    */
   bool isRightAnswer(value){
-    return value == _quizChallengeQnA.rightAnswer.toString();
+    return value == _dailyQuizChallengeQnAList[currentIndex].rightAnswer;
   }
 
   /*
@@ -93,10 +131,27 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       setState(() {
          _dailyQuizChallengeQnAList = querySnapshot.documents.map((documentSnapshot) =>
                 DailyQuizChallengeQnA.fromMap(documentSnapshot.data)).toList();
+         initializeQuestionAndAnswer(currentIndex);
         _hasQuizListBeenRetrieved = true;
+         setButtonClickable(true);
       });
 
     });
+  }
+
+  /*
+  Update question and answer
+   */
+  void updateQuestionAndAnswer(){
+
+    // Update answer
+    _quizQuestion.updateQuestion(_dailyQuizChallengeQnAList[currentIndex].question);
+
+    // Update question
+    _firstAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0));
+    _secondAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1));
+    _thirdAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2));
+    _fourthAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3));
   }
 
   /**
@@ -112,7 +167,6 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
         print(_quizState.isSwitchOn);
         if (_quizState.isSwitchOn) {
           _hasQuizStateBeenRetrieved = true;
-          startQuiz();
 
           // Get current quiz value
           _dailyQuizChallengeQnAList.forEach((dailyQuizChallengeQnA){
@@ -124,8 +178,6 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
         }
         if (!_quizState.isSwitchOn) {
           _hasQuizStateBeenRetrieved = false;
-          setButtonClickable(true);
-          //stopQuiz();
         }
       });
     });
@@ -139,10 +191,11 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       if (isRightAnswer(value)) {
         AppHelper.showSnackBar("correct", _scaffoldKey);
       }
-      setState(() {
+      else{
+        AppHelper.showSnackBar("wrong", _scaffoldKey);
+      }
         setButtonClickable(false);
         button.changeColor(value);
-      });
     }
   }
 
@@ -157,16 +210,54 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
             decoration: BoxDecoration(
                 image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage),fit: BoxFit.fill)
             ),
-          child: (_hasQuizStateBeenRetrieved && _hasQuizListBeenRetrieved ? ifAllQuizValueHasBeenSet() : ifQuizValueIsInRetrievedMode()),
+          child: (_hasQuizListBeenRetrieved && _hasQuizStateBeenRetrieved ? ifAllQuizValueHasBeenSet() : ifQuizValueIsInRetrievedMode()),
         ),
       ),
     );
   }
 
   /*
+  Keep time track
+   */
+  void keepTimeTrack(int second) async {
+    Future.delayed(Duration(seconds: second), (){
+      setState(() {
+        if((currentIndex + 1) != _dailyQuizChallengeQnAList.length) {
+          currentIndex = currentIndex + 1;
+          updateQuestionAndAnswer();
+          resetButtonColor();
+          setButtonClickable(true);
+          _customCountDownTimerWidget.repeatCountdown();
+        }
+        else{
+          _customCountDownTimerWidget.stopCountdown();
+          _isGameFinished = true;
+          setButtonClickable(false);
+          AppHelper.showSnackBar("Game has finished", _scaffoldKey);
+        }
+      });
+    }).catchError((error){
+      print(error);
+    });
+  }
+
+  /*
+  Reset button color;
+   */
+  void resetButtonColor(){
+    _firstAnswer.resetColor();
+    _secondAnswer.resetColor();
+    _thirdAnswer.resetColor();
+    _fourthAnswer.resetColor();
+  }
+
+  /*
   Widget for quiz play
    */
     Widget ifAllQuizValueHasBeenSet(){
+      if(!_isGameFinished) {
+        keepTimeTrack(10);
+      }
       return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -175,18 +266,14 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           padding: const EdgeInsets.only(top:42.0),
           child: Center(
           child: Text(
-            "Let's play Daily quiz challenge!",
+            StringResources.headingText,
             style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.w500),
           ),
       ),
         ),
             Padding(
                 padding: const EdgeInsets.only(top: 24.0),
-                child: CustomCountDownTimerWidget(true, new Duration(seconds: 10),
-                    "", countDownTimerHeight, countDownTimerWidth,
-                    Colors.white,
-                    Colors.red[900],
-                    CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY)),
+                child: _customCountDownTimerWidget),
 
             Stack(
               children: <Widget>[
@@ -199,7 +286,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
                       decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
                       child: Center(
                         child: Text(
-                          "4",
+                          (currentIndex + 1).toString(),
                           style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.w500),
                         ),
                       ),
@@ -225,21 +312,14 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(left:4.0, right: 4.0, top: 4.0),
-                          child: CustomQuizQuestionHolderWidget(
-                              _quizChallengeQnA.question),
+                          child: _quizQuestion,
                         ),
 
-                        CustomQuizAnswerButtonWidget(onButtonSelect, quizFirstButtonCode, _quizChallengeQnA.answers.elementAt(0),
-                            EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 8)),
+                        _firstAnswer,
+                        _secondAnswer,
+                        _thirdAnswer,
+                        _fourthAnswer,
 
-                        CustomQuizAnswerButtonWidget(onButtonSelect, quizSecondButtonCode, _quizChallengeQnA.answers.elementAt(1),
-                            EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8)),
-
-                        CustomQuizAnswerButtonWidget(onButtonSelect, quizThirdButtonCode, _quizChallengeQnA.answers.elementAt(2),
-                            EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8)),
-
-                        CustomQuizAnswerButtonWidget(onButtonSelect, quizFourButtonCode, _quizChallengeQnA.answers.elementAt(3),
-                            EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8.0))
                       ],
                     ),
                   ),
@@ -260,7 +340,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           CircularProgressIndicator(backgroundColor: Colors.redAccent,),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text("Get Ready! Question will be on your screen soon", style: TextStyle(color: Colors.white, fontSize: 21)),
+            child: Text(StringResources.getReadyForQuizText, style: TextStyle(color: Colors.white, fontSize: 21)),
           )
         ]),
       ),

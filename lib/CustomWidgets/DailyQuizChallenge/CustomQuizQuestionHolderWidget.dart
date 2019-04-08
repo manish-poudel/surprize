@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 class CustomQuizQuestionHolderWidget extends StatefulWidget{
 
   final String _quizQuestion;
+  CustomQuizQuestionHolderWidgetState _state;
+
   CustomQuizQuestionHolderWidget(this._quizQuestion);
 
+  void updateQuestion(String question){
+    _state.updateQuestion(question);
+  }
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return CustomQuizQuestionHolderWidgetState(_quizQuestion);
+    _state = CustomQuizQuestionHolderWidgetState(_quizQuestion);
+    return _state;
   }
 
 }
@@ -17,7 +23,12 @@ class CustomQuizQuestionHolderWidgetState extends State<CustomQuizQuestionHolder
   String _quizQuestion = "";
 
   CustomQuizQuestionHolderWidgetState(this._quizQuestion);
-  
+
+  void updateQuestion(String question){
+    setState(() {
+      _quizQuestion = question;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

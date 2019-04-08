@@ -26,6 +26,8 @@ dependencies:
   firebase_auth: ^0.7.0
   firebase_storage: 1.0.4
   add_2_calendar: ^1.2.2
+  audioplayer:
+  path_provider:
 
 
 dev_dependencies:
@@ -57,6 +59,7 @@ flutter:
     - assets/images/surprize-text-logo.png
     - assets/images/surprize-text-logo-with-background.png
     - assets/images/quiz_answer_background.jpg
+    - assets/dailyQuizPlayBackgroundMusic.mp3
 
   fonts:
     - family: Roboto

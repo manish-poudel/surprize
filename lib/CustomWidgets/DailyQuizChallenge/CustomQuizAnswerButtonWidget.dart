@@ -8,6 +8,12 @@ class CustomQuizAnswerButtonWidget extends StatefulWidget{
   Function _onPressed;
    CustomQuizAnswerButtonWidgetState _state;
 
+   void setQuizAnswer(String answer){
+     if(_state != null) {
+       _state.setQuizAnswer(answer);
+     }
+   }
+
   CustomQuizAnswerButtonWidget( this._onPressed, this._buttonId, this._quizAnswer, this._edgeInsets);
 
   @override
@@ -24,6 +30,10 @@ class CustomQuizAnswerButtonWidget extends StatefulWidget{
     _state._changeColor(id);
   }
 
+  void resetColor(){
+    _state.resetColor();
+  }
+
 }
 
 class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidget>{
@@ -33,13 +43,13 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
   Function _onPressed;
   CustomQuizAnswerButtonWidget _customQuizAnswerButtonWidget;
 
-  List<Color> _colorList = [
-    Colors.deepPurple[900],
-    Colors.deepPurple[800],
-    Colors.deepPurple[700],
-    Colors.deepPurple[600],
-  ];
+  List<Color> _colorList;
 
+  void setQuizAnswer(String answer){
+    setState(() {
+      _quizAnswer = answer;
+    });
+  }
   /*
   Change color
    */
@@ -55,6 +65,29 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
       });
     }
     _colorList = _colorList;
+  }
+
+  void resetColor(){
+    setState(() {
+      initColor();
+    });
+  }
+  /**
+   * Initial color
+   */
+  void initColor(){
+    _colorList = _colorList = [
+    Colors.deepPurple[900],
+    Colors.deepPurple[800],
+    Colors.deepPurple[700],
+    Colors.deepPurple[600],
+    ];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initColor();
   }
 
   CustomQuizAnswerButtonWidgetState(this._customQuizAnswerButtonWidget,this._onPressed, this._buttonId, this._quizAnswer, this._edgeInsets);
