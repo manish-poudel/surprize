@@ -49,6 +49,7 @@ class LoginPage extends StatefulWidget {
         key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
             ),

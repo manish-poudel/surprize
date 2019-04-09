@@ -5,6 +5,7 @@ import 'package:surprize/CountDownTimerTypeEnum.dart';
 import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:surprize/CustomWidgets/DailyQuizChallenge/CustomQuizAnswerButtonWidget.dart';
 import 'package:surprize/CustomWidgets/DailyQuizChallenge/CustomQuizQuestionHolderWidget.dart';
+import 'package:surprize/DailyQuizChallengeScoreSummaryPage.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Helper/SoundHelper.dart';
@@ -56,10 +57,13 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   bool _hasQuizStateBeenRetrieved = false;
   bool _hasQuizListBeenRetrieved = false;
   bool _isGameFinished = false;
+  bool _hasMusicStarted = false;
 
   int currentIndex = 0;
 
  SoundHelper _soundHelper;
+
+ int _totalScore = 0;
 
   static final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
@@ -71,8 +75,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
     initQuizQuestion();
    listenForQuizState();
    _soundHelper = SoundHelper();
-   _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
-       SoundResources.dailyQuizChallengeBackgroundMusic);
+
   }
 
 
@@ -189,6 +192,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   void onButtonSelect(value, CustomQuizAnswerButtonWidget button) {
     if(_clickableButton) {
       if (isRightAnswer(value)) {
+        _totalScore = _totalScore + 10;
         AppHelper.showSnackBar("correct", _scaffoldKey);
       }
       else{
@@ -234,6 +238,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           _isGameFinished = true;
           setButtonClickable(false);
           AppHelper.showSnackBar("Game has finished", _scaffoldKey);
+          goToScoreSummaryPage();
         }
       });
     }).catchError((error){
@@ -255,9 +260,17 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   Widget for quiz play
    */
     Widget ifAllQuizValueHasBeenSet(){
+
+      if(!_hasMusicStarted) {
+        _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
+            SoundResources.dailyQuizChallengeBackgroundMusic);
+        _hasMusicStarted = true;
+      }
+
       if(!_isGameFinished) {
         keepTimeTrack(10);
       }
+      
       return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -345,6 +358,12 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
         ]),
       ),
     );
+}
+
+void goToScoreSummaryPage(){
+  Navigator.pushReplacement(context, MaterialPageRoute(
+    builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalScore),
+  ));
 }
 
 }

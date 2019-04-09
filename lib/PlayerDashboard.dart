@@ -40,6 +40,7 @@ class PlayerDashboardState extends State<PlayerDashboard>{
             CustomTextButtonWidget("Logout", Colors.blueAccent, ()=> logoutUser()),
             CustomTextButtonWidget("no available", Colors.blueAccent, () => AppHelper.goToPage(context, false, '/dailyQuizChallengeNotAvailablePage')),
             CustomTextButtonWidget("available", Colors.blueAccent, () => AppHelper.goToPage(context, false, '/dailyQuizChallengeGamePlayPage')),
+            CustomTextButtonWidget("Score summary page", Colors.blueAccent, () => AppHelper.goToPage(context, false, '/dailyQuizChallengeScoreSummaryPage')),
             CustomTextButtonWidget("Play Quiz", Colors.blueAccent, ()=> DailyQuizChallengePage().openPage(context))
           ],
         ),)
