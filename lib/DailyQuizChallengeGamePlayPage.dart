@@ -231,7 +231,8 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           updateQuestionAndAnswer();
           resetButtonColor();
           setButtonClickable(true);
-          _customCountDownTimerWidget.repeatCountdown();
+          _customCountDownTimerWidget.resetCountdown();
+          _customCountDownTimerWidget.startCountdown();
         }
         else{
           _customCountDownTimerWidget.stopCountdown();
@@ -270,7 +271,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       if(!_isGameFinished) {
         keepTimeTrack(10);
       }
-      
+
       return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -286,8 +287,8 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
         ),
             Padding(
                 padding: const EdgeInsets.only(top: 24.0),
-                child: _customCountDownTimerWidget),
-
+                child: _customCountDownTimerWidget
+            ),
             Stack(
               children: <Widget>[
                 Padding(
@@ -360,6 +361,9 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
     );
 }
 
+/*
+Go to summary page after game is finished.
+ */
 void goToScoreSummaryPage(){
   Navigator.pushReplacement(context, MaterialPageRoute(
     builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalScore),

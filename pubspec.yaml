@@ -55,6 +55,7 @@ flutter:
   assets:
     - assets/images/app-background.png
     - assets/images/app-logo.png
+    - assets/images/app-icon.png
     - assets/images/daily-quiz-challenge-text-logo.png
     - assets/images/surprize-text-logo.png
     - assets/images/surprize-text-logo-with-background.png
