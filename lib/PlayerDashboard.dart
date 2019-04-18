@@ -1,9 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:surprize/CustomWidgets/CustomEventsWidgetCard.dart';
 import 'package:surprize/CustomWidgets/CustomSliverAppBarWidget.dart';
+import 'package:surprize/CustomWidgets/CustomStreamBuilderWidget.dart';
 import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
 import 'package:surprize/DailyQuizChallengePage.dart';
+import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppHelper.dart';
+import 'package:surprize/Models/Events.dart';
+import 'package:surprize/Resources/FirestoreResources.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 
 class PlayerDashboard extends StatefulWidget {
@@ -40,8 +45,14 @@ class PlayerDashboardState extends State<PlayerDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    _screenWidth = MediaQuery.of(context).size.width;
-    _screenHeight = MediaQuery.of(context).size.height;
+    _screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    _screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     // TODO: implement build
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.purple[800]),
@@ -54,7 +65,10 @@ class PlayerDashboardState extends State<PlayerDashboard> {
           ),
           body: Container(
             color: Colors.grey[50],
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
             child: NestedScrollView(
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
@@ -65,44 +79,68 @@ class PlayerDashboardState extends State<PlayerDashboard> {
               body: SingleChildScrollView(
                 child: Center(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    //  profileInformationHolder(),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text("Upcoming events",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Colors.black54,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    eventCard(),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Container(
-                        height: 8,
-                        color: Colors.grey[200],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text("News ",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Colors.black54,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    newsCard()
-                  ],
-                )),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        //  profileInformationHolder(),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text("Upcoming events",
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black54,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                       Container(
+                         height: 160,
+                         width: 500,
+                         child: CustomStreamBuilderWidget(
+                              FirestoreOperations().getMainCollectionSnapshot(FirestoreResources.collectionEvent),
+                              getEventList
+                          ),
+                       ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Container(
+                            height: 8,
+                            color: Colors.grey[200],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text("News ",
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.black54,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        newsCard()
+                      ],
+                    )),
               ),
             ),
           )),
     );
   }
 
+  /*
+  Get all list view
+   */
+  ListView getEventList(snapshot){
+    return ListView(
+      scrollDirection: Axis.horizontal,
+      shrinkWrap: true,
+      children: snapshot.data.documents.map<Widget>((document){
+        return CustomEventWidgetCard(document[FirestoreResources.fieldEventPhoto],
+          document[FirestoreResources.fieldEventTitle],
+          document[FirestoreResources.fieldEventDesc],
+          document[FirestoreResources.fieldEventTime].toString(),
+        );
+      }).toList()
+    );
+  }
   /*
   Sliver Appbar background
    */
@@ -117,11 +155,11 @@ class PlayerDashboardState extends State<PlayerDashboard> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                   child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  textWithIcon(Icons.person, "Manish Poudel"),
-                ],
-              )),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      textWithIcon(Icons.person, "Manish Poudel"),
+                    ],
+                  )),
             )
           ],
         ),
@@ -147,15 +185,15 @@ class PlayerDashboardState extends State<PlayerDashboard> {
   /*
   Text with icon
    */
-  Widget textWithIcon(IconData icon, String text){
-    return    Row(
+  Widget textWithIcon(IconData icon, String text) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Icon(icon, color: Colors.white),
         Padding(
-          padding: const EdgeInsets.only(left:4.0),
+          padding: const EdgeInsets.only(left: 4.0),
           child: Text(
-           text,
+            text,
             style: TextStyle(
                 fontFamily: 'Roboto',
                 fontSize: 21,
@@ -165,6 +203,7 @@ class PlayerDashboardState extends State<PlayerDashboard> {
       ],
     );
   }
+
   Widget profileInformationHolder() {
     return Container(
         decoration: BoxDecoration(color: Colors.purple[300]),
@@ -188,7 +227,7 @@ class PlayerDashboardState extends State<PlayerDashboard> {
                   decoration: new BoxDecoration(
                       border: new Border.all(color: Colors.white, width: 1),
                       borderRadius:
-                          new BorderRadius.all(Radius.circular(40.0))),
+                      new BorderRadius.all(Radius.circular(40.0))),
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 4.0, right: 4, top: 1.0, bottom: 1.0),
@@ -207,22 +246,24 @@ class PlayerDashboardState extends State<PlayerDashboard> {
     return ListView(
       children: <Widget>[
         flatButtonWithRoute(
-            () => goToPage('/dailyQuizChallengeNotAvailablePage'), 'No quiz'),
+                () => goToPage('/dailyQuizChallengeNotAvailablePage'),
+            'No quiz'),
         Padding(
           padding: const EdgeInsets.only(top: 2.0),
           child: flatButtonWithRoute(
-              () => goToPage('/dailyQuizChallengeGamePlayPage'),
+                  () => goToPage('/dailyQuizChallengeGamePlayPage'),
               "Quiz available"),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 2.0),
           child: flatButtonWithRoute(
-              () => DailyQuizChallengePage().openPage(context), "Play quiz"),
+                  () => DailyQuizChallengePage().openPage(context),
+              "Play quiz"),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 2.0),
           child: flatButtonWithRoute(
-              () => goToPage('/dailyQuizChallengeScoreSummaryPage'),
+                  () => goToPage('/dailyQuizChallengeScoreSummaryPage'),
               "Quiz summary page"),
         ),
         Padding(
@@ -246,7 +287,7 @@ class PlayerDashboardState extends State<PlayerDashboard> {
   Widget buttonText(String text) {
     return Text(text,
         style:
-            TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 21));
+        TextStyle(fontFamily: 'Roboto', color: Colors.white, fontSize: 21));
   }
 
   Widget flatButtonWithRoute(Function function, String text) {
@@ -262,125 +303,45 @@ class PlayerDashboardState extends State<PlayerDashboard> {
   /*
   Create news card
    */
-  Widget newsCard(){
+  Widget newsCard() {
     return Padding(
-      padding: const EdgeInsets.only(left:8.0, right: 8.0),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: Container(
-        width: _screenWidth,
-        child:Card(
-        color: Colors.grey[100],
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Welcome to the new area of Surprize",  style: TextStyle(fontSize: 21, fontWeight: FontWeight.w500),),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Text("12/12/2012",  style: TextStyle(fontSize: 12, color:Colors.grey, fontWeight: FontWeight.w500),),
+          width: _screenWidth,
+          child: Card(
+            color: Colors.grey[100],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Welcome to the new area of Surprize",
+                    style: TextStyle(
+                        fontSize: 21, fontWeight: FontWeight.w500),),
                 ),
-              ),
-              Container(
-                color:Colors.grey[200],
-                child: Image.asset(ImageResources.appSurprizeTextLogo,
-                   height: 220, width: _screenWidth),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("We are in the new area of surprize where you can earn loads of money with just a click... ",  style: TextStyle(fontSize: 18),),
-              )
-            ],
-          ) ,
-        )
-      ),
-    );
-  }
-  /*
-  Event card
-   */
-  Widget eventCard() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 16.0, left: 16.0),
-      child: Container(
-        height: 160,
-        child: Card(
-          color: Colors.white,
-          child: Row(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Image.asset(ImageResources.appMainIcon,
-                      height: 152, width: 158),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text("Daily quiz challenge",
-                              style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  color: Colors.purple[900],
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20)),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text("Play and earn 500",
-                            style: TextStyle(
-                                fontFamily: 'Roboto',
-                                color: Colors.grey,
-                                fontSize: 18)),
-                      ),
-                      Text("12/12/2017 5:00 PM ",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Colors.grey,
-                              fontSize: 16)),
-
-                      Padding(
-                        padding: const EdgeInsets.only(top:20.0),
-                        child: Container(
-                          decoration: new BoxDecoration(
-                              color:Colors.purple,
-                              border:
-                              new Border.all(color: Colors.purple, width: 1),
-                              borderRadius:
-                              new BorderRadius.all(Radius.circular(40.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Row(
-                              children: <Widget>[
-                                Icon(Icons.alarm, color:Colors.white),
-                                Padding(
-                                  padding: const EdgeInsets.only(left:4.0),
-                                  child: Text("Set Reminder",
-                                      style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          color: Colors.white,
-                                          fontSize: 18)),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text("12/12/2012", style: TextStyle(fontSize: 12,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w500),),
                   ),
                 ),
-              )
-            ],
-          ),
-        ),
+                Container(
+                  color: Colors.grey[200],
+                  child: Image.asset(ImageResources.appSurprizeTextLogo,
+                      height: 220, width: _screenWidth),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "We are in the new area of surprize where you can earn loads of money with just a click... ",
+                    style: TextStyle(fontSize: 18),),
+                )
+              ],
+            ),
+          )
       ),
     );
   }

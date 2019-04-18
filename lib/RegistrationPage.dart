@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppColor.dart';
 import 'package:surprize/Models/Player.dart';
+import 'package:surprize/Resources/FirestoreResources.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 import 'package:surprize/Resources/StringResources.dart';
 
@@ -219,7 +220,7 @@ class RegistrationPageState extends State<RegistrationPage> {
   Register player information
    */
   void registerPlayer(String docId, Map playerMap){
-      FirestoreOperations().createData(StringResources.userCollectionName, docId, playerMap).then((value){
+      FirestoreOperations().createData(FirestoreResources.userCollectionName, docId, playerMap).then((value){
         _customRegistrationProgressBar.stopAndEndProgressBar(context);
         AppHelper.showSnackBar(StringResources.snackBarRegistrationSuccessMessage, _scaffoldKey);
         AppHelper.goToPage(context, true, '/playerDashboard');

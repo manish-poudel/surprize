@@ -11,18 +11,6 @@ class StringResources{
   static final String buttonLoginText = "Login";
   static final String loginProgressInformationDisplay = "Login in...";
 
-  // Player basic registration info related
-  static final String userCollectionName = "/Players";
-  static final String fieldPlayerId = 'membershipId';
-  static final String fieldPlayerEmail = 'email';
-  static final String fieldPlayerName = 'name';
-  static final String fieldPlayerGender = 'gender';
-  static final String fieldPlayerDOB = 'dob';
-  static final String fieldPlayerCountry = 'country';
-  static final String fieldPlayerPhoneNumber ='phoneNumber';
-  static final String fieldPlayerAddress = 'address';
-  static final String fieldPlayerProfileURL = 'profileImageURL';
-  static final String fieldPlayerMembershipDate = 'membershipDate';
 
   // Related to registration information Display
   static final String snackBarRegistrationSuccessMessage = "Registration Completed";
@@ -45,4 +33,5 @@ class StringResources{
   static final String setReminderSuccessMessage = "Reminder for daily quiz challenge has been set";
   static final String headingText = "Let's play daily quiz challenge!";
   static final String getReadyForQuizText ="Get Ready! Question will be on your screen soon!";
+
 }

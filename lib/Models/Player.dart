@@ -1,5 +1,5 @@
 import 'package:surprize/Models/User.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:surprize/Resources/FirestoreResources.dart';
 
 /*
 Model class for player
@@ -15,17 +15,17 @@ class Player extends User{
     var map = new Map<String, dynamic>();
 
     if(membershipId != null){
-      map[StringResources.fieldPlayerId] = membershipId;
+      map[FirestoreResources.fieldPlayerId] = membershipId;
     }
-    map[StringResources.fieldPlayerName] = name;
-    map[StringResources.fieldPlayerDOB] = dob;
-    map[StringResources.fieldPlayerAddress] = address;
-    map[StringResources.fieldPlayerCountry] = country;
-    map[StringResources.fieldPlayerGender] = gender;
-    map[StringResources.fieldPlayerEmail] = email;
-    map[StringResources.fieldPlayerPhoneNumber] = phoneNumber;
-    map[StringResources.fieldPlayerMembershipDate] = membershipDate;
-    map[StringResources.fieldPlayerProfileURL] = profileImageURL;
+    map[FirestoreResources.fieldPlayerName] = name;
+    map[FirestoreResources.fieldPlayerDOB] = dob;
+    map[FirestoreResources.fieldPlayerAddress] = address;
+    map[FirestoreResources.fieldPlayerCountry] = country;
+    map[FirestoreResources.fieldPlayerGender] = gender;
+    map[FirestoreResources.fieldPlayerEmail] = email;
+    map[FirestoreResources.fieldPlayerPhoneNumber] = phoneNumber;
+    map[FirestoreResources.fieldPlayerMembershipDate] = membershipDate;
+    map[FirestoreResources.fieldPlayerProfileURL] = profileImageURL;
 
     return map;
   }
@@ -33,15 +33,15 @@ class Player extends User{
   /*
   Convert map to player
    */
-  Player.fromMap(Map<String, dynamic> map) : super( map[StringResources.fieldPlayerId],
-      map[StringResources.fieldPlayerName],
-      map[StringResources.fieldPlayerDOB],
-      map[StringResources.fieldPlayerAddress],
-      map[StringResources.fieldPlayerCountry],
-      map[StringResources.fieldPlayerGender],
-      map[StringResources.fieldPlayerEmail] ,
-      map[StringResources.fieldPlayerPhoneNumber],
-      map[StringResources.fieldPlayerMembershipDate],
-      map[StringResources.fieldPlayerProfileURL]);
+  Player.fromMap(Map<String, dynamic> map) : super( map[FirestoreResources.fieldPlayerId],
+      map[FirestoreResources.fieldPlayerName],
+      map[FirestoreResources.fieldPlayerDOB],
+      map[FirestoreResources.fieldPlayerAddress],
+      map[FirestoreResources.fieldPlayerCountry],
+      map[FirestoreResources.fieldPlayerGender],
+      map[FirestoreResources.fieldPlayerEmail] ,
+      map[FirestoreResources.fieldPlayerPhoneNumber],
+      map[FirestoreResources.fieldPlayerMembershipDate],
+      map[FirestoreResources.fieldPlayerProfileURL]);
 
 }
