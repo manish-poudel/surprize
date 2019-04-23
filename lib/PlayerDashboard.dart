@@ -92,12 +92,15 @@ class PlayerDashboardState extends State<PlayerDashboard> {
                                   fontWeight: FontWeight.w500)),
                         ),
                        Container(
-                         height: 160,
+                         height: 296,
                          width: 500,
-                         child: CustomStreamBuilderWidget(
-                              FirestoreOperations().getMainCollectionSnapshot(FirestoreResources.collectionEvent),
-                              getEventList
-                          ),
+                         child: Padding(
+                           padding: const EdgeInsets.only(left:16.0,right:16.0),
+                           child: CustomStreamBuilderWidget(
+                                FirestoreOperations().getMainCollectionSnapshot(FirestoreResources.collectionEvent),
+                                getEventList
+                            ),
+                         ),
                        ),
 
                         Padding(
@@ -116,7 +119,9 @@ class PlayerDashboardState extends State<PlayerDashboard> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500)),
                         ),
-                        newsCard()
+                        newsCard(),
+                        newsCard(),
+                        newsCard(),
                       ],
                     )),
               ),
@@ -313,23 +318,41 @@ class PlayerDashboardState extends State<PlayerDashboard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Welcome to the new area of Surprize",
-                    style: TextStyle(
-                        fontSize: 21, fontWeight: FontWeight.w500),),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Text("12/12/2012", style: TextStyle(fontSize: 12,
-                        color: Colors.grey,
-                        fontWeight: FontWeight.w500),),
-                  ),
-                ),
                 Container(
                   color: Colors.grey[200],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Icon(Icons.event_note, color: Colors.grey,),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0, top:16.0),
+                              child: Text("Welcome to the new area of Surprize",
+                                style: TextStyle(
+                                    fontSize: 21, fontWeight: FontWeight.w500),),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+                              child: Text("12/12/2012", style: TextStyle(fontSize: 12,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500),),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+
+                Container(
+                  color: Colors.grey[50],
                   child: Image.asset(ImageResources.appSurprizeTextLogo,
                       height: 220, width: _screenWidth),
                 ),
