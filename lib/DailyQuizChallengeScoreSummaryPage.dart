@@ -34,7 +34,7 @@ class DailyQuizChallengeScoreSummaryPageState
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child:
-                      totalScoreHeading((widget._totalScore + 10).toString()),
+                  totalScoreHeading((widget._totalScore + 10).toString()),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -89,7 +89,7 @@ class DailyQuizChallengeScoreSummaryPageState
     return Container(
         width: MediaQuery.of(context).size.width,
         decoration:
-            BoxDecoration(color: Colors.purple[900], shape: BoxShape.circle),
+        BoxDecoration(color: Colors.purple[900], shape: BoxShape.circle),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
@@ -140,7 +140,7 @@ class DailyQuizChallengeScoreSummaryPageState
           height: 160,
           width: 160,
           decoration:
-              BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
+          BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
           child: Center(
             child: Text(
               totalScore,
@@ -182,21 +182,21 @@ class DailyQuizChallengeScoreSummaryPageState
     double width = MediaQuery.of(context).size.width;
     return Container(
         child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-              child: Padding(
-            padding: EdgeInsets.only(left: width - 240),
-            child: Text("Total Score",
-                style: TextStyle(
-                    color: Colors.white, fontSize: 18, fontFamily: 'Roboto')),
-          )),
-          Text(score,
-              style: TextStyle(
-                  color: Colors.white, fontSize: 18, fontFamily: 'Roboto'))
-        ],
-      ),
-    ));
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: width - 240),
+                    child: Text("Total Score",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: 18, fontFamily: 'Roboto')),
+                  )),
+              Text(score,
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 18, fontFamily: 'Roboto'))
+            ],
+          ),
+        ));
   }
 }

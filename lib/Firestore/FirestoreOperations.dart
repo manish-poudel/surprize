@@ -12,14 +12,15 @@ class FirestoreOperations extends FirestoreAuthOperations with FirestoreStorage,
   ///
   /// Reg user with email and password and save user information to the collection
   @override
-  Future<FirebaseUser> regUser(email, password) {
-    return FirebaseAuth.instance
+   Future<FirebaseUser> regUser(email, password) async {
+    AuthResult authResult =  await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
+    return authResult.user;
   }
 
   // Sign in with email and password
   @override
-  Future<FirebaseUser> loginUser(email, password){
+  loginUser(email, password){
     return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
   }
 

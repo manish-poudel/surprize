@@ -1,3 +1,4 @@
+import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Models/User.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
 
@@ -41,7 +42,6 @@ class Player extends User{
       map[FirestoreResources.fieldPlayerGender],
       map[FirestoreResources.fieldPlayerEmail] ,
       map[FirestoreResources.fieldPlayerPhoneNumber],
-      map[FirestoreResources.fieldPlayerMembershipDate],
+      AppHelper.convertToDateTime(map[FirestoreResources.fieldPlayerMembershipDate]),
       map[FirestoreResources.fieldPlayerProfileURL]);
-
 }

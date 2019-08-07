@@ -1,3 +1,4 @@
+import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
 
 class Events{
@@ -15,6 +16,6 @@ class Events{
     id = map[FirestoreResources.fieldEventId];
     title = map[FirestoreResources.fieldEventTitle];
     desc = map[FirestoreResources.fieldEventDesc];
-    time = map[FirestoreResources.fieldEventTime];
+    time = AppHelper.convertToDateTime(map[FirestoreResources.fieldEventTime]);
   }
 }

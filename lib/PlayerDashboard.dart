@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:surprize/CustomWidgets/CustomEventsWidgetCard.dart';
 import 'package:surprize/CustomWidgets/CustomSliverAppBarWidget.dart';
 import 'package:surprize/CustomWidgets/CustomStreamBuilderWidget.dart';
-import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
 import 'package:surprize/DailyQuizChallengePage.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Models/Events.dart';
+import 'package:surprize/ProfilePage.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 
@@ -138,10 +138,11 @@ class PlayerDashboardState extends State<PlayerDashboard> {
       scrollDirection: Axis.horizontal,
       shrinkWrap: true,
       children: snapshot.data.documents.map<Widget>((document){
-        return CustomEventWidgetCard(document[FirestoreResources.fieldEventPhoto],
-          document[FirestoreResources.fieldEventTitle],
-          document[FirestoreResources.fieldEventDesc],
-          document[FirestoreResources.fieldEventTime].toString(),
+        Events events = Events.fromMap(document.data);
+        return CustomEventWidgetCard(events.photoUrl,
+          events.title,
+          events.desc,
+          AppHelper.dateToReadableString(events.time)
         );
       }).toList()
     );
@@ -162,7 +163,7 @@ class PlayerDashboardState extends State<PlayerDashboard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      textWithIcon(Icons.person, "Manish Poudel"),
+                      AppHelper.textWithIcon(Icons.person, "Manish Poudel", 4.0, 21, Colors.white),
                     ],
                   )),
             )
@@ -187,27 +188,6 @@ class PlayerDashboardState extends State<PlayerDashboard> {
     );
   }
 
-  /*
-  Text with icon
-   */
-  Widget textWithIcon(IconData icon, String text) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(icon, color: Colors.white),
-        Padding(
-          padding: const EdgeInsets.only(left: 4.0),
-          child: Text(
-            text,
-            style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 21,
-                color: Colors.white),
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget profileInformationHolder() {
     return Container(
@@ -251,12 +231,16 @@ class PlayerDashboardState extends State<PlayerDashboard> {
     return ListView(
       children: <Widget>[
         flatButtonWithRoute(
-                () => goToPage('/dailyQuizChallengeNotAvailablePage'),
+                () {
+                  goToPage('/dailyQuizChallengeNotAvailablePage');
+                },
             'No quiz'),
         Padding(
           padding: const EdgeInsets.only(top: 2.0),
           child: flatButtonWithRoute(
-                  () => goToPage('/dailyQuizChallengeGamePlayPage'),
+                  () {
+                    goToPage('/dailyQuizChallengeGamePlayPage');
+                  },
               "Quiz available"),
         ),
         Padding(
@@ -264,6 +248,20 @@ class PlayerDashboardState extends State<PlayerDashboard> {
           child: flatButtonWithRoute(
                   () => DailyQuizChallengePage().openPage(context),
               "Play quiz"),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: flatButtonWithRoute((){
+        FirebaseAuth.instance.currentUser().then((user){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProfilePage(user.uid)),
+          );
+        });
+
+    }, "Profile"),
+
         ),
         Padding(
           padding: const EdgeInsets.only(top: 2.0),
@@ -275,6 +273,7 @@ class PlayerDashboardState extends State<PlayerDashboard> {
           padding: const EdgeInsets.only(top: 2.0),
           child: flatButtonWithRoute(() => logoutUser(), "Log out"),
         ),
+
       ],
     );
   }
@@ -283,6 +282,7 @@ class PlayerDashboardState extends State<PlayerDashboard> {
   Go to page
    */
   void goToPage(String pageName) {
+    print("Going to page " + pageName.toString());
     AppHelper.goToPage(context, false, pageName);
   }
 

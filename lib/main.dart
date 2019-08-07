@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:surprize/DailyQuizChallengeGamePlayPage.dart';
 import 'package:surprize/DailyQuizChallengeScoreSummaryPage.dart';
+import 'package:surprize/ProfilePage.dart';
 import 'package:surprize/SplashScreen.dart';
 import 'package:surprize/DailyQuizChallengeNotAvailablePage.dart';
 import 'package:surprize/PlayerDashboard.dart';
@@ -22,7 +23,8 @@ class EntryPoint extends StatelessWidget{
         '/playerDashboard': (BuildContext context) => PlayerDashboard(),
         '/dailyQuizChallengeNotAvailablePage': (BuildContext context) => DailyQuizChallengeNotAvailablePage(),
         '/dailyQuizChallengeGamePlayPage': (BuildContext context) => DailyQuizChallengeGamePlayPage(),
-        '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0)
+        '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0),
+        '/playerProfilePage': (BuildContext context) => ProfilePage(null)
       },
     );
   }

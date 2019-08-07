@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 class AppHelper{
   /*
@@ -97,4 +98,50 @@ class AppHelper{
     scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text(value)));
   }
 
+  /*
+  Text with icon
+   */
+ static Widget textWithIcon(IconData icon, String text, double padding, double textSize,  Color color) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Icon(icon, color: color),
+        Padding(
+          padding:  EdgeInsets.only(left: padding),
+          child: Text(
+            text,
+            style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: textSize,
+                color: color),
+          ),
+        ),
+      ],
+    );
+  }
+
+  static DateTime convertToDateTime(time){
+   DateTime convertedDateTime;
+      try{
+        Timestamp timestamp = time;
+        convertedDateTime = DateTime.fromMillisecondsSinceEpoch(timestamp.seconds * 1000);
+      }
+      catch(error) {
+        print("DATE TIME CONVERSION ERROR: " + convertedDateTime.toString());
+      }
+      return convertedDateTime;
+  }
+
+  static String dateToReadableString(DateTime time){
+   return time.year.toString() + "-" + time.month.toString() + "-" + time.day.toString()
+       + " " + time.hour.toString() + ":" + addLeadZeroToNumber(time.minute);
+  }
+
+  static String addLeadZeroToNumber(int time){
+   String readableTime = time.toString();
+   if(time < 9){
+     return readableTime.padLeft(2,"0");
+   }
+   return readableTime;
+  }
 }
