@@ -1,6 +1,17 @@
 class FirestoreResources{
 
 
+  static final leaderboardCollection = "Leaderboard";
+  static final leaderboardSubCollection = "Leaderboard_scores";
+
+  /// Related to leaderboard
+  static final String leaderboardAllTime = "All Time Score";
+  static final String leaderboardWeekly = "Weekly Score";
+  static final String leaderboardDaily = "Daily Winners";
+
+  static final String fieldLeaderBoardScore = "score";
+  static final String fieldDailyQuizWinner  = "isWinner";
+
   // Related to registration
 
   // Player basic registration info related
@@ -40,4 +51,7 @@ class FirestoreResources{
   static final String fieldEventTitle = "eventTitle";
   static final String fieldEventDesc = "eventDesc";
   static final String fieldEventTime = "eventTime";
+
+
+
 }

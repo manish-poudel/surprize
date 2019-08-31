@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:surprize/CustomWidgets/CustomEventsWidgetCard.dart';
-import 'package:surprize/CustomWidgets/CustomSliverAppBarWidget.dart';
 import 'package:surprize/CustomWidgets/CustomStreamBuilderWidget.dart';
 import 'package:surprize/DailyQuizChallengePage.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppHelper.dart';
+import 'package:surprize/LeaderboardPage.dart';
 import 'package:surprize/Models/Events.dart';
 import 'package:surprize/ProfilePage.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
@@ -57,26 +57,14 @@ class PlayerDashboardState extends State<PlayerDashboard> {
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.purple[800]),
       home: Scaffold(
+        appBar: AppBar(title:Text("Home")),
           drawer: Drawer(
             child: Container(
               decoration: BoxDecoration(color: Colors.purple[800]),
               child: drawerContent(),
             ),
           ),
-          body: Container(
-            color: Colors.grey[50],
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  CustomSliverAppBarWidget(sliverTitle(), sliverBackground())
-                ];
-              },
-              body: SingleChildScrollView(
+          body: SingleChildScrollView(
                 child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +114,6 @@ class PlayerDashboardState extends State<PlayerDashboard> {
                     )),
               ),
             ),
-          )),
     );
   }
 
@@ -261,6 +248,19 @@ class PlayerDashboardState extends State<PlayerDashboard> {
         });
 
     }, "Profile"),
+
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 2.0),
+          child: flatButtonWithRoute(() async {
+            FirebaseUser user = await FirebaseAuth.instance.currentUser();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LeaderboardPage(user.uid)),
+            );
+
+          }, "Leaderboard"),
 
         ),
         Padding(

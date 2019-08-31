@@ -9,6 +9,7 @@ import 'package:surprize/DailyQuizChallengeScoreSummaryPage.dart';
 import 'package:surprize/Firestore/FirestoreOperations.dart';
 import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Helper/SoundHelper.dart';
+import 'package:surprize/Leaderboard/ScoreSystem.dart';
 import 'package:surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
 import 'package:surprize/Models/DailyQuizChallenge/QuizState.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
@@ -192,11 +193,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   void onButtonSelect(value, CustomQuizAnswerButtonWidget button) {
     if(_clickableButton) {
       if (isRightAnswer(value)) {
-        _totalScore = _totalScore + 10;
-        AppHelper.showSnackBar("correct", _scaffoldKey);
-      }
-      else{
-        AppHelper.showSnackBar("wrong", _scaffoldKey);
+        _totalScore = _totalScore + ScoreSystem.getScoreFromQuizCorrectAnswer();
       }
         setButtonClickable(false);
         button.changeColor(value);
@@ -269,7 +266,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       }
 
       if(!_isGameFinished) {
-        keepTimeTrack(10);
+        keepTimeTrack(2);
       }
 
       return  SingleChildScrollView(

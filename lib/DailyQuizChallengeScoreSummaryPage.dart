@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:surprize/Resources/ImageResources.dart';
+
+import 'Leaderboard/ScoreSystem.dart';
 
 class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
   final int _totalScore;
@@ -15,6 +18,8 @@ class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
 
 class DailyQuizChallengeScoreSummaryPageState
     extends State<DailyQuizChallengeScoreSummaryPage> {
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -34,17 +39,17 @@ class DailyQuizChallengeScoreSummaryPageState
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child:
-                  totalScoreHeading((widget._totalScore + 10).toString()),
+                  totalScoreHeading((widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString()),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: scoreTypeHeading(
                       "Correct answers", widget._totalScore.toString()),
                 ),
-                scoreTypeHeading("Game Play", "10"),
+                scoreTypeHeading("Game Play", ScoreSystem.getScoreFromGamePlay().toString()),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: totalScore((widget._totalScore + 10).toString()),
+                  child: totalScore((widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString()),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 64.0),
@@ -199,4 +204,26 @@ class DailyQuizChallengeScoreSummaryPageState
           ),
         ));
   }
+
+  @override
+  void initState() {
+    super.initState();
+    LeaderboardManager().saveScoreAfterGamePlay(widget._totalScore,
+
+        /// if all time score is saved
+        (value){
+          print("ALL TIME SCORE SAVED: " + value.toString());
+        },
+
+        /// if weekly score is saved
+        (value){
+          print("WEEKLY SCORE SAVED: " + value.toString());
+        },
+
+        /// if daily quiz winner is saved
+        (value){
+          print("DAILY QUIZ WINNER SCORE SAVED: " + value.toString());
+        });
+  }
+
 }

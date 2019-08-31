@@ -34,4 +34,5 @@ class StringResources{
   static final String headingText = "Let's play daily quiz challenge!";
   static final String getReadyForQuizText ="Get Ready! Question will be on your screen soon!";
 
+
 }

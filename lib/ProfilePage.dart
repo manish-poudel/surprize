@@ -5,6 +5,8 @@ import 'package:surprize/Models/Player.dart';
 import 'package:surprize/Models/User.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 
+import 'CustomWidgets/CustomAppBar.dart';
+
 class ProfilePage extends StatefulWidget {
 
   String _userId;
@@ -38,18 +40,7 @@ class ProfilePageState extends State<ProfilePage> {
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-          appBar: AppBar(
-            leading: GestureDetector(child: Icon(Icons.arrow_back, color: Colors.white),
-              onTap: (){
-                Navigator.of(context).pop();
-              },
-            ),
-            title: Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width / 2 - 92),
-              child: Text('Profile'),
-            ),
-          ),
+          appBar: CustomAppBar("Profile", context),
           body: Container(
               child: StreamBuilder(
                 stream: _userProfileBloc.profile,
@@ -89,20 +80,9 @@ class ProfilePageState extends State<ProfilePage> {
               Center(child: profilePhotoContainer()),
               personalInformationHolder(),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 1.0),
                 child: Container(
                   height: 8,
-                  color: Colors.grey[200],
-                ),
-              ),
-              Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: profileLeaderboardHolder(),
-                    ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Container(
-                  height: 2,
                   color: Colors.grey[200],
                 ),
               ),
@@ -112,13 +92,15 @@ class ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+
+
   Widget numberDisplayWidget(){
     return Container(
       color:Colors.grey[100],
       child: Column(
         children: <Widget>[
           Center(child: Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(1.0),
             child: Text("Score",
                 style: TextStyle(
                     color: Colors.black,
@@ -131,6 +113,7 @@ class ProfilePageState extends State<ProfilePage> {
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,
+                    fontWeight:FontWeight.w200,
                     fontFamily: 'Roboto'))
           )
         ],
@@ -147,9 +130,10 @@ class ProfilePageState extends State<ProfilePage> {
         color:Colors.purple[800],
         width: MediaQuery.of(context).size.width,
         child: Column(
+
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(top:16.0),
               child: Container(
                 height: 140,
                 width: 140,
@@ -162,66 +146,39 @@ class ProfilePageState extends State<ProfilePage> {
                         fit: BoxFit.fill)),
               ),
             ),
+            Container(
+                child: Padding(
+                  padding: const EdgeInsets.only(top:16.0, bottom: 4.0),
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        _player.name.toUpperCase(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Roboto', fontSize: 18, fontWeight:FontWeight.w400, color: Colors.purple),
+                      ),
+                    ),
+                  ),
+                )),
           ],
         ),
+
     ),
       );
   }
 
   Widget personalInformationHolder(){
-    return  Card(child: Container(
+    return  Container(
             width: MediaQuery.of(context).size.width,
             child: Column(children: <Widget>[
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    _player.name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Roboto', fontSize: 18, fontWeight:FontWeight.w500,color: Colors.purple),
-                  ),
-                )),
               textWithIcon(Icons.email, _player.email, Colors.purple),
               textWithIcon(Icons.phone, _player.phoneNumber, Colors.purple),
-              textWithIcon(Icons.place, _player.address, Colors.purple),
-
+              textWithIcon(Icons.place, _player.address, Colors.purple)
             ]),
-          ));
+          );
   }
 
-
-  Widget profileLeaderboardHolder(){
-    return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text("Current position", style:  TextStyle(
-            fontFamily: 'Roboto',
-            color: Colors.black54,
-            fontSize: 18,
-            fontWeight: FontWeight.w500)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top:8.0),
-                    child: Row(
-                        children: <Widget>[
-                          Text("1", style:  TextStyle(fontFamily: 'Roboto', fontSize: 18, color: Colors.purple)),
-                          Expanded(child: Center(child: Text("Manish Poudel", style:  TextStyle(fontFamily: 'Roboto', fontSize: 18, color: Colors.purple)))),
-                          Text("40", style:  TextStyle(fontFamily: 'Roboto', fontSize: 18, color: Colors.purple)),
-                        ],
-                      ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-    );
-  }
   /*
   Widget for text with icon
    */
@@ -229,12 +186,15 @@ class ProfilePageState extends State<ProfilePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Icon(iconData, color: color),
+        Padding(
+          padding: const EdgeInsets.only(left:8.0),
+          child: Card(child: Icon(iconData, color: color)),
+        ),
         Expanded(
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'Roboto', fontSize: 18, color: color),
+            style: TextStyle(fontFamily: 'Roboto', fontSize: 18,  fontWeight:FontWeight.w300, color: color),
           ),
         )
       ],
