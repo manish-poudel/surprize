@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:surprize/CustomWidgets/CalendarEventManagement.dart';
+import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Resources/ImageResources.dart';
+import 'package:surprize/Resources/StringResources.dart';
 
 class CustomEventWidgetCard extends StatelessWidget {
 
   String _photoUrl;
   String _title;
   String _desc;
-  String _time;
+  DateTime _time;
 
   CustomEventWidgetCard(this._photoUrl, this._title, this._desc, this._time);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    return fullSize();
+  }
+
+  Widget fullSize(){
     return  Container(
       child: Card(
         color: Colors.white,
         child: Column(
           children: <Widget>[
             Image.asset(ImageResources.appMainIcon,
-                height: 152, width: 158),
+                height: 100, width: 100),
             Container(
               color:Colors.grey[200],
               height: 1,
@@ -37,42 +44,54 @@ class CustomEventWidgetCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Text(_desc,
                   style: TextStyle(
                       fontFamily: 'Roboto',
                       color: Colors.grey,
                       fontSize: 18)),
             ),
-            Text(_time,
+            Text(AppHelper.dateToReadableString(_time),
                 style: TextStyle(
                     fontFamily: 'Roboto',
                     color: Colors.grey,
                     fontSize: 16)),
 
-            Padding(
-              padding: const EdgeInsets.only(top:20.0),
-              child: Container(
-                decoration: new BoxDecoration(
-                    color:Colors.purple,
-                    border:
-                    new Border.all(color: Colors.purple, width: 1),
-                    borderRadius:
-                    new BorderRadius.all(Radius.circular(40.0))),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.alarm, color:Colors.white),
-                      Padding(
-                        padding: const EdgeInsets.only(left:4.0),
-                        child: Text("Set Reminder",
-                            style: TextStyle(
-                                fontFamily: 'Roboto',
-                                color: Colors.white,
-                                fontSize: 18)),
-                      ),
-                    ],
+            GestureDetector(
+              onTap: (){
+                CalendarEventManagement().addEventToCalendar(_title,
+                    _desc,
+                    _time,
+                    _time).then((value){
+                }).catchError((error){
+                  print(error);
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top:8.0, bottom:8.0),
+                child: Container(
+                  decoration: new BoxDecoration(
+                      color:Colors.green[400],
+                      border:
+                      new Border.all(color: Colors.green[100], width: 1),
+                      borderRadius:
+                      new BorderRadius.all(Radius.circular(10.0))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.alarm, color:Colors.white),
+                        Padding(
+                          padding: const EdgeInsets.only(left:8.0),
+                          child: Text("Set Reminder",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  color: Colors.white,
+                                  fontSize: 18)),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -99,7 +99,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
       ];
     }
     return [
-      Text(_countDownString, style: TextStyle(color: Colors.green, fontSize: 18.0, fontFamily: 'Roboto')),
+      Text(_countDownString, style: TextStyle(color: Colors.white, fontSize: 18.0, fontFamily: 'Roboto', fontWeight: FontWeight.w400)),
         builder
     ];
 

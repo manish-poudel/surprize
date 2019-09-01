@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 class AppHelper{
   /*
@@ -134,7 +135,7 @@ class AppHelper{
 
   static String dateToReadableString(DateTime time){
    return time.year.toString() + "-" + time.month.toString() + "-" + time.day.toString()
-       + " " + time.hour.toString() + ":" + addLeadZeroToNumber(time.minute);
+       + " " + addLeadZeroToNumber(time.hour)  + ":" + addLeadZeroToNumber(time.minute);
   }
 
   static String addLeadZeroToNumber(int time){
@@ -143,5 +144,43 @@ class AppHelper{
      return readableTime.padLeft(2,"0");
    }
    return readableTime;
+  }
+
+
+  /// Button with text widget
+  Widget buttonText(String text) {
+    return Text(text,
+        style: TextStyle(color: Colors.purple[800], fontFamily: 'Roboto' ,fontSize: 18, fontWeight: FontWeight.w500));
+  }
+
+  /// Flat button with route
+  Widget flatButtonWithRoute(Icon icon, Function function, String text) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left:16.0),
+            child: icon
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left:16.0),
+            child: FlatButton(onPressed: function, child: buttonText(text)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Method for logging out user
+   logoutUser(context) {
+    FirebaseAuth.instance.signOut().then((value) {
+      try {
+        AppHelper.goToPage(context, true, '/loginPage');
+      } catch (error) {
+        print(error);
+      }
+    }).catchError((error) {
+      print(error);
+    });
   }
 }

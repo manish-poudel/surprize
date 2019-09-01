@@ -1,22 +1,35 @@
-import 'package:surprize/Helper/AppHelper.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'DailyQuizChallengeGamePlayPage.dart';
+import 'DailyQuizChallengeNotAvailablePage.dart';
 
 class DailyQuizChallengePage{
-  /*
-  Open page
-   */
-  void openPage(context){
+
+  DailyQuizChallengePage(context){
+    openPage(context);
+  }
+
+  /// Open page
+   openPage(context){
     if(!_checkIfDailyQuizGameIsOn()){
-      AppHelper.goToPage(context, false, '/dailyQuizChallengeNotAvailablePage');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DailyQuizChallengeNotAvailablePage()));
     }
+
     if(_checkIfDailyQuizGameIsOn()){
-      AppHelper.goToPage(context, false, '/dailyQuizChallengeGamePlayPage');
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DailyQuizChallengeGamePlayPage()));
     }
   }
 
-  /*
-  Check if quiz is on
-   */
+  /// Check if quiz is on
   bool _checkIfDailyQuizGameIsOn(){
     return true;
   }
+
 }

@@ -16,13 +16,11 @@ class CustomStreamBuilderWidget extends StatelessWidget{
     return StreamBuilder<QuerySnapshot>(
       stream: _querySnapshot,
       builder: (BuildContext context, snapshot){
-
         if(!snapshot.hasData) return CircularProgressIndicator();
         if(snapshot.hasError) return new Text('Error occured');
         switch(snapshot.connectionState){
           case ConnectionState.waiting:
             return new Center(child: new CircularProgressIndicator());
-
           case(ConnectionState.active):
             return _listview(snapshot);
           default:

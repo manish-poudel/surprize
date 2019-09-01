@@ -56,12 +56,12 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 32.0, right: 32.0),
-                child: Text(StringResources.noCurrentGameText, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Roboto')),
+                child: Text(StringResources.noCurrentGameText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Roboto')),
               ),
               Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: CustomCountDownTimerWidget(true,new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString, 180.0, 180.0,
-                    Colors.blueAccent, Colors.white, CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
+                    Colors.white, Colors.white, CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
               ),
               Padding(
                 padding: const EdgeInsets.only(top:16.0, bottom:16.0),

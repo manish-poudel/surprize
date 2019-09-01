@@ -20,7 +20,6 @@ class EntryPoint extends StatelessWidget{
       routes: <String, WidgetBuilder>{
         '/loginPage': (BuildContext context) => LoginPage(),
         '/registrationPage': (BuildContext context) => RegistrationPage(),
-        '/playerDashboard': (BuildContext context) => PlayerDashboard(),
         '/dailyQuizChallengeNotAvailablePage': (BuildContext context) => DailyQuizChallengeNotAvailablePage(),
         '/dailyQuizChallengeGamePlayPage': (BuildContext context) => DailyQuizChallengeGamePlayPage(),
         '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0),
@@ -41,7 +40,7 @@ class EntryPoint extends StatelessWidget{
               }
               else{
                 if(snapshot.hasData){
-                  return PlayerDashboard();
+                  return PlayerDashboard(snapshot.data);
                 }
                 else {
                   return new LoginPage();
@@ -50,4 +49,5 @@ class EntryPoint extends StatelessWidget{
             })
     );
   }
+
 }

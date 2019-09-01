@@ -55,7 +55,7 @@ class ProfilePageState extends State<ProfilePage> {
                         children: <Widget>[
                           CircularProgressIndicator(backgroundColor: Colors.purple),
                           Padding(
-                            padding: const EdgeInsets.only(top:8.0),
+                            padding: const EdgeInsets.only(top:0.0),
                             child: Text("Retrieving profile ..."),
                           )
                         ],)
@@ -78,14 +78,7 @@ class ProfilePageState extends State<ProfilePage> {
           Column(
             children: <Widget>[
               Center(child: profilePhotoContainer()),
-              personalInformationHolder(),
-              Padding(
-                padding: const EdgeInsets.only(top: 1.0),
-                child: Container(
-                  height: 8,
-                  color: Colors.grey[200],
-                ),
-              ),
+              personalInformationHolder()
             ],
           ),
         ],
@@ -130,37 +123,41 @@ class ProfilePageState extends State<ProfilePage> {
         color:Colors.purple[800],
         width: MediaQuery.of(context).size.width,
         child: Column(
-
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top:16.0),
-              child: Container(
-                height: 140,
-                width: 140,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: _player.profileImageURL.isEmpty?AssetImage(ImageResources.emptyUrlPlaceHolderImage):
-                           CachedNetworkImage(imageUrl: _player.profileImageURL),
-                        fit: BoxFit.fill)),
+              child: Center(
+                child: Container(
+                  height: 140,
+                  width: 140,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: _player.profileImageURL.isEmpty?NetworkImage('http://lorempixel.com/400/200/'):
+                             CachedNetworkImage(imageUrl: _player.profileImageURL),
+                          fit: BoxFit.fill)),
+                ))),
+
+            Padding(
+              padding: const EdgeInsets.only(top:16.0),
+              child: Text(
+                _player.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Roboto', fontSize: 24, fontWeight:FontWeight.w400, color: Colors.white),
               ),
             ),
-            Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(top:16.0, bottom: 4.0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        _player.name.toUpperCase(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'Roboto', fontSize: 18, fontWeight:FontWeight.w400, color: Colors.purple),
-                      ),
-                    ),
-                  ),
-                )),
+
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                _player.address,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Roboto', fontSize: 18, fontWeight:FontWeight.w400, color: Colors.white),
+              ),
+            )
           ],
         ),
 
@@ -169,14 +166,19 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Widget personalInformationHolder(){
-    return  Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(children: <Widget>[
-              textWithIcon(Icons.email, _player.email, Colors.purple),
-              textWithIcon(Icons.phone, _player.phoneNumber, Colors.purple),
-              textWithIcon(Icons.place, _player.address, Colors.purple)
-            ]),
-          );
+    return  Card(
+      child: Container(
+
+              width: MediaQuery.of(context).size.width,
+              child: Column(children: <Widget>[
+                textWithIcon(Icons.email, _player.email, Colors.purple),
+                textWithIcon(Icons.phone, _player.phoneNumber, Colors.purple),
+                textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
+                textWithIcon(Icons.place, _player.country, Colors.purple),
+                textWithIcon(Icons.people_outline, _player.gender, Colors.purple),
+              ]),
+            ),
+    );
   }
 
   /*
@@ -201,5 +203,45 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
+ /* Container(
+  child: Padding(
+  padding: const EdgeInsets.only(top:16.0, bottom: 4.0),
+  child: Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: <Widget>[
+
+  Container(
+  width:100,
+  child: Card(
+
+  child: Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: Text(
+  "asdsadsadasdasdasdasdasdasdasdasdasdasd",
+  textAlign: TextAlign.center,
+  style: TextStyle(
+  fontFamily: 'Roboto', fontSize: 18, fontWeight:FontWeight.w400, color: Colors.purple),
+  ),
+  ),
+  ),
+  ),
+
+  Card(
+  child: Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: Text(
+  _player.email,
+  textAlign: TextAlign.center,
+  style: TextStyle(
+  fontFamily: 'Roboto', fontSize: 18, fontWeight:FontWeight.w400, color: Colors.purple),
+  ),
+  ),
+  ),
+  ],
+  ),
+  ),
+  ))*/
 
 }

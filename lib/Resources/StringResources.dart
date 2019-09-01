@@ -24,7 +24,7 @@ class StringResources{
   static final String goBackToolTipText = 'Go back';
 
   // Related to daily quiz challenge page
-  static final String noCurrentGameText = "No quiz happening right now. Set reminder so we can let you know when next game is on!!!";
+  static final String noCurrentGameText = "No quiz is happening right now. Set reminder so we can let you know when next game is on!!!";
   static final String setReminderButtonText = "Set reminder";
   static final String exitButtonText = "Exit";
   static final String countDownTimeString ="Game starts at";
