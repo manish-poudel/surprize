@@ -87,7 +87,10 @@ class PlayerDashboardState extends State<PlayerDashboard> {
                         fontWeight: FontWeight.w500)),
               ),
               newsCard(),
-              newsCard()
+              Padding(
+                padding: const EdgeInsets.only(top:16.0),
+                child: newsCard(),
+              )
             ],
           )),
     );

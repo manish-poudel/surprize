@@ -67,11 +67,9 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget{
       child: ListView(
         children: <Widget>[
           profileDisplay(),
-          Container(
-            height: 4,
-            decoration: BoxDecoration(color: Colors.white),
-          ),
-          drawerButtons()
+
+          drawerButtons(),
+          drawerFooter()
         ],
       ),
     );
@@ -87,12 +85,24 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget{
         drawerButtonNavigation(DailyQuizChallengeNotAvailablePage(), Icon(Icons.people, color: Colors.purple),"No quiz"),
         drawerButtonNavigationWithPadding(DailyQuizChallengeGamePlayPage(),Icon(Icons.people, color: Colors.purple), "Quiz available"),
         goToGamePlay(),
-        drawerButtonNavigationWithPadding(ProfilePage(_uid),Icon(Icons.person, color: Colors.purple), "Profile"),
-            drawerButtonNavigationWithPadding(NewsReadingPage(),Icon(Icons.assignment, color: Colors.purple), "News"),
+        drawerButtonNavigationWithPadding(ProfilePage(_uid),Icon(Icons.person, color: Colors.purple), "Profile"), drawerButtonNavigationWithPadding(NewsReadingPage(),Icon(Icons.assignment, color: Colors.purple), "News"),
         drawerButtonNavigationWithPadding(LeaderboardPage(_uid), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
         drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
         logOutButton()
       ]),
+    );
+  }
+
+  /// Footer widget
+  Widget drawerFooter(){
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: <Widget>[
+          Text("Entertained by silicon guys", style: TextStyle(color:  Colors.black, fontFamily: 'Roboto' ,fontSize: 18, fontWeight: FontWeight.w300)),
+          Text("siliconguy123@gmail.com", style: TextStyle(color:  Colors.black, fontFamily: 'Roboto' ,fontSize: 12, fontWeight: FontWeight.w300)),
+        ],
+      ),
     );
   }
   /// Drawer navigation with no padding
