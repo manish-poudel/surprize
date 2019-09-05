@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/Memory/UserMemory.dart';
-import 'package:surprize/Models/Player.dart';
+import 'package:surprize/DailyQuizChallengePage.dart';
 import 'package:surprize/SurprizeNavigationDrawerWidget.dart';
 import 'CustomUpcomingEventsWidget.dart';
 import 'CustomWidgets/CustomNewsCardWidget.dart';
 import 'CustomWidgets/CustomRoundedEdgeButton.dart';
 import 'DailyQuizChallengeGamePlayPage.dart';
 import 'Helper/AppHelper.dart';
+import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
+import 'Models/DailyQuizChallenge/QuizState.dart';
 
 class PlayerDashboard extends StatefulWidget {
 
@@ -21,22 +22,35 @@ class PlayerDashboard extends StatefulWidget {
 
 class PlayerDashboardState extends State<PlayerDashboard>
     with SingleTickerProviderStateMixin {
-  double _screenWidth;
-  double _screenHeight;
 
+  DailyQuizChallengePage _dailyQuizChallengePage;
   AnimationController _animationController;
+
+  bool _showDailyQuizChallengeWidget = false;
 
   @override
   void initState() {
+    super.initState();
+
     _animationController = new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationController.repeat();
-    super.initState();
+    _dailyQuizChallengePage = new DailyQuizChallengePage(context);
+    isDailyQuizAvailable();
+  }
+
+  /// Is daily quiz available
+  isDailyQuizAvailable() async {
+
+    _dailyQuizChallengePage.listenForDailyQuizGameOn((QuizState quizState){
+      setState(() {
+        _showDailyQuizChallengeWidget = (quizState.quizState != CurrentQuizState.QUIZ_IS_OFF);
+      });
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    _screenWidth = MediaQuery.of(context).size.width;
-    _screenHeight = MediaQuery.of(context).size.height;
 
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
@@ -47,7 +61,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
   }
 
   /// Dashboard body
-  Widget dashboardBody() {
+  Widget dashboardBody()  {
     return SingleChildScrollView(
       child: Center(
           child: Column(
@@ -60,8 +74,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: CustomUpcomingEventsWidget()),
           ),
-          Visibility(visible: true, child: AppHelper.appHeaderDivider()),
-          Visibility(visible: true, child: playDailyQuizChallenge(context)),
+          dailyQuizOnWidget(),
           AppHelper.appHeaderDivider(),
           AppHelper.appSmallHeader("News"),
           CustomNewsCardWidget(),
@@ -73,6 +86,19 @@ class PlayerDashboardState extends State<PlayerDashboard>
       )),
     );
   }
+
+  /// Daily quiz on widget
+  Widget dailyQuizOnWidget(){
+    return AnimatedOpacity(
+      opacity: _showDailyQuizChallengeWidget ? 1.0 : 0.0,
+      duration: Duration(seconds: 1),
+      child: Column(children: <Widget>[
+        Visibility(visible: _showDailyQuizChallengeWidget , child: AppHelper.appHeaderDivider()),
+        Visibility(visible: _showDailyQuizChallengeWidget, child: playDailyQuizChallenge(context)),
+      ]),
+    );
+  }
+
 
   /// Play quiz challenge short cut button widget
   Widget playDailyQuizChallenge(context) {
@@ -87,8 +113,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
               style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.redAccent),
+                  fontWeight: FontWeight.w300,
+                  color: Colors.purple),
             ),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[

@@ -66,8 +66,9 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
   String get timerString{
     Duration duration = controller.duration * controller.value;
     if(_countDownTimeTypeEnum == CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE) {
-      return '${(duration.inHours).toString().padLeft(2, '0')}: ${(duration
-          .inMinutes.toString().padLeft(2, '0'))}: ${(duration.inSeconds % 60)
+      print("Duration in minute" + (duration.inMinutes).toString());
+      return '${(duration.inHours).toString().padLeft(2, '0')}: ${((duration
+          .inMinutes - (duration.inHours * 60)).toString().padLeft(2, '0'))}: ${(duration.inSeconds % 60)
           .toString()
           .padLeft(2, '0')}';
     }
@@ -79,7 +80,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
     }
 
     return '${(duration.inHours).toString().padLeft(2, '0')}: ${(duration
-        .inMinutes.toString().padLeft(2, '0'))}: ${(duration.inSeconds % 60)
+        .inMinutes.toString().padLeft(2, '0'))}: ${(duration.inSeconds)
         .toString()
         .padLeft(2, '0')}';
   }
@@ -111,7 +112,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
     super.initState();
     controller = AnimationController(
         vsync: this,
-        duration:_duration
+        duration:_duration.isNegative?Duration(seconds: 0):_duration
     );
 
     if(widget._startCountDownImmediately) {
@@ -123,8 +124,18 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
   Start controller
    */
   void _startController(){
+    try {
       controller.reverse(
           from: controller.value == 0.0 ? 1.0 : controller.value);
+    }
+    catch(error){
+      controller = AnimationController(
+          vsync: this,
+          duration:Duration(seconds:0));
+      controller.reverse(
+          from: controller.value == 0.0 ? 1.0 : controller.value);
+
+    }
   }
 
   /*

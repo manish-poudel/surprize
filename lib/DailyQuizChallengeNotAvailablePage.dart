@@ -3,12 +3,15 @@ import 'package:surprize/CountDownTimerTypeEnum.dart';
 import 'package:surprize/CustomWidgets/CalendarEventManagement.dart';
 import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
-import 'package:surprize/Helper/AppColor.dart';
 import 'package:surprize/Helper/AppHelper.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 import 'package:surprize/Resources/StringResources.dart';
 
 class DailyQuizChallengeNotAvailablePage extends StatefulWidget {
+
+  DateTime _dateTime;
+  DailyQuizChallengeNotAvailablePage(this._dateTime);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -21,23 +24,32 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  Duration countDownDuration;
   /*
   Set reminder for the daily quiz challenge game
    */
   void setReminderForTheGame(){
+
     // adding event
     CalendarEventManagement().addEventToCalendar(StringResources.setReminderTitle,
         StringResources.setReminderDescription,
-        DateTime.now(),
-        DateTime.now()).then((value){
+        widget._dateTime,
+        widget._dateTime).then((value){
     }).catchError((error){
       print(error);
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    DateTime currentDateTime = DateTime.now();
+    countDownDuration = widget._dateTime.difference(currentDateTime);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return MaterialApp(
       home: new Scaffold(
         key: _scaffoldKey,
@@ -59,8 +71,13 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
               ),
               Padding(
                 padding: const EdgeInsets.all(32.0),
-                child: CustomCountDownTimerWidget(true,new Duration(hours: 00, minutes: 00, seconds: 60), StringResources.countDownTimeString, 180.0, 180.0,
-                    Colors.white, Colors.white, CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
+                child: CustomCountDownTimerWidget(true, countDownDuration,
+                    StringResources.countDownTimeString,
+                    180.0,
+                    180.0,
+                    Colors.white,
+                    Colors.redAccent,
+                    CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
               ),
               Padding(
                 padding: const EdgeInsets.only(top:16.0, bottom:16.0),

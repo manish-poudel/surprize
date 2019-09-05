@@ -17,6 +17,8 @@ import 'package:surprize/Resources/ImageResources.dart';
 import 'package:surprize/Resources/SoundResources.dart';
 import 'package:surprize/Resources/StringResources.dart';
 
+import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
+
 class DailyQuizChallengeGamePlayPage extends StatefulWidget {
 
   @override
@@ -55,7 +57,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY);
 
   bool _clickableButton = true;
-  bool _hasQuizStateBeenRetrieved = false;
+  bool _readyToShowQuestion = false;
   bool _hasQuizListBeenRetrieved = false;
   bool _isGameFinished = false;
   bool _hasMusicStarted = false;
@@ -74,7 +76,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   void initState() {
     super.initState();
     initQuizQuestion();
-   listenForQuizState();
+     listenForQuizState();
    _soundHelper = SoundHelper();
 
   }
@@ -168,10 +170,8 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
         .listen((snapshot) {
       setState(() {
         _quizState = QuizState.fromMap(snapshot.data);
-        print(_quizState.isSwitchOn);
-        if (_quizState.isSwitchOn) {
-          _hasQuizStateBeenRetrieved = true;
-
+        if (_quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED) {
+          _readyToShowQuestion = true;
           // Get current quiz value
           _dailyQuizChallengeQnAList.forEach((dailyQuizChallengeQnA){
             if(dailyQuizChallengeQnA.id == _quizState.currentQuizId){
@@ -180,8 +180,8 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           });
 
         }
-        if (!_quizState.isSwitchOn) {
-          _hasQuizStateBeenRetrieved = false;
+        if (_quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED) {
+          _readyToShowQuestion = false;
         }
       });
     });
@@ -211,7 +211,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
             decoration: BoxDecoration(
                 image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage),fit: BoxFit.fill)
             ),
-          child: (_hasQuizListBeenRetrieved && _hasQuizStateBeenRetrieved ? ifAllQuizValueHasBeenSet() : ifQuizValueIsInRetrievedMode()),
+          child: (_hasQuizListBeenRetrieved && _readyToShowQuestion ? ifAllQuizValueHasBeenSet() : ifQuizValueIsInRetrievedMode()),
         ),
       ),
     );
@@ -235,7 +235,6 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           _customCountDownTimerWidget.stopCountdown();
           _isGameFinished = true;
           setButtonClickable(false);
-          AppHelper.showSnackBar("Game has finished", _scaffoldKey);
           goToScoreSummaryPage();
         }
       });

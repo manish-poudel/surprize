@@ -132,31 +132,6 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget numberDisplayWidget() {
-    return Container(
-      color: Colors.grey[100],
-      child: Column(
-        children: <Widget>[
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Text("Score",
-                style: TextStyle(
-                    color: Colors.black, fontSize: 18.0, fontFamily: 'Roboto')),
-          )),
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("20",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w200,
-                      fontFamily: 'Roboto')))
-        ],
-      ),
-    );
-  }
-
   var image = "";
   /*
   User profile photo container
@@ -349,6 +324,7 @@ class ProfilePageState extends State<ProfilePage> {
         _isImageLoading = true;
         _imageUploadProgressValue = event.snapshot.bytesTransferred.toDouble() /
             event.snapshot.totalByteCount.toDouble();
+        print("Image upload prgress value" + _imageUploadProgressValue.toString());
       });
     });
 

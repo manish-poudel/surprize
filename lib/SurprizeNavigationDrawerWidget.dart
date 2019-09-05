@@ -1,6 +1,3 @@
-
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +90,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-        drawerButtonNavigation(DailyQuizChallengeNotAvailablePage(), Icon(Icons.people, color: Colors.purple),"No quiz"),
+        drawerButtonNavigation(DailyQuizChallengeNotAvailablePage(DateTime.now()), Icon(Icons.people, color: Colors.purple),"No quiz"),
         drawerButtonNavigationWithPadding(DailyQuizChallengeGamePlayPage(),Icon(Icons.people, color: Colors.purple), "Quiz available"),
         goToGamePlay(),
         drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"), drawerButtonNavigationWithPadding(NewsReadingPage(),Icon(Icons.assignment, color: Colors.purple), "News"),
@@ -148,7 +145,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget goToGamePlay(){
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
-        child:  AppHelper().flatButtonWithRoute(Icon(Icons.play_arrow, color: Colors.purple),() => DailyQuizChallengePage(_selfContext), "Play Quiz")
+        child:  AppHelper().flatButtonWithRoute(Icon(Icons.play_arrow, color: Colors.purple),() => DailyQuizChallengePage(_selfContext).openPage(), "Play Quiz")
     );
   }
 }

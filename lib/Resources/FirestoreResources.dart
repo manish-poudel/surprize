@@ -34,8 +34,8 @@ class FirestoreResources{
   static final String collectionQuizName = '/quiz';
   static final String collectionQuestionAndAnswersList= 'quiz_q&a_list';
   static final String fieldQuizId = 'id';
-  static final String fieldQuizGameAvailable = 'startGame';
-  static final String fieldQuizPlay = 'isQuizOn';
+  static final String fieldQuizState = 'quizState';
+  static final String fieldQuizStartTime = 'quizStartTime';
   static final String fieldCurrentQuizId = "current_quiz_id";
   static final String fieldQuizQuestion = 'question';
   static final String fieldQuizAnswers = 'answers';

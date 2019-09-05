@@ -1,23 +1,37 @@
+import 'package:surprize/Helper/AppHelper.dart';
+import 'package:surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
 import 'package:surprize/Resources/FirestoreResources.dart';
 
 class QuizState{
-  bool _isQuizGameAvailable;
-  bool _startQuiz;
+  DateTime _quizStartTime;
+  CurrentQuizState _currentQuizState;
   String _currentQuizId;
 
-  QuizState(this._isQuizGameAvailable, this._startQuiz, this._currentQuizId);
+  QuizState(this._currentQuizState, this._currentQuizId, this._quizStartTime);
 
-
-  bool get isDailyQuizChallengeOn => _isQuizGameAvailable;
-  bool get isSwitchOn => _startQuiz;
+  DateTime get quizStartTime => _quizStartTime;
+  CurrentQuizState get quizState => _currentQuizState;
   String get currentQuizId => _currentQuizId;
 
-  /*
-  Convert from map to object
-   */
+
   QuizState.fromMap(Map<dynamic, dynamic> map){
-    _isQuizGameAvailable = map[FirestoreResources.fieldQuizGameAvailable];
-    _startQuiz = map[FirestoreResources.fieldQuizPlay];
+    _currentQuizState = _convertStringToEnum(map[FirestoreResources.fieldQuizState]);
     _currentQuizId = map[FirestoreResources.fieldCurrentQuizId];
+    _quizStartTime = AppHelper.convertToDateTime(map[FirestoreResources.fieldQuizStartTime]);
   }
+
+  /// Convert enum to string
+  CurrentQuizState _convertStringToEnum(String currentQuizState){
+    switch(currentQuizState){
+      case "QUIZ_IS_OFF":
+        return CurrentQuizState.QUIZ_IS_OFF;
+      case "QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED":
+        return CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED;
+      case "QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED":
+        return CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED;
+      default:
+        return CurrentQuizState.UNKNOWN;
+    }
+  }
+
 }

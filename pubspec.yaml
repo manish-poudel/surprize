@@ -31,6 +31,7 @@ dependencies:
   cached_network_image: ^1.1.1
   image_picker:
   image_cropper:
+  flutter_html:
 
 
 dev_dependencies:
