@@ -12,9 +12,9 @@ class FirestoreResources{
   static final String fieldLeaderBoardScore = "score";
   static final String fieldDailyQuizWinner  = "isWinner";
 
-  // Related to registration
+  /// Related to registration
 
-  // Player basic registration info related
+  /// Player basic registration info related
   static final String userCollectionName = "/Players";
   static final String fieldPlayerId = 'membershipId';
   static final String fieldPlayerEmail = 'email';
@@ -29,7 +29,7 @@ class FirestoreResources{
 
   /*****************************************************************/
 
-  // Related to daily quiz challenge
+  /// Related to daily quiz challenge
 
   static final String collectionQuizName = '/quiz';
   static final String collectionQuestionAndAnswersList= 'quiz_q&a_list';
@@ -44,7 +44,7 @@ class FirestoreResources{
   /*****************************************************************/
 
 
-  // Related to events collections
+  /// Related to events collections
   static final String collectionEvent = "events";
   static final String fieldEventId = "eventId";
   static final String fieldEventPhoto  = "eventPhoto";
@@ -52,6 +52,18 @@ class FirestoreResources{
   static final String fieldEventDesc = "eventDesc";
   static final String fieldEventTime = "eventTime";
 
+  /***************************Related to activity**************************************/
+
+  static final String collectionActivity = "activity";
+  static final String collectionActivityList = "top_five_recent_activity_list";
+  static final String fieldActivityId = "activityId";
+  static final String fieldActivityType = "activityType";
+  static final String fieldActivityReward = "activityReward";
+  static final String fieldActivityTime = "activityTime";
 
 
+  /**********************************************************************/
+  /// Related to storage
+
+  static final String storageProfileFolder = "User profile images";
 }

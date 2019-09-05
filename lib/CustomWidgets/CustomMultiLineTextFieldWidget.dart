@@ -9,20 +9,20 @@ class CustomMultiLineTextFieldWidget extends StatefulWidget{
   String _label ="";
   CustomMultiLineTextFieldWidgetState _state;
   Color _color = Colors.white;
+  String value;
 
-  CustomMultiLineTextFieldWidget(String label, Color color){
+  CustomMultiLineTextFieldWidget(String label, this.value, Color color){
     _label = label;
     _color = color;
   }
 
 
-  String getValue()
-  {
+  String getValue() {
     return _state.getValue();
   }
 
   State<StatefulWidget> createState(){
-    _state = new CustomMultiLineTextFieldWidgetState(_label, _color);
+    _state = new CustomMultiLineTextFieldWidgetState(_label, _color,value);
     return _state;
   }
 }
@@ -34,9 +34,10 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
   Color _color = Colors.white;
   final textFldcontroller = TextEditingController();
 
-  CustomMultiLineTextFieldWidgetState(String label, Color color){
+  CustomMultiLineTextFieldWidgetState(String label, Color color,String value){
     _label = label;
     _color = color;
+    textFldcontroller.text  = _value = value;
   }
 
   String getValue()
@@ -57,7 +58,7 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
                 fillColor: _color,
                 border:InputBorder.none,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 0.0)
+                    borderSide: BorderSide(width: 0.0, color: Colors.white)
                 )
 
             ),

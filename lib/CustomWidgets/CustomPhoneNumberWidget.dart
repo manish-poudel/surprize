@@ -4,10 +4,16 @@ import 'package:country_code_picker/country_code_picker.dart';
 class CustomPhoneNumberWidget extends StatefulWidget {
 
   CustomPhoneNumberWidgetState _state;
+
+  String _initialSelection;
+  String _phoneNumber;
+
+  CustomPhoneNumberWidget(this._initialSelection, this._phoneNumber);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    _state = CustomPhoneNumberWidgetState();
+    _state = CustomPhoneNumberWidgetState(_phoneNumber);
     return _state;
   }
 
@@ -29,6 +35,10 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
   String _countryName;
 
   final TextEditingController controller = TextEditingController();
+
+  CustomPhoneNumberWidgetState(String phoneNumber){
+    controller.text = phoneNumber;
+  }
 
   String getCountryCode(){
     return _countryCode;
@@ -55,7 +65,7 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
                   _countryCode = code.toString();
                   _countryName = code.name;
                 },
-                initialSelection: 'USA',
+                initialSelection: widget._initialSelection,
          ),
          Expanded(
            child:TextFormField(

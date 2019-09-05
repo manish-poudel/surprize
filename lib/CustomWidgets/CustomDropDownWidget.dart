@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 class CustomDropDownWidget extends StatefulWidget {
 
   List<String> _listItems;
+  String _selectedItem;
   String _label;
   CustomDropDownWidgetState _state;
 
-  CustomDropDownWidget(this._listItems, this._label);
+  CustomDropDownWidget(this._listItems, this._selectedItem, this._label);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    _state = CustomDropDownWidgetState(_listItems, _label);
+    _state = CustomDropDownWidgetState(_listItems, _label, this._selectedItem);
     return _state;
   }
 
@@ -24,7 +25,7 @@ class CustomDropDownWidget extends StatefulWidget {
   String _label;
   String _selectedItem = 'Male';
 
-  CustomDropDownWidgetState(this._listItems, this._label);
+  CustomDropDownWidgetState(this._listItems, this._label,this._selectedItem);
 
   String returnSelectedItem(){
     return _selectedItem;

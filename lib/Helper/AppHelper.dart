@@ -1,6 +1,12 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:surprize/LoginPage.dart';
 class AppHelper{
   /*
   Pop and removed current page, and push with new page
@@ -134,7 +140,7 @@ class AppHelper{
   }
 
   static String dateToReadableString(DateTime time){
-   return time.year.toString() + "-" + time.month.toString() + "-" + time.day.toString()
+   return time.year.toString() + "/" + time.month.toString() + "/" + time.day.toString()
        + " " + addLeadZeroToNumber(time.hour)  + ":" + addLeadZeroToNumber(time.minute);
   }
 
@@ -155,27 +161,57 @@ class AppHelper{
 
   /// Flat button with route
   Widget flatButtonWithRoute(Icon icon, Function function, String text) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left:16.0),
-            child: icon
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left:16.0),
-            child: FlatButton(onPressed: function, child: buttonText(text)),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () => function(),
+      child: Container(
+        color:Colors.grey[100],
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left:16.0),
+              child: icon
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left:16.0),
+              child: FlatButton(onPressed: function, child: buttonText(text)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
+  /// Widget for app small header
+ static Widget appSmallHeader(String heading){
+   return Padding(
+     padding: const EdgeInsets.all(16.0),
+     child: Text(heading,
+         style: TextStyle(
+             fontFamily: 'Roboto',
+             color: Colors.black54,
+             fontSize: 18,
+             fontWeight: FontWeight.w500)),
+   );
+  }
+
+  /// App header
+  static Widget appHeaderDivider(){
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Container(
+        height: 8,
+        color: Colors.grey[200],
+      ),
+    );
+  }
   /// Method for logging out user
    logoutUser(context) {
     FirebaseAuth.instance.signOut().then((value) {
       try {
-        AppHelper.goToPage(context, true, '/loginPage');
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginPage()));
       } catch (error) {
         print(error);
       }
@@ -183,4 +219,44 @@ class AppHelper{
       print(error);
     });
   }
+
+  /// Open image gallery
+  static Future openImageGallery() async {
+    var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    return file;
+  }
+
+  /// Open image cropper
+  static Future<File> cropImage(File imageFile, maxH, maxW) async {
+    File croppedFile = await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      ratioX: 1.0,
+      ratioY: 1.0,
+      maxWidth: maxW,
+      maxHeight: maxH,
+    );
+    return croppedFile;
+  }
+
+  /// Open image gallery, crop and return it
+  static Future pickAndCropPhoto(maxHeight, maxWidth) async {
+    var image = await AppHelper.openImageGallery();
+    var croppedImage = await AppHelper.cropImage(image, maxHeight, maxWidth);
+    return croppedImage;
+  }
+
+  /// Get date from list
+  static List<int> getDateListFromString(String dob, String splitBy){
+   List<int> dobList = new List();
+   try {
+     dob.split(splitBy).forEach((value) {
+       dobList.add(int.parse(value));
+     });
+   }
+   catch(error){
+     print(error.toString());
+     return [DateTime.now().year,DateTime.now().month,DateTime.now().day];
+   }
+  return dobList;
+ }
 }

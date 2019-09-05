@@ -42,13 +42,13 @@ class NewsReadingPageState extends State<NewsReadingPage>{
   /// Title of news
   Widget newsTitle(){
    return Padding(
-     padding: const EdgeInsets.all(8.0),
+     padding: const EdgeInsets.all(16.0),
      child: Column(
        crossAxisAlignment: CrossAxisAlignment.start,
        children: <Widget>[
-         Text("Winner of popular app surprize has declared its first winner. ", style: TextStyle(color: Colors.black, fontFamily: 'Roboto' ,fontSize: 24, fontWeight: FontWeight.w500)),
+         Text("Surprize has finally declared its first winner", style: TextStyle(color: Colors.black, fontFamily: 'Roboto' ,fontSize: 24, fontWeight: FontWeight.w500)),
          Padding(
-           padding: const EdgeInsets.only(top:8.0),
+           padding: const EdgeInsets.only(top:2.0),
            child: Text("12/1/2019", style: TextStyle(color: Colors.grey, fontFamily: 'Roboto' ,fontSize: 12, fontWeight: FontWeight.w500)),
          )
        ],
@@ -64,7 +64,7 @@ class NewsReadingPageState extends State<NewsReadingPage>{
             Image.network('http://lorempixel.com/400/200/', height: 200),
             Container(
                 height: 20,
-                child: Text("Some random image short desc will be displayed here.", style: TextStyle(color: Colors.black, fontFamily: 'Roboto' ,fontSize: 14, fontWeight: FontWeight.w300))),
+                child: Text("Image short description here", style: TextStyle(color: Colors.black, fontFamily: 'Roboto' ,fontSize: 14, fontWeight: FontWeight.w300))),
           ],
         ));
   }

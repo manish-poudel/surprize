@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:surprize/Resources/ImageResources.dart';
 
 import 'Leaderboard/ScoreSystem.dart';
+import 'Models/Activity.dart';
+import 'UserProfileManagement/UserProfile.dart';
 
 class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
   final int _totalScore;
@@ -208,6 +211,10 @@ class DailyQuizChallengeScoreSummaryPageState
   @override
   void initState() {
     super.initState();
+    FirebaseAuth.instance.currentUser().then((user){
+      UserProfile().addActivity(user.uid, ActivityType.PLAYED_QUIZ, widget._totalScore.toString(), DateTime.now());
+    });
+
     LeaderboardManager().saveScoreAfterGamePlay(widget._totalScore,
 
         /// if all time score is saved

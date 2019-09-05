@@ -8,24 +8,26 @@ class SplashScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context)
   {
-    return new MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        backgroundColor: AppColor.colorPrimary,
-          body: Center(
-            child: (SingleChildScrollView(
-              child: Center(
-                child: (Card(child:Column(mainAxisAlignment:MainAxisAlignment.center,
-                    children:<Widget> [
-                      Container(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0),child:
-                      Image.asset(ImageResources.appMainLogo)),
-                      Text(StringResources.appCreator)
-                    ])
-                )),
+          body: Container(
+            color:Colors.purple[800],
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset(ImageResources.appMainLogo),
+                  Center(child:Text("A product of silicon guys",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Roboto',
+                          fontSize: 21,
+                          fontWeight: FontWeight.w400)
+                  )),
+                ],
               ),
-            )
             ),
-          )
-      ),
+          )),
     );
   }
 }

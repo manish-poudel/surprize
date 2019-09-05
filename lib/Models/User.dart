@@ -28,13 +28,13 @@ class User{
   String get address => _address;
 
   set membershipId(String membershipId) => _membershipId;
-  set name(String name) => _name;
-  set dob(String dob) => _dob;
-  set gender(String gender) => _gender;
-  set email(String email) => _email;
+  set name(String name) => _name = name;
+  set dob(String dob) => _dob = dob;
+  set gender(String gender) => _gender = gender;
+  set email(String email) => _email = email;
   set membershipDate(DateTime membershipDate) => _membershipId;
-  set profileImageURL(String url) => _profileImageURL;
-  set phoneNumber(String phoneNumber) => _phoneNumber;
-  set country(String country) => _country;
-  set address(String address) => _address;
+  set profileImageURL(String url) => _profileImageURL = url;
+  set phoneNumber(String phoneNumber) => _phoneNumber = phoneNumber;
+  set country(String country) => _country = country;
+  set address(String address) => _address = address;
 }

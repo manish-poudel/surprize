@@ -29,6 +29,8 @@ dependencies:
   audioplayer:
   path_provider:
   cached_network_image: ^1.1.1
+  image_picker:
+  image_cropper:
 
 
 dev_dependencies:

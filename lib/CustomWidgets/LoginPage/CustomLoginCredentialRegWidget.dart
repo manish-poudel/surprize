@@ -40,7 +40,7 @@ class CustomLoginCredentialRegWidgetState extends State<CustomLoginCredentialReg
     return _passwordField.getRepassword();
   }
 
-  CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email", Colors.white, validation: AppHelper.validateEmail);
+  CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email","", Colors.white, validation: AppHelper.validateEmail);
   CustomRegPasswordEntryWidget _passwordField = CustomRegPasswordEntryWidget();
 
   @override

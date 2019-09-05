@@ -22,15 +22,15 @@ class LoginPage extends StatefulWidget {
   class LoginPageState extends State<LoginPage>{
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email", Colors.white);
-    CustomLabelTextFieldWidget _passwordField = CustomLabelTextFieldWidget("Password", Colors.white);
+    CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email","", Colors.white);
+    CustomLabelTextFieldWidget _passwordField = CustomLabelTextFieldWidget("Password","", Colors.white);
     CustomProgressbarWidget _customProgressBarWidget = CustomProgressbarWidget();
 
    /*
    Login user
     */
     void loginUser(){
-      _customProgressBarWidget.startProgressBar(context, StringResources.loginProgressInformationDisplay);
+      _customProgressBarWidget.startProgressBar(context, StringResources.loginProgressInformationDisplay, Colors.purple[800], Colors.white);
       FirestoreOperations().loginUser(_emailField.getValue(), _passwordField.getValue()).then((firebaseUser)  {
         _customProgressBarWidget.stopAndEndProgressBar(context);
         AppHelper.goToPage(context, true, '/playerDashboard');

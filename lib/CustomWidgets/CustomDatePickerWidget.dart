@@ -6,6 +6,12 @@ class CustomDatePickerWidget extends StatefulWidget{
 
   CustomDatePickerWidgetState _customDatePickerWidgetState;
 
+  int y;
+  int m;
+  int d;
+
+  CustomDatePickerWidget(this.y, this.m, this.d);
+
   String getSelectedDate(){
     return _customDatePickerWidgetState.currentDate;
   }
@@ -24,10 +30,18 @@ class CustomDatePickerWidget extends StatefulWidget{
 
 class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
 
-  String currentDate = "DOB";
+  String currentDate;
   bool _properDateSelected = false;
   bool _showValidation = false;
 
+
+  @override
+  void initState() {
+    currentDate =  widget.y.toString() + "/" + widget.m.toString() + "/" + widget.d.toString();
+    super.initState();
+  }
+
+  CustomDatePickerWidgetState();
   /*
   Check for proper validation. If not, also set validation message.
    */
@@ -45,6 +59,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
       currentDate = year.toString() + "/" + month.toString() + "/" + date.toString();
       _properDateSelected = true;
       _showValidation = false;
+        currentDate = year.toString() + "/" + month.toString() + "/" + date.toString();
     });
   }
 
@@ -54,16 +69,19 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
   /*
  Open date picker
   */
-  void openDatePicker(){
+  void openDatePicker(int y, int m, int d){
+    print("ada");
+    print(y.toString() + " " +  m.toString() + " " +  d.toString());
+
     DatePicker.showDatePicker(
       context,
       locale: 'i18n',
       showTitleActions: true,
       minYear: 1970,
       maxYear: 2020,
-      initialYear: 2018,
-      initialMonth: 6,
-      initialDate: 21,
+      initialYear: y,
+      initialMonth: m,
+      initialDate: d,
       cancel: Text('Cancel'),
       confirm: Text('Confirm'),
       dateFormat: 'yyyy-mm-dd',
@@ -93,12 +111,12 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
                 IconButton(
                   icon:Icon(Icons.calendar_today, color: Colors.red),
                   tooltip: 'Set date',
-                  onPressed: openDatePicker ,
+                  onPressed: () => openDatePicker(widget.y,widget.m,widget.d),
                 ),
 
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(currentDate,
+                  child: Text("DOB   " + currentDate,
                       style: TextStyle(fontSize: 16.0)
                   ),
                 )
@@ -113,7 +131,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
         ],
       ),
       onTap: (){
-        openDatePicker();
+        openDatePicker(widget.y,widget.m,widget.d);
       },
     );
   }

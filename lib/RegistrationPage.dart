@@ -35,11 +35,11 @@ class RegistrationPageState extends State<RegistrationPage> {
 
   // Form widgets
   CustomLoginCredentialRegWidget _customLoginCredentialRegWidget=  CustomLoginCredentialRegWidget();
-  CustomLabelTextFieldWidget _nameField = CustomLabelTextFieldWidget("Name", Colors.white, validation: AppHelper.validateName);
-  CustomDropDownWidget _genderDropDownWidget=  CustomDropDownWidget(['Male', 'Female', 'Other'], "Gender");
-  CustomDatePickerWidget _dobDatePickerWidget = CustomDatePickerWidget();
-  CustomPhoneNumberWidget _phoneNumberWidget = CustomPhoneNumberWidget();
-  CustomMultiLineTextFieldWidget _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", Colors.white);
+  CustomLabelTextFieldWidget _nameField = CustomLabelTextFieldWidget("Name", "",Colors.white, validation: AppHelper.validateName);
+  CustomDropDownWidget _genderDropDownWidget=  CustomDropDownWidget(['Male', 'Female', 'Other'], "Male","Gender");
+  CustomDatePickerWidget _dobDatePickerWidget = CustomDatePickerWidget(1991,1,1);
+  CustomPhoneNumberWidget _phoneNumberWidget = CustomPhoneNumberWidget("+1", "");
+  CustomMultiLineTextFieldWidget _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", "",Colors.white);
   CustomELAWidget _customELAWidget = new CustomELAWidget();
   CustomProgressbarWidget _customRegistrationProgressBar = new CustomProgressbarWidget();
 
@@ -178,7 +178,7 @@ class RegistrationPageState extends State<RegistrationPage> {
    */
   void validateAndRegisterPlayer(){
     if(_formKey.currentState.validate() && _dobDatePickerWidget.isProperlyValidated()){
-      _customRegistrationProgressBar.startProgressBar(context, StringResources.registrationProgressInformationDisplayMessage);
+      _customRegistrationProgressBar.startProgressBar(context, StringResources.registrationProgressInformationDisplayMessage, Colors.purple[800], Colors.white);
       registerUser(_customLoginCredentialRegWidget.getEmail(), _customLoginCredentialRegWidget.getPassword());
     }
     else{

@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 
 class CustomLabelTextFieldWidget extends StatefulWidget {
 
+  String _value = "";
   String _label = "";
   _CustomLabelTextFieldWidgetState _state;
   Color _color = Colors.white;
   Function _validation;
 
-  CustomLabelTextFieldWidget(String label, Color color, {Function validation}) {
+  CustomLabelTextFieldWidget(String label, String value, Color color, {Function validation}) {
+    _value = value;
     _label = label;
     _color = color;
     _validation = validation;
@@ -21,10 +23,17 @@ class CustomLabelTextFieldWidget extends StatefulWidget {
     return _state.getValue();
   }
 
+   setValue(String value){
+    value = value;
+    _state.setValue(value);
+  }
+
+  @override
   State<StatefulWidget> createState() {
-    _state = new _CustomLabelTextFieldWidgetState(_label, _color, _validation);
+    _state =  _CustomLabelTextFieldWidgetState(_label, _color, _validation, _value);
     return _state;
   }
+
 }
 
 class _CustomLabelTextFieldWidgetState
@@ -33,16 +42,24 @@ class _CustomLabelTextFieldWidgetState
   Function _validation;
   String _value = "";
   Color _color = Colors.white;
-  final textFldcontroller = TextEditingController();
+  final textcontroller = TextEditingController();
 
-  _CustomLabelTextFieldWidgetState(String label, Color color, Function validation) {
+  _CustomLabelTextFieldWidgetState(String label, Color color, Function validation, value) {
     _label = label;
     _color = color;
     _validation = validation;
+      textcontroller.text = _value = value;
   }
 
   String getValue() {
-    return textFldcontroller.text;
+    return textcontroller.text;
+  }
+
+   setValue(String value){
+    setState(() {
+      textcontroller.text = value;
+      _value = value;
+    });
   }
 
   @override
@@ -51,8 +68,7 @@ class _CustomLabelTextFieldWidgetState
         child: Row(children: <Widget>[
       Flexible(
           child: TextFormField(
-
-        controller: textFldcontroller,
+        controller: textcontroller,
         keyboardType: TextInputType.emailAddress,
         validator: _validation,
         onSaved: (String val){
@@ -60,12 +76,13 @@ class _CustomLabelTextFieldWidgetState
         },
         decoration: InputDecoration(
             filled: true,
-            border: UnderlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+            border: InputBorder.none,
             enabled: true,
             labelText: _label,
             fillColor: _color,
             enabledBorder:
-                OutlineInputBorder(borderSide: BorderSide(width: 0.0))),
+                OutlineInputBorder(
+                    borderSide: BorderSide(color:Colors.white,width: 1.0))),
       ))
     ]));
   }

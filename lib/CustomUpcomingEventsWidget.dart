@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:surprize/CustomWidgets/CustomEventsWidget.dart';
+import 'package:flutter/material.dart';
 
 import 'CustomWidgets/CustomEventsWidgetCard.dart';
 import 'Firestore/FirestoreOperations.dart';
-import 'Helper/AppHelper.dart';
 import 'Models/Events.dart';
 import 'Resources/FirestoreResources.dart';
 
@@ -19,7 +18,7 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
 
   List<Events> _eventsList = new List();
 
-  double _height = 20;
+  double _height = 234;
 
   @override
   void initState() {
@@ -40,7 +39,10 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
   /// Get event list
   Widget displayEventList(){
 
-    _eventsList.add(_eventsList[0]);
+    Events event = new Events("", "1", "Daily quiz challenge", "Play and earn money",
+        DateTime.now());
+    _eventsList.clear();
+    _eventsList.add(event);
     if(_eventsList.length == 0)
       return noEventDisplay();
 
@@ -53,9 +55,8 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
     FirestoreOperations().getMainCollectionSnapshot(FirestoreResources.collectionEvent).listen((querySnapshot){
        querySnapshot.documents.toList().forEach((documentSnapshot){
           setState(() {
-            _height = 230;
+            _height = 234;
             Events event = Events.fromMap(documentSnapshot.data);
-            print("The event "+ event.title);
              _eventsList.add(event);
           });
       });
@@ -64,7 +65,16 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
 
   /// if there is no events
   Widget noEventDisplay(){
-      return Text("No events");
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(Icons.notifications_off, color:Colors.grey,size: 18),
+          Padding(
+            padding: const EdgeInsets.only(left:8.0),
+            child: Text("No events"),
+          ),
+        ],
+      );
   }
 
   Widget eventDisplay(){

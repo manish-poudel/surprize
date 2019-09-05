@@ -48,7 +48,7 @@ class CustomEventWidgetCard extends StatelessWidget {
               child: Text(_desc,
                   style: TextStyle(
                       fontFamily: 'Roboto',
-                      color: Colors.grey,
+                      color: Colors.black,
                       fontSize: 18)),
             ),
             Text(AppHelper.dateToReadableString(_time),
@@ -68,26 +68,26 @@ class CustomEventWidgetCard extends StatelessWidget {
                 });
               },
               child: Padding(
-                padding: const EdgeInsets.only(top:8.0, bottom:8.0),
+                padding: const EdgeInsets.only(top:16.0, bottom:8.0),
                 child: Container(
                   decoration: new BoxDecoration(
-                      color:Colors.green[400],
+                      color:Colors.white,
                       border:
                       new Border.all(color: Colors.green[100], width: 1),
                       borderRadius:
                       new BorderRadius.all(Radius.circular(10.0))),
                   child: Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: Row(
                       children: <Widget>[
-                        Icon(Icons.alarm, color:Colors.white),
+                        Icon(Icons.alarm, color:Colors.green),
                         Padding(
-                          padding: const EdgeInsets.only(left:8.0),
+                          padding: const EdgeInsets.only(left:8.0, right: 4.0),
                           child: Text("Set Reminder",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: 'Roboto',
-                                  color: Colors.white,
+                                  color: Colors.green,
                                   fontSize: 18)),
                         ),
                       ],

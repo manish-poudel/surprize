@@ -41,7 +41,6 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
     return MaterialApp(
       home: new Scaffold(
         key: _scaffoldKey,
-        backgroundColor: AppColor.colorPrimary,
         body: Container(
             decoration: BoxDecoration(
                 image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
