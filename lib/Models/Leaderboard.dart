@@ -1,4 +1,4 @@
-import 'package:surprize/Models/Player.dart';
+import 'package:Surprize/Models/Player.dart';
 
 class Leaderboard{
   int _rank;

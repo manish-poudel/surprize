@@ -1,21 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:surprize/CountDownTimerTypeEnum.dart';
-import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
-import 'package:surprize/CustomWidgets/DailyQuizChallenge/CustomQuizAnswerButtonWidget.dart';
-import 'package:surprize/CustomWidgets/DailyQuizChallenge/CustomQuizQuestionHolderWidget.dart';
-import 'package:surprize/DailyQuizChallengeScoreSummaryPage.dart';
-import 'package:surprize/Firestore/FirestoreOperations.dart';
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Helper/SoundHelper.dart';
-import 'package:surprize/Leaderboard/ScoreSystem.dart';
-import 'package:surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
-import 'package:surprize/Models/DailyQuizChallenge/QuizState.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
-import 'package:surprize/Resources/ImageResources.dart';
-import 'package:surprize/Resources/SoundResources.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:Surprize/CountDownTimerTypeEnum.dart';
+import 'package:Surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
+import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizAnswerButtonWidget.dart';
+import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizQuestionHolderWidget.dart';
+import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
+import 'package:Surprize/Firestore/FirestoreOperations.dart';
+import 'package:Surprize/Helper/SoundHelper.dart';
+import 'package:Surprize/Leaderboard/ScoreSystem.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/QuizState.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/Resources/SoundResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
 
@@ -288,7 +287,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
             Stack(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 32, left:0.0),
+                  padding: const EdgeInsets.only(top: 24, left:0.0),
                   child: Center(
                     child: Container(
                       height: 50,
@@ -315,7 +314,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
                               blurRadius: 21.0
                           ),
                         ],
-                        border: new Border.all(color: Colors.purple, width: 1),
+                        border: new Border.all(color: Colors.white10, width: 0),
                         borderRadius:  new BorderRadius.all(Radius.circular(21.0))
                     ),
                     child: Column(

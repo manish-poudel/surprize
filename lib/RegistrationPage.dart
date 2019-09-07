@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/Firestore/FirestoreOperations.dart';
-import 'package:surprize/Helper/AppColor.dart';
-import 'package:surprize/Models/Player.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
-import 'package:surprize/Resources/ImageResources.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:Surprize/Firestore/FirestoreOperations.dart';
+import 'package:Surprize/Helper/AppColor.dart';
+import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 import 'CustomWidgets/CustomLabelTextFieldWidget.dart';
 import 'CustomWidgets/CustomPhoneNumberWidget.dart';
@@ -13,8 +13,8 @@ import 'CustomWidgets/CustomMultiLineTextFieldWidget.dart';
 import 'CustomWidgets/CustomTextButtonWidget.dart';
 import 'CustomWidgets/CustomDropDownWidget.dart';
 import 'Helper/AppHelper.dart';
-import 'package:surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
-import 'package:surprize/CustomWidgets/LoginPage/CustomLoginCredentialRegWidget.dart';
+import 'package:Surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
+import 'package:Surprize/CustomWidgets/LoginPage/CustomLoginCredentialRegWidget.dart';
 import 'CustomWidgets/CustomProgressbarWidget.dart';
 
 class RegistrationPage extends StatefulWidget {

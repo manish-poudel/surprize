@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
 import '../CustomLabelTextFieldWidget.dart';
-import 'package:surprize/CustomWidgets/RegistrationPage/CustomRegPasswordEntryWidget.dart';
+import 'package:Surprize/CustomWidgets/RegistrationPage/CustomRegPasswordEntryWidget.dart';
 
 class CustomLoginCredentialRegWidget extends StatefulWidget{
 

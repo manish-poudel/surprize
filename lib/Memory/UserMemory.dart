@@ -1,5 +1,5 @@
 
-import 'package:surprize/Models/Player.dart';
+import 'package:Surprize/Models/Player.dart';
 
 class UserMemory {
   static final UserMemory _userMemory =

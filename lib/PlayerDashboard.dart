@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/DailyQuizChallengePage.dart';
-import 'package:surprize/SurprizeNavigationDrawerWidget.dart';
+import 'package:Surprize/DailyQuizChallengePage.dart';
+import 'package:Surprize/SurprizeNavigationDrawerWidget.dart';
 import 'CustomUpcomingEventsWidget.dart';
 import 'CustomWidgets/CustomNewsCardWidget.dart';
 import 'CustomWidgets/CustomRoundedEdgeButton.dart';

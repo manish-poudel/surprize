@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:surprize/Firestore/FirestoreAuthOperations.dart';
-import 'package:surprize/Firestore/FirestoreCRUDOperations.dart';
-import 'package:surprize/Firestore/FirestoreStorageOperations.dart';
+import 'package:Surprize/Firestore/FirestoreAuthOperations.dart';
+import 'package:Surprize/Firestore/FirestoreCRUDOperations.dart';
+import 'package:Surprize/Firestore/FirestoreStorageOperations.dart';
 
 class FirestoreOperations extends FirestoreAuthOperations with FirestoreStorage, FirestoreCRUDOperations{
   ///

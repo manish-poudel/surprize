@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'DailyQuizChallengeGamePlayPage.dart';
 import 'DailyQuizChallengeNotAvailablePage.dart';

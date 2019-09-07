@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
 
 import 'CustomWidgets/CustomNavigationDrawerWidget.dart';
 import 'DailyQuizChallengeGamePlayPage.dart';
@@ -145,7 +145,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget goToGamePlay(){
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
-        child:  AppHelper().flatButtonWithRoute(Icon(Icons.play_arrow, color: Colors.purple),() => DailyQuizChallengePage(_selfContext).openPage(), "Play Quiz")
+        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple),() => DailyQuizChallengePage(_selfContext).openPage(), "Play Quiz")
     );
   }
 }

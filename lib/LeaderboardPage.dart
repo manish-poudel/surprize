@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:surprize/Leaderboard/LeaderboardManager.dart';
-import 'package:surprize/Models/Leaderboard.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
+import 'package:Surprize/Models/Leaderboard.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'Resources/ImageResources.dart';
 

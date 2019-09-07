@@ -46,7 +46,7 @@ class CustomQuizQuestionHolderWidgetState extends State<CustomQuizQuestionHolder
                 blurRadius: 25.0
             ),
           ],
-          border: new Border.all(color: Colors.white54, width: 0.5),
+          border: new Border.all(color: Colors.white54, width: 0),
             borderRadius:  new BorderRadius.all(Radius.circular(32.0))
         ),
         child: Center(

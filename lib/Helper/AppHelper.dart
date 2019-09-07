@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:surprize/LoginPage.dart';
+import 'package:Surprize/LoginPage.dart';
 class AppHelper{
   /*
   Pop and removed current page, and push with new page
@@ -141,7 +141,7 @@ class AppHelper{
 
   static String dateToReadableString(DateTime time){
    return time.year.toString() + "/" + time.month.toString() + "/" + time.day.toString()
-       + " " + addLeadZeroToNumber(time.hour)  + ":" + addLeadZeroToNumber(time.minute);
+       + ", " + addLeadZeroToNumber(time.hour)  + ":" + addLeadZeroToNumber(time.minute);
   }
 
   static String addLeadZeroToNumber(int time){

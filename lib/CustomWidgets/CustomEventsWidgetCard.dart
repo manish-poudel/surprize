@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/CustomWidgets/CalendarEventManagement.dart';
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Resources/ImageResources.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:Surprize/CustomWidgets/CalendarEventManagement.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 class CustomEventWidgetCard extends StatelessWidget {
 

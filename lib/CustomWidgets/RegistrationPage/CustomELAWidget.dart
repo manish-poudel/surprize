@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 class CustomELAWidget extends StatefulWidget {
   @override

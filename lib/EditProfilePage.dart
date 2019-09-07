@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/CustomWidgets/CustomProgressbarWidget.dart';
-import 'package:surprize/Models/Player.dart';
+import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
+import 'package:Surprize/Models/Activity.dart';
+import 'package:Surprize/Models/Player.dart';
 
 import 'CustomWidgets/CustomAppBar.dart';
 import 'CustomWidgets/CustomDatePickerWidget.dart';
@@ -146,8 +147,15 @@ class EditProfilePageState extends State<EditProfilePage> {
 
      UserProfile().updateProfile(_player.membershipId, _player).then((value){
        UserMemory().savePlayer(_player);
+       addActivity();
        _customRegistrationProgressBar.stopAndEndProgressBar(context);
        Navigator.pop(context);
      });
+  }
+
+  /// Add to recent activity
+  void addActivity(){
+    UserProfile().addActivity(_player.membershipId, ActivityType.EDITED_PROFILE,
+        "0", DateTime.now());
   }
 }

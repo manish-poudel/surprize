@@ -18,6 +18,10 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="surprize"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -37,6 +41,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider423872288231567"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

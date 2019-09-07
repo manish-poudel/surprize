@@ -1,6 +1,6 @@
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Models/User.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/User.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 /*
 Model class for player

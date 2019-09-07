@@ -1,4 +1,4 @@
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 class DailyQuizChallengeQnA {
 

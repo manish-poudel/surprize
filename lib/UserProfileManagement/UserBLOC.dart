@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:surprize/Memory/UserMemory.dart';
-import 'package:surprize/Models/Player.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/Player.dart';
 
 /// User bloc class to get all the profile.
 class UserBLOC{

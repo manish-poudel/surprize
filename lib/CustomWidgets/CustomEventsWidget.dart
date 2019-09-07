@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:surprize/CustomWidgets/CustomStreamBuilderWidget.dart';
+import 'package:Surprize/CustomWidgets/CustomStreamBuilderWidget.dart';
 
 class CustomEventsWidget extends StatefulWidget{
   var _query;

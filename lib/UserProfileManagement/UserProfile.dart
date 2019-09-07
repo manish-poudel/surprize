@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:surprize/Models/Activity.dart';
-import 'package:surprize/Models/Player.dart';
-import 'package:surprize/Models/User.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:Surprize/Models/Activity.dart';
+import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/Models/User.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 class UserProfile{
 

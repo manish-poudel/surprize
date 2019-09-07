@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/CountDownTimerTypeEnum.dart';
-import 'package:surprize/CustomWidgets/CalendarEventManagement.dart';
-import 'package:surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
-import 'package:surprize/CustomWidgets/CustomTextButtonWidget.dart';
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Resources/ImageResources.dart';
-import 'package:surprize/Resources/StringResources.dart';
+import 'package:Surprize/CountDownTimerTypeEnum.dart';
+import 'package:Surprize/CustomWidgets/CalendarEventManagement.dart';
+import 'package:Surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
+import 'package:Surprize/CustomWidgets/CustomTextButtonWidget.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 class DailyQuizChallengeNotAvailablePage extends StatefulWidget {
 

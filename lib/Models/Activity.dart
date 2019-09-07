@@ -1,5 +1,5 @@
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 class Activity {
   String id;
@@ -12,7 +12,7 @@ class Activity {
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
     map[FirestoreResources.fieldActivityId] = id;
-    map[FirestoreResources.fieldActivityType] = _getStringFromEnum(type);
+    map[FirestoreResources.fieldActivityType] = getStringFromEnum(type);
     map[FirestoreResources.fieldActivityReward] = reward;
     map[FirestoreResources.fieldActivityTime] = time;
     return map;
@@ -27,7 +27,7 @@ class Activity {
 }
 
 /// Get string from enum
-_getStringFromEnum(ActivityType activityType) {
+  getStringFromEnum(ActivityType activityType) {
   switch (activityType) {
     case ActivityType.EDITED_PROFILE:
       return "EDITED_PROFILE";
@@ -35,8 +35,11 @@ _getStringFromEnum(ActivityType activityType) {
     case ActivityType.PLAYED_QUIZ:
       return "PLAYED_QUIZ";
       break;
-    case ActivityType.SHARING_APP:
-      return "SHARING_APP";
+    case ActivityType.SHARING_APP_TO_OTHER_APPS:
+      return "SHARING_APP_TO_OTHER_APPS";
+      break;
+    case ActivityType.SHARING_APP_TO_FACEBOOK:
+      return "SHARING_APP_TO_FACEBOOK";
       break;
     case ActivityType.UNKNOWN:
       return "UNKNOWN";
@@ -53,8 +56,11 @@ _getEnumFromString(String activityType) {
     case "PLAYED_QUIZ":
       return ActivityType.PLAYED_QUIZ;
       break;
-    case "SHARING_APP":
-      return ActivityType.SHARING_APP;
+    case "SHARING_APP_TO_OTHER_APPS":
+      return ActivityType.SHARING_APP_TO_OTHER_APPS;
+      break;
+    case "SHARING_APP_TO_FACEBOOK":
+      return ActivityType.SHARING_APP_TO_FACEBOOK;
       break;
     case "UNKNOWN":
       return ActivityType.UNKNOWN;
@@ -62,4 +68,4 @@ _getEnumFromString(String activityType) {
   }
 }
 
-enum ActivityType { SHARING_APP, PLAYED_QUIZ, EDITED_PROFILE, UNKNOWN }
+enum ActivityType { SHARING_APP_TO_OTHER_APPS, PLAYED_QUIZ, EDITED_PROFILE, UNKNOWN, SHARING_APP_TO_FACEBOOK}

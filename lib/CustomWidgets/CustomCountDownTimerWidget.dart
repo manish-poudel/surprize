@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:surprize/CountDownTimerTypeEnum.dart';
+import 'package:Surprize/CountDownTimerTypeEnum.dart';
 import 'dart:math' as math;
 
 class CustomCountDownTimerWidget extends StatefulWidget{

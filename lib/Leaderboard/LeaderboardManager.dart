@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:surprize/Firestore/FirestoreOperations.dart';
-import 'package:surprize/Leaderboard/ScoreSystem.dart';
-import 'package:surprize/Models/Leaderboard.dart';
-import 'package:surprize/Models/Player.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Firestore/FirestoreOperations.dart';
+import 'package:Surprize/Leaderboard/ScoreSystem.dart';
+import 'package:Surprize/Models/Leaderboard.dart';
+import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 /// Singleton leaderboard manager class for handling all operation related to leaderboard
 
@@ -30,10 +30,10 @@ class LeaderboardManager{
       _userId = firebaseUser.uid;
       _totalScore = scoreFromQuizPlay + ScoreSystem.getScoreFromGamePlay();
 
-      _saveForAllTimeScore((value){
+      saveForAllTimeScore((value){
         allTimeScoredSaved(value);
       });
-     _saveForWeeklyScore((value){
+      saveForWeeklyScore((value){
         weeklyScoredSaved(value);
       });
       _saveForDailyQuizWinner(scoreFromQuizPlay , (value){
@@ -43,15 +43,26 @@ class LeaderboardManager{
   }
 
 
+  ///Save score after sharing
+  saveScoreAfterSharing(Function allTimeScoredSaved, Function weeklyScoredSaved){
+    _totalScore = ScoreSystem.getSoreFromSharingApp("Facebook");
+    saveForAllTimeScore((value){
+      allTimeScoredSaved(value);
+    });
+    saveForWeeklyScore((value){
+      weeklyScoredSaved(value);
+    });
+  }
+
   /// Save score for all time
-  void _saveForAllTimeScore(Function allTimeScoreSaved){
+  void saveForAllTimeScore(Function allTimeScoreSaved){
    _saveToFirestore(FirestoreResources.leaderboardAllTime, (value){
      allTimeScoreSaved(value);
    });
   }
 
   /// Save score for weekly
-  void _saveForWeeklyScore(Function weeklyScoredSaved){
+  void saveForWeeklyScore(Function weeklyScoredSaved){
     _saveToFirestore(FirestoreResources.leaderboardWeekly, (value){
       weeklyScoredSaved(value);
     });

@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:surprize/CustomWidgets/CustomAppBarWithAction.dart';
-import 'package:surprize/EditProfilePage.dart';
-import 'package:surprize/Memory/UserMemory.dart';
-import 'package:surprize/Models/Player.dart';
+import 'package:Surprize/CustomWidgets/CustomAppBarWithAction.dart';
+import 'package:Surprize/EditProfilePage.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/Player.dart';
 
 import 'CustomWidgets/CustomRecentActiviyWidget.dart';
 import 'Helper/AppHelper.dart';
@@ -97,8 +97,8 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
-    super.dispose();
     _userBLOC.dispose();
+    super.dispose();
   }
 
   /// If no profile exists
@@ -260,11 +260,11 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  List<Activity> _recentActivityList = List();
+  Map<String, Activity>_recentActivityMap = Map();
 
   /// Get all recent activity list
   Widget recentActivityList() {
-    if (_recentActivityList.length == 0)
+    if (_recentActivityMap.length == 0)
       return Center(
           child: Text("No recent activities",
               style: TextStyle(
@@ -273,8 +273,10 @@ class ProfilePageState extends State<ProfilePage> {
                   fontWeight: FontWeight.w300,
                   color: Colors.grey)));
 
+
+    List<Activity> recentActivityList = _recentActivityMap.values.toList();
     /// Sort the recent activity list
-    _recentActivityList.sort((Activity activity, Activity activity2) =>
+    recentActivityList.sort((Activity activity, Activity activity2) =>
         activity2.id.compareTo(activity.id));
 
     return Container(
@@ -282,11 +284,11 @@ class ProfilePageState extends State<ProfilePage> {
           physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: _recentActivityList.length,
+          itemCount: recentActivityList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: CustomRecentActivityWidget(_recentActivityList[index]),
+              child: CustomRecentActivityWidget(recentActivityList[index]),
             );
           }),
     );
@@ -294,9 +296,13 @@ class ProfilePageState extends State<ProfilePage> {
 
   /// Get and listen recent activity list
   void getRecentActivityList() {
+
     UserProfile().getActivity(_player.membershipId, (Activity activity) {
       setState(() {
-        _recentActivityList.add(activity);
+        if(_recentActivityMap.containsKey(activity.id)){
+          _recentActivityMap.remove(activity.id);
+        }
+        _recentActivityMap.putIfAbsent(activity.id, () => activity);
       });
     });
   }

@@ -1,10 +1,17 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:surprize/Leaderboard/LeaderboardManager.dart';
-import 'package:surprize/Resources/ImageResources.dart';
+import 'package:flutter/services.dart';
+import 'package:Surprize/AppShare/FacebookShare.dart';
+import 'package:Surprize/AppShare/ShareApp.dart';
+import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
+import 'package:Surprize/Resources/ImageResources.dart';
 
+import 'CustomWidgets/CustomProgressbarWidget.dart';
 import 'Leaderboard/ScoreSystem.dart';
 import 'Models/Activity.dart';
+import 'Resources/ChannelResources.dart';
 import 'UserProfileManagement/UserProfile.dart';
 
 class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
@@ -21,7 +28,6 @@ class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
 
 class DailyQuizChallengeScoreSummaryPageState
     extends State<DailyQuizChallengeScoreSummaryPage> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +60,40 @@ class DailyQuizChallengeScoreSummaryPageState
                   padding: const EdgeInsets.all(16.0),
                   child: totalScore((widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString()),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 64.0),
-                  child: button("Share and earn point", Icons.share),
-                ),
+               Container(
+                 child: Column(
+                   children: <Widget>[
+                     Padding(
+                       padding: const EdgeInsets.all(4),
+                       child: Container(
+                         height: 1,
+                         color: Colors.white10,
+                       ),
+                     ),
+                     Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: <Widget>[
+                           Icon(Icons.share, color: Colors.white),
+                           Padding(
+                             padding: const EdgeInsets.only(left:8.0),
+                             child: Text("Share and earn points !",style: TextStyle(color:Colors.white, fontSize: 18,fontFamily: 'Roboto', fontWeight: FontWeight.w500),),
+                           ),
+                         ],
+                       ),
+                     ),
+                     Padding(
+                       padding: const EdgeInsets.only(top: 2.0),
+                       child: button("Share with Facebook", Colors.blue ,() => shareWithFacebook()),
+                     ),
+                     Padding(
+                       padding: const EdgeInsets.only(top: 4.0, bottom:8.0),
+                       child: button("Share with other apps", Colors.purple[800] ,() => shareWithOtherApp()),
+                     ),
+                   ],
+                 ),
+               )
               ],
             ),
           ),
@@ -161,28 +197,22 @@ class DailyQuizChallengeScoreSummaryPageState
     );
   }
 
-  Widget button(String text, IconData icon) {
+  Widget button(String text, Color color, Function onClick) {
     return FlatButton(
       child: Container(
         decoration: new BoxDecoration(
-            color: Colors.purple[800],
-            border: new Border.all(color: Colors.white, width: 0.5),
-            borderRadius: new BorderRadius.all(Radius.circular(24.0))),
+            color: color,
+            borderRadius: new BorderRadius.all(Radius.circular(8.0))),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: Text(text,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Roboto'))),
-              Icon(icon, color: Colors.white)
-            ],
-          ),
+          child: Text(text,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Roboto')),
         ),
       ),
+      onPressed: onClick,
     );
   }
 
@@ -208,29 +238,94 @@ class DailyQuizChallengeScoreSummaryPageState
         ));
   }
 
+
+  UserProfile _userProfile;
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.currentUser().then((user){
-      UserProfile().addActivity(user.uid, ActivityType.PLAYED_QUIZ, widget._totalScore.toString(), DateTime.now());
-    });
+    _userProfile = UserProfile();
+      addRecentActivity(ActivityType.PLAYED_QUIZ, (widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString());
+      updateScoreForGamePlay();
+  }
 
+  /// Add recent activity
+  void addRecentActivity(ActivityType activityType, String totalScore){
+    FirebaseAuth.instance.currentUser().then((user){
+      _userProfile.addActivity(user.uid, activityType, totalScore, DateTime.now());
+    });
+  }
+
+  /// Sharing with other app
+  shareWithOtherApp() async {
+   String result = await ShareApp().shareAfterGamePlay(ScoreSystem.getSoreFromSharingApp("Others"));
+  }
+
+
+  bool hasAllTimeScoreSaved = false;
+  bool hasWeeklyScoreSaved = false;
+  Future shareWithFacebook() async {
+    try {
+      String value = await FacebookShare().shareToFacebookWithScore(widget._totalScore);
+      if(value == "APP_SHARED"){
+        updateScoreForSharing();
+        addRecentActivity(ActivityType.SHARING_APP_TO_FACEBOOK, ScoreSystem.getSoreFromSharingApp('Facebook').toString());
+      }
+      if(value == "APP_SHARE_CANCELED"){
+        Scaffold.of(context).showSnackBar(new SnackBar(
+          content: new Text("You've cancelled sharing the post. Sharing post can increase your points."),
+        ));
+      }
+    }
+    catch(error){
+      print(error.toString());
+    }
+  }
+
+  /// Update Score for game play
+  updateScoreForGamePlay(){
     LeaderboardManager().saveScoreAfterGamePlay(widget._totalScore,
 
         /// if all time score is saved
-        (value){
+            (value){
           print("ALL TIME SCORE SAVED: " + value.toString());
         },
 
         /// if weekly score is saved
-        (value){
+            (value){
           print("WEEKLY SCORE SAVED: " + value.toString());
         },
 
         /// if daily quiz winner is saved
-        (value){
+            (value){
           print("DAILY QUIZ WINNER SCORE SAVED: " + value.toString());
         });
+  }
+
+
+  /// Update score for sharing
+  void updateScoreForSharing(){
+    CustomProgressbarWidget customProgressbarWidget = new CustomProgressbarWidget();
+    customProgressbarWidget.startProgressBar(context,
+        "Thanks for sharing!. \n Updating your score ...", Colors.white, Colors.black);
+    try {
+      LeaderboardManager().saveScoreAfterSharing((value) {
+        hasAllTimeScoreSaved = true;
+        stopProgressBar(customProgressbarWidget);
+
+      }, (value) {
+        hasWeeklyScoreSaved = true;
+        stopProgressBar(customProgressbarWidget);
+      });
+    }
+    catch(error){
+      customProgressbarWidget.stopAndEndProgressBar(context);
+    }
+  }
+
+  /// Stop progressbar
+  stopProgressBar(customProgressbarWidget){
+    if(hasAllTimeScoreSaved && hasWeeklyScoreSaved)
+      customProgressbarWidget.stopAndEndProgressBar(context);
   }
 
 }

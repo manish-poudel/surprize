@@ -1,6 +1,6 @@
-import 'package:surprize/Helper/AppHelper.dart';
-import 'package:surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
-import 'package:surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 
 class QuizState{
   DateTime _quizStartTime;
