@@ -275,7 +275,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                   backgroundImage:
                   leaderboard.player.profileImageURL.isEmpty
                       ? AssetImage(
-                      ImageResources.emptyUrlPlaceHolderImage)
+                      ImageResources.emptyUserProfilePlaceholderImage)
                       : NetworkImage(
                       leaderboard.player.profileImageURL)),
             ),

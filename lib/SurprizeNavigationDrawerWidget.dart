@@ -51,7 +51,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
          Padding(
            padding: const EdgeInsets.all(16.0),
            child: CircleAvatar(radius: 40, backgroundColor: Colors.white, backgroundImage:
-           _player.profileImageURL.isEmpty?AssetImage(ImageResources.emptyUrlPlaceHolderImage):
+           _player.profileImageURL.isEmpty?AssetImage(ImageResources.emptyUserProfilePlaceholderImage):
            CachedNetworkImageProvider( _player.profileImageURL)
            ),
          ),

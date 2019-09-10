@@ -9,6 +9,8 @@ import 'Helper/AppHelper.dart';
 import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
 import 'Models/DailyQuizChallenge/QuizState.dart';
 
+
+//// MAKE SURE YOU REMOVE DEPENDENCIES IN GRADLE FOR EG, FIRESTORE... AND CHECK IF IT WORK.. thEY MAY BE NOT BE REQUIRED!!!!!
 class PlayerDashboard extends StatefulWidget {
 
   PlayerDashboard();
@@ -69,11 +71,9 @@ class PlayerDashboardState extends State<PlayerDashboard>
         children: <Widget>[
           //  profileInformationHolder(),
           AppHelper.appSmallHeader("Upcoming events"),
-          Container(
-            child: Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                child: CustomUpcomingEventsWidget()),
-          ),
+          Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: CustomUpcomingEventsWidget()),
           dailyQuizOnWidget(),
           AppHelper.appHeaderDivider(),
           AppHelper.appSmallHeader("News"),

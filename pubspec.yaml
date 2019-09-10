@@ -67,6 +67,7 @@ flutter:
     - assets/images/quiz_answer_background.jpg
     - assets/user_placeholder.png
     - assets/dailyQuizPlayBackgroundMusic.mp3
+    - assets/image_placeholder.png
 
   fonts:
     - family: Roboto

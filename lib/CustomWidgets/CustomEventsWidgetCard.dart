@@ -1,8 +1,7 @@
+import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CustomWidgets/CalendarEventManagement.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/Resources/ImageResources.dart';
-import 'package:Surprize/Resources/StringResources.dart';
 
 class CustomEventWidgetCard extends StatelessWidget {
 
@@ -16,21 +15,26 @@ class CustomEventWidgetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return fullSize();
+    return fullSize(context);
   }
 
-  Widget fullSize(){
+  Widget fullSize(context){
     return  Container(
       child: Card(
         color: Colors.white,
         child: Column(
           children: <Widget>[
-            Image.asset(ImageResources.appMainIcon,
-                height: 100, width: 100),
-            Container(
-              color:Colors.grey[200],
-              height: 1,
-              width: 120,
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: FadeInImage(height:80, width:160, image: NetworkImage(_photoUrl), placeholder: AssetImage(ImageResources.emptyImageLoadingUrlPlaceholder)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left:8.0, right:8.0),
+              child: Container(
+                color:Colors.grey[200],
+                height: 1,
+                width: 120,
+              ),
             ),
             Container(
               child: Padding(
@@ -68,7 +72,7 @@ class CustomEventWidgetCard extends StatelessWidget {
                 });
               },
               child: Padding(
-                padding: const EdgeInsets.only(top:16.0, bottom:8.0),
+                padding: const EdgeInsets.only(top:16.0, bottom:8.0, left:8, right: 8),
                 child: Container(
                   decoration: new BoxDecoration(
                       color:Colors.white,

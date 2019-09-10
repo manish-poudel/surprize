@@ -1,0 +1,31 @@
+
+import 'dart:io';
+
+import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:social_share_plugin/social_share_plugin.dart';
+
+class ShareApp{
+
+  Future<String> shareAfterGamePlay(int score) async {
+    final ByteData bytes = await rootBundle.load(ImageResources.appMainLogo);
+    await Share.file('Surprize image', 'appMainLogo.png', bytes.buffer.asUint8List(), 'image/png', text: ''
+        'Share code: xyz ) \n'
+        'Applicable for sharer only: Go to app>share> and past this code to get point for your work \n \n'
+        'Play and earn money! \n'
+        'https://play.google.com/store/apps/details?id=com.talkmydoc.blyaank.barunste&hl=en \n'
+        'Click the link above');
+
+    return "SUCCESS";
+  }
+
+
+  shareToFacebook(int score) async {
+    File file = await ImagePicker.pickImage(source:ImageSource.gallery);
+    await SocialSharePlugin.shareToFeedFacebook('Surprize', file.path);
+  }
+
+
+}

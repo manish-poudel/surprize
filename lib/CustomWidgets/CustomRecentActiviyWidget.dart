@@ -53,7 +53,7 @@ class CustomRecentActivityWidget extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 21,
                           color: Colors.purple,
-                          fontWeight: FontWeight.w500)),
+                          fontWeight: FontWeight.w400)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
@@ -110,8 +110,8 @@ class CustomRecentActivityWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300)),
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400)),
             ),
           ),
         ],

@@ -276,7 +276,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           child: Center(
           child: Text(
             StringResources.headingText,
-            style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.w500),
+            style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.w300),
           ),
       ),
         ),

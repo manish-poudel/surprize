@@ -193,7 +193,7 @@ class ProfilePageState extends State<ProfilePage> {
                       image: DecorationImage(
                           image: _player.profileImageURL.isEmpty
                               ? AssetImage(
-                                  ImageResources.emptyUrlPlaceHolderImage)
+                                  ImageResources.emptyUserProfilePlaceholderImage)
                               : CachedNetworkImageProvider(
                                   _player.profileImageURL),
                           fit: BoxFit.fill)),
@@ -287,7 +287,7 @@ class ProfilePageState extends State<ProfilePage> {
           itemCount: recentActivityList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.all(8.0),
               child: CustomRecentActivityWidget(recentActivityList[index]),
             );
           }),

@@ -16,9 +16,8 @@ class CustomUpcomingEventsWidget extends StatefulWidget{
 }
 class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
 
-  List<Events> _eventsList = new List();
+  Map<String, Events> _eventsList = new Map();
 
-  double _height = 234;
 
   @override
   void initState() {
@@ -28,21 +27,11 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
 
   @override
   Widget build(BuildContext context) {
-
-    // TODO: implement build
-    return Container(
-      height: _height,
-      child: displayEventList(),
-    );
+    return displayEventList();
   }
 
   /// Get event list
   Widget displayEventList(){
-
-    Events event = new Events("", "1", "Daily quiz challenge", "Play and earn money",
-        DateTime.now());
-    _eventsList.clear();
-    _eventsList.add(event);
     if(_eventsList.length == 0)
       return noEventDisplay();
 
@@ -53,11 +42,10 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
   /// Get event list
   void getEventsList(){
     FirestoreOperations().getMainCollectionSnapshot(FirestoreResources.collectionEvent).listen((querySnapshot){
-       querySnapshot.documents.toList().forEach((documentSnapshot){
+       querySnapshot.documentChanges.toList().forEach((documentSnapshot){
           setState(() {
-            _height = 234;
-            Events event = Events.fromMap(documentSnapshot.data);
-             _eventsList.add(event);
+            Events event = Events.fromMap(documentSnapshot.document.data);
+             _eventsList.putIfAbsent(event.id, () => event);
           });
       });
     });
@@ -78,12 +66,19 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
   }
 
   Widget eventDisplay(){
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-        itemCount: _eventsList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return CustomEventWidgetCard(_eventsList[index].photoUrl,
-              _eventsList[index].title, _eventsList[index].desc, _eventsList[index].time);
-        });
+
+    List<Events> eventList = _eventsList.values.toList();
+
+    return Container(
+      height: 230,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+          itemCount: eventList.length,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return CustomEventWidgetCard(eventList[index].photoUrl,
+                eventList[index].title, eventList[index].desc, eventList[index].time);
+          }),
+    );
   }
 }
