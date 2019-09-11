@@ -61,6 +61,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
         child: Row(children: <Widget>[
           Flexible(
               child: TextFormField(
+                style: TextStyle(fontFamily: 'Raleway'),
                 controller: passwordController,
                 keyboardType: TextInputType.emailAddress,
                 validator: _validatePassword,
@@ -84,6 +85,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
         child: Row(children: <Widget>[
           Flexible(
               child: TextFormField(
+                style: TextStyle(fontFamily: 'Raleway'),
                 controller: rePasswordController,
                 keyboardType: TextInputType.emailAddress,
                 validator: _validatePasswordAgain,

@@ -50,7 +50,9 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
     return Container(child: Row(
         children:<Widget>[
           Flexible(child:
-          TextField(controller: textFldcontroller,
+          TextField(
+            style: TextStyle(fontFamily: 'Raleway'),
+            controller: textFldcontroller,
             decoration: InputDecoration(
                 filled: true,
                 enabled: true,

@@ -1,3 +1,4 @@
+import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/DailyQuizChallengePage.dart';
 import 'package:Surprize/SurprizeNavigationDrawerWidget.dart';
@@ -57,7 +58,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-            appBar: AppBar(title: Text("Home")),
+            appBar: AppBar(title: Text("Home", style: TextStyle(fontFamily: 'Raleway'))),
             drawer: SurprizeNavigationDrawerWidget(context),
             body: dashboardBody()));
   }
@@ -76,12 +77,24 @@ class PlayerDashboardState extends State<PlayerDashboard>
               child: CustomUpcomingEventsWidget()),
           dailyQuizOnWidget(),
           AppHelper.appHeaderDivider(),
-          AppHelper.appSmallHeader("News"),
-          CustomNewsCardWidget(),
+          Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  CustomQuizLettersWidget(),
+                  Align(alignment:Alignment.center ,child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text("Learn more", style: TextStyle(fontFamily: 'Raleway'),),
+                  ))
+                ],
+              )),
+          AppHelper.appHeaderDivider(),
+          AppHelper.appSmallHeader("Hear from us"),
           Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: CustomNewsCardWidget(),
-          )
+          ),
+
         ],
       )),
     );
@@ -111,7 +124,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
             child: Text(
               "Game is on !!!",
               style: TextStyle(
-                  fontFamily: 'Roboto',
+                  fontFamily: 'Raleway',
                   fontSize: 18,
                   fontWeight: FontWeight.w300,
                   color: Colors.purple),

@@ -41,23 +41,23 @@ class CustomEventWidgetCard extends StatelessWidget {
                 padding: const EdgeInsets.all(4.0),
                 child: Text(_title,
                     style: TextStyle(
-                        fontFamily: 'Roboto',
+                        fontFamily: 'Raleway',
                         color: Colors.purple[900],
                         fontWeight: FontWeight.w500,
                         fontSize: 20)),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.only(left:8.0, right: 8.0, bottom: 2.0, top:4.0),
               child: Text(_desc,
                   style: TextStyle(
-                      fontFamily: 'Roboto',
+                      fontFamily: 'Raleway',
                       color: Colors.black,
                       fontSize: 18)),
             ),
             Text(AppHelper.dateToReadableString(_time),
                 style: TextStyle(
-                    fontFamily: 'Roboto',
+                    fontFamily: 'Raleway',
                     color: Colors.grey,
                     fontSize: 16)),
 
@@ -90,7 +90,7 @@ class CustomEventWidgetCard extends StatelessWidget {
                           child: Text("Set Reminder",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontFamily: 'Roboto',
+                                  fontFamily: 'Raleway',
                                   color: Colors.green,
                                   fontSize: 18)),
                         ),

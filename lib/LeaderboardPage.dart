@@ -46,7 +46,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                       Navigator.of(context).pop();
                     },
                   ),
-                  title: Text("Leaderboard"),
+                  title: Text("Leaderboard", style: TextStyle(fontFamily: 'Raleway')),
                   bottom: _leaderboardTabs(),
                 ),
                 body: _leaderboardBody())));
@@ -67,9 +67,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   TabBar _leaderboardTabs() {
     return TabBar(
       tabs: [
-        Tab(icon: Icon(Icons.card_giftcard), child: Text("Daily quiz")),
-        Tab(icon: Icon(Icons.view_week), child: Text("Weekly Score")),
-        Tab(icon: Icon(Icons.score), child: Text("All Time Score")),
+        Tab(icon: Icon(Icons.card_giftcard), child: Text("Daily quiz",style: TextStyle(fontFamily: 'Raleway'))),
+        Tab(icon: Icon(Icons.view_week), child: Text("Weekly Score",style: TextStyle(fontFamily: 'Raleway'))),
+        Tab(icon: Icon(Icons.score), child: Text("All Time Score",style: TextStyle(fontFamily: 'Raleway'))),
       ],
     );
   }
@@ -91,7 +91,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                 ? "Congrats! You are a winner of daily quiz challenge."
                 : "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.",
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: 18, fontFamily: 'Raleway'),
           )),
         ),
       ],
@@ -260,24 +260,22 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                             : leaderboard.rank.toString(),
                         style: TextStyle(
                             color: Colors.purple,
-                            fontFamily: 'Roboto',
+                            fontFamily: 'Raleway',
                             fontSize: 16,
                             fontWeight: FontWeight.w600)),
                   )),
             ),
           ),
+
           Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.white,
-                  backgroundImage:
-                  leaderboard.player.profileImageURL.isEmpty
-                      ? AssetImage(
-                      ImageResources.emptyUserProfilePlaceholderImage)
-                      : NetworkImage(
-                      leaderboard.player.profileImageURL)),
+              child: ClipOval(
+
+                  child:leaderboard.player.profileImageURL.isEmpty
+                      ? Image.asset(
+                      ImageResources.emptyUserProfilePlaceholderImage, height: 50,width: 50,)
+                      : FadeInImage.assetNetwork(image: leaderboard.player.profileImageURL,height:50,width:50,placeholder: ImageResources.emptyUserProfilePlaceholderImage)),
             ),
           ),
           Flexible(
@@ -289,13 +287,13 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           color: Colors.purple[800],
-                          fontFamily: 'Roboto',
+                          fontFamily: 'Raleway',
                           fontSize: 18,
                           fontWeight: FontWeight.w500)),
                   Text(leaderboard == null ? "" : leaderboard.score.toString(),
                       style: TextStyle(
                           color: Colors.purple[600],
-                          fontFamily: 'Roboto',
+                          fontFamily: 'Raleway',
                           fontSize: 21,
                           fontWeight: FontWeight.w500))
                 ],
@@ -315,11 +313,11 @@ class LeaderboardPageState extends State<LeaderboardPage> {
         width: MediaQuery.of(context).size.width - 32,
         color: Colors.purple[400],
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(text,
               style: TextStyle(
                   color: Colors.white,
-                  fontFamily: 'Roboto',
+                  fontFamily: 'Raleway',
                   fontSize: 24,
                   fontWeight: FontWeight.w400)),
         ));

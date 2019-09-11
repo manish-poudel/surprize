@@ -34,10 +34,11 @@ public class MainActivity extends FlutterActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     GeneratedPluginRegistrant.registerWith(this);
-
+    _callBackManager =  CallbackManager.Factory.create();
     new MethodChannel(getFlutterView(), CHANNEL_NAME).setMethodCallHandler(new MethodChannel.MethodCallHandler() {
       @Override
       public void onMethodCall(MethodCall methodCall, MethodChannel.Result result) {
+
         _methodChannelResult = result;
 
         if(methodCall.method.equals(METHOD_FACEBOOK_SHARE_NAME)){
@@ -60,7 +61,6 @@ public class MainActivity extends FlutterActivity {
   String _setQuote = "App Sharing";
 
   void shareToFacebook(){
-    _callBackManager = CallbackManager.Factory.create();
     _shareDialog = new ShareDialog(this);
 
     ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
@@ -96,6 +96,11 @@ public class MainActivity extends FlutterActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
-    _callBackManager.onActivityResult(requestCode, resultCode, data);
+    try {
+      _callBackManager.onActivityResult(requestCode, resultCode, data);
+    }
+    catch (Exception exception){
+
+    }
   }
 }

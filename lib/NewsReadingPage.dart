@@ -25,7 +25,7 @@ class NewsReadingPageState extends State<NewsReadingPage>{
                   Navigator.of(context).pop();
                 },
               ),
-              title: Text("News"),
+              title: Text("News", style: TextStyle(fontFamily: 'Raleway')),
             ),
           body:SingleChildScrollView(child: newsContent())
         ));
@@ -49,10 +49,10 @@ class NewsReadingPageState extends State<NewsReadingPage>{
      child: Column(
        crossAxisAlignment: CrossAxisAlignment.start,
        children: <Widget>[
-         Text("Surprize has finally declared its first winner", style: TextStyle(color: Colors.black, fontFamily: 'Roboto' ,fontSize: 24, fontWeight: FontWeight.w500)),
+         Text("Surprize has finally declared its first winner", style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w500)),
          Padding(
            padding: const EdgeInsets.only(top:2.0),
-           child: Text("12/1/2019", style: TextStyle(color: Colors.grey, fontFamily: 'Roboto' ,fontSize: 12, fontWeight: FontWeight.w500)),
+           child: Text("12/1/2019", style: TextStyle(color: Colors.grey, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w500)),
          )
        ],
      ),
@@ -67,7 +67,7 @@ class NewsReadingPageState extends State<NewsReadingPage>{
             Image.network('http://lorempixel.com/400/200/', height: 200),
             Container(
                 height: 20,
-                child: Text("Image short description here", style: TextStyle(color: Colors.black, fontFamily: 'Roboto' ,fontSize: 14, fontWeight: FontWeight.w300))),
+                child: Text("Image short description here", style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300))),
           ],
         ));
   }

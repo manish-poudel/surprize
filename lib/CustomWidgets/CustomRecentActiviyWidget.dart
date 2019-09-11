@@ -52,14 +52,16 @@ class CustomRecentActivityWidget extends StatelessWidget {
                   child: Text(getTitleText(),
                       style: TextStyle(
                           fontSize: 21,
+                          fontFamily: 'Raleway',
                           color: Colors.purple,
-                          fontWeight: FontWeight.w400)),
+                          fontWeight: FontWeight.w500)),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(AppHelper.dateToReadableString(_activity.time),
                       style: TextStyle(
                           fontSize: 14,
+                          fontFamily: 'Raleway',
                           color: Colors.black,
                           fontWeight: FontWeight.w300)),
                 )
@@ -90,7 +92,7 @@ class CustomRecentActivityWidget extends StatelessWidget {
       child: Text("Score earned " + _activity.reward,
           style: TextStyle(
               fontSize: 18,
-              fontFamily: 'Roboto',
+              fontFamily: 'Raleway',
               color: Colors.black,
               fontWeight: FontWeight.w500)),
     );
@@ -110,6 +112,7 @@ class CustomRecentActivityWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 18,
+                      fontFamily: 'Raleway',
                       color: Colors.grey,
                       fontWeight: FontWeight.w400)),
             ),

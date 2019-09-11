@@ -65,6 +65,7 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
       );
   }
 
+  /// Event display widget
   Widget eventDisplay(){
 
     List<Events> eventList = _eventsList.values.toList();

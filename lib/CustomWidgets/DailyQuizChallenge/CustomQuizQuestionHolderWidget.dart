@@ -52,7 +52,7 @@ class CustomQuizQuestionHolderWidgetState extends State<CustomQuizQuestionHolder
         child: Center(
           child: Padding(padding: EdgeInsets.all(16.0),
           child: Text(_quizQuestion, style: TextStyle(color: Colors.purple, fontSize: 21.0, fontWeight: FontWeight.w500,
-                fontFamily: 'Roboto')) ,
+                fontFamily: 'Raleway')) ,
           ),
         ),
       ),

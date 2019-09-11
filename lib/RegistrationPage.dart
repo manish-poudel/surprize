@@ -90,7 +90,7 @@ class RegistrationPageState extends State<RegistrationPage> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 32.0,
-                            fontFamily: 'Roboto',
+                            fontFamily: 'Raleway',
                             fontWeight: FontWeight.bold)),
                   ),
                 ],
@@ -104,7 +104,7 @@ class RegistrationPageState extends State<RegistrationPage> {
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
-                  fontFamily: 'Roboto')),
+                  fontFamily: 'Raleway')),
         ),
         _customLoginCredentialRegWidget,
 
@@ -114,7 +114,7 @@ class RegistrationPageState extends State<RegistrationPage> {
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
-                  fontFamily: 'Roboto')),
+                  fontFamily: 'Raleway')),
         ),
         Container(
           padding: EdgeInsets.all(16),

@@ -24,7 +24,7 @@ class CustomRoundedEdgeButton extends StatelessWidget{
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   text,
-                  style: TextStyle(fontFamily: 'Roboto', fontSize: 18,  fontWeight:FontWeight.w400, color: Colors.white,
+                  style: TextStyle(fontFamily: 'Raleway', fontSize: 18,  fontWeight:FontWeight.w400, color: Colors.white,
                   ),
                 ))));
   }

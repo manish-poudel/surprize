@@ -67,7 +67,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 32.0, right: 32.0),
-                child: Text(StringResources.noCurrentGameText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Roboto')),
+                child: Text(StringResources.noCurrentGameText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Raleway')),
               ),
               Padding(
                 padding: const EdgeInsets.all(32.0),

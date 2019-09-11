@@ -12,7 +12,6 @@ class CustomPhoneNumberWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     _state = CustomPhoneNumberWidgetState(_phoneNumber);
     return _state;
   }
@@ -69,6 +68,7 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
          ),
          Expanded(
            child:TextFormField(
+             style: TextStyle(fontFamily: 'Raleway'),
              controller: controller ,
              keyboardType: TextInputType.emailAddress,
               validator: validateMobile,

@@ -66,8 +66,8 @@ class DailyQuizChallengeScoreSummaryPageState
                      Padding(
                        padding: const EdgeInsets.all(4),
                        child: Container(
-                         height: 1,
-                         color: Colors.white10,
+                         height: 0.1,
+                         color: Colors.white,
                        ),
                      ),
                      Padding(
@@ -78,7 +78,7 @@ class DailyQuizChallengeScoreSummaryPageState
                            Icon(Icons.share, color: Colors.white),
                            Padding(
                              padding: const EdgeInsets.only(left:8.0),
-                             child: Text("Share and earn points !",style: TextStyle(color:Colors.white, fontSize: 18,fontFamily: 'Roboto', fontWeight: FontWeight.w500),),
+                             child: Text("Share and earn points !",style: TextStyle(color:Colors.white, fontSize: 18,fontFamily: 'Raleway', fontWeight: FontWeight.w500),),
                            ),
                          ],
                        ),
@@ -122,7 +122,7 @@ class DailyQuizChallengeScoreSummaryPageState
       padding: const EdgeInsets.only(top: 48.0),
       child: Text(text,
           style: TextStyle(
-              fontSize: 35, fontFamily: 'Roboto', color: Colors.white)),
+              fontSize: 35, fontFamily: 'Raleway', color: Colors.white)),
     );
   }
 
@@ -140,7 +140,7 @@ class DailyQuizChallengeScoreSummaryPageState
               child: Text("Score Summary",
                   style: TextStyle(
                       fontSize: 35,
-                      fontFamily: 'Roboto',
+                      fontFamily: 'Raleway',
                       color: Colors.white))),
         ));
   }
@@ -160,14 +160,14 @@ class DailyQuizChallengeScoreSummaryPageState
             padding: EdgeInsets.all(8.0),
             child: Text(text,
                 style: TextStyle(
-                    color: Colors.white, fontSize: 18.0, fontFamily: 'Roboto')),
+                    color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway')),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Text(score,
               style: TextStyle(
-                  color: Colors.white, fontSize: 18.0, fontFamily: 'Roboto')),
+                  color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway')),
         ),
       ]),
     );
@@ -189,7 +189,7 @@ class DailyQuizChallengeScoreSummaryPageState
             child: Text(
               totalScore,
               style: TextStyle(
-                  color: Colors.white, fontSize: 90, fontFamily: 'Roboto'),
+                  color: Colors.white, fontSize: 90, fontFamily: 'Raleway'),
             ),
           ),
         ),
@@ -209,7 +209,7 @@ class DailyQuizChallengeScoreSummaryPageState
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
-                  fontFamily: 'Roboto')),
+                  fontFamily: 'Raleway')),
         ),
       ),
       onPressed: onClick,
@@ -228,11 +228,11 @@ class DailyQuizChallengeScoreSummaryPageState
                     padding: EdgeInsets.only(left: width - 240),
                     child: Text("Total Score",
                         style: TextStyle(
-                            color: Colors.white, fontSize: 18, fontFamily: 'Roboto')),
+                            color: Colors.white, fontSize: 18, fontFamily: 'Raleway')),
                   )),
               Text(score,
                   style: TextStyle(
-                      color: Colors.white, fontSize: 18, fontFamily: 'Roboto'))
+                      color: Colors.white, fontSize: 18, fontFamily: 'Raleway'))
             ],
           ),
         ));

@@ -91,7 +91,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
          builder: (BuildContext context, Widget child){
            return new Text(
                timerString,
-               style: TextStyle(color: _textColor, fontSize: 32.0, fontFamily: 'Roboto')
+               style: TextStyle(color: _textColor, fontSize: 32.0, fontFamily: 'Raleway')
            );
          });
     if(_countDownTimeTypeEnum == CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY){
@@ -100,7 +100,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
       ];
     }
     return [
-      Text(_countDownString, style: TextStyle(color: Colors.white, fontSize: 18.0, fontFamily: 'Roboto', fontWeight: FontWeight.w400)),
+      Text(_countDownString, style: TextStyle(color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway', fontWeight: FontWeight.w400)),
         builder
     ];
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CountDownTimerTypeEnum.dart';
 import 'package:Surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
@@ -41,7 +42,6 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   QuizState _quizState;
 
   List<DailyQuizChallengeQnA> _dailyQuizChallengeQnAList;
-  DailyQuizChallengeQnA _quizChallengeQnA;
 
   CustomQuizQuestionHolderWidget _quizQuestion;
   CustomQuizAnswerButtonWidget _firstAnswer;
@@ -56,6 +56,8 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY);
 
   bool _clickableButton = true;
+  bool _disableButtonPermanently = false;
+
   bool _readyToShowQuestion = false;
   bool _hasQuizListBeenRetrieved = false;
   bool _isGameFinished = false;
@@ -173,9 +175,6 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           _readyToShowQuestion = true;
           // Get current quiz value
           _dailyQuizChallengeQnAList.forEach((dailyQuizChallengeQnA){
-            if(dailyQuizChallengeQnA.id == _quizState.currentQuizId){
-              _quizChallengeQnA = dailyQuizChallengeQnA;
-            }
           });
 
         }
@@ -190,7 +189,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   Handle button click event
    */
   void onButtonSelect(value, CustomQuizAnswerButtonWidget button) {
-    if(_clickableButton) {
+    if(_clickableButton && !_disableButtonPermanently) {
       if (isRightAnswer(value)) {
         _totalScore = _totalScore + ScoreSystem.getScoreFromQuizCorrectAnswer();
       }
@@ -264,7 +263,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       }
 
       if(!_isGameFinished) {
-        keepTimeTrack(2);
+        keepTimeTrack(10);
       }
 
       return  SingleChildScrollView(
@@ -276,7 +275,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           child: Center(
           child: Text(
             StringResources.headingText,
-            style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.w300),
+            style: TextStyle(color: Colors.white, fontSize:24, fontFamily: 'Raleway', fontWeight: FontWeight.w300),
           ),
       ),
         ),
@@ -296,7 +295,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
                       child: Center(
                         child: Text(
                           (currentIndex + 1).toString(),
-                          style: TextStyle(color: Colors.white, fontSize:24, fontWeight: FontWeight.w500),
+                          style: TextStyle(color: Colors.white, fontFamily: 'Raleway',fontSize:24, fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),
@@ -349,7 +348,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           CircularProgressIndicator(backgroundColor: Colors.redAccent,),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(StringResources.getReadyForQuizText, style: TextStyle(color: Colors.white, fontSize: 21)),
+            child: Text(StringResources.getReadyForQuizText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontFamily: 'Raleway', fontSize: 21)),
           )
         ]),
       ),
@@ -363,6 +362,20 @@ void goToScoreSummaryPage(){
   Navigator.pushReplacement(context, MaterialPageRoute(
     builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalScore),
   ));
+}
+
+/// Listen of quiz state change
+listenForQuizStateChange(){
+  Firestore.instance.collection(FirestoreResources.collectionQuizName).document("h9Y2waV1lifvEjOW2ajW").snapshots()
+      .listen((snapshot){
+        QuizState quizState = QuizState.fromMap(snapshot.data);
+        if(quizState.quizState == CurrentQuizState.QUIZ_IS_OFF){
+          setState(() {
+            _disableButtonPermanently = true;
+          });
+
+        }
+  });
 }
 
 }

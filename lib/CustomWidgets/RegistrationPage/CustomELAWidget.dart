@@ -19,7 +19,7 @@ class CustomELAWidgetState extends State<CustomELAWidget> {
         RichText(
           text: TextSpan(
             text: StringResources.elaText,
-            style: TextStyle(color: Colors.blueAccent)
+            style: TextStyle(color: Colors.white,fontFamily: 'Roboto')
           ),
         ),
         Padding(
@@ -27,7 +27,7 @@ class CustomELAWidgetState extends State<CustomELAWidget> {
           child: GestureDetector(
             child: RichText(text: TextSpan(
               text:StringResources.elaTextButton,
-                style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline, color: Colors.blue)
+                style: TextStyle(fontWeight: FontWeight.bold,fontFamily: 'Raleway', decoration: TextDecoration.underline, color: Colors.white)
             )
             )
           ),

@@ -1,3 +1,4 @@
+import 'package:Surprize/Helper/AppColor.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
@@ -47,66 +48,66 @@ class LoginPage extends StatefulWidget {
     return MaterialApp(
       home:Scaffold(
         key: _scaffoldKey,
-        body: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-              image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(
-                    child: Image.asset(ImageResources.appMainLogo),
-                    padding: EdgeInsets.only(top:36.0),
-                    alignment: FractionalOffset.center
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                      Text(StringResources.loginHeadingDisplay,
-                          style: TextStyle(color:Colors.white, decorationColor: Colors.deepPurpleAccent ,fontSize: 18.0, fontWeight: FontWeight.w500,fontFamily: 'Roboto' )
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:16.0),
-                        child: _emailField,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:8.0),
-                        child: _passwordField,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 1.0,top:8.0,right:1.0),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 48.0,
-                          child:CustomTextButtonWidget(StringResources.buttonLoginText, Colors.deepPurple, ()=> loginUser()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 24, left:16.0, right: 16.0),
-                        child: GestureDetector(
-                          child: Text(StringResources.buttonForgotPasswordText,
-                              style: TextStyle(color:Colors.white, fontSize: 18.0, fontFamily: 'Roboto', decoration: TextDecoration.underline)
-                          ),
-                          onTap: (){
-
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(32.0),
-                        child: CustomTextButtonWidget(StringResources.buttonRegisterAccountText, Colors.deepPurpleAccent,
-                                ()=> AppHelper.goToPage(context, false, '/registrationPage')),
-                      ),
-                    ],),
+        backgroundColor: Color(0xFF7D046A),
+        body: Container(
+                decoration: BoxDecoration(
+                    image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)),
+          child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      child: Image.asset(ImageResources.appMainLogo),
+                      padding: EdgeInsets.only(top:36.0),
+                      alignment: FractionalOffset.center
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                        Text(StringResources.loginHeadingDisplay,
+                            style: TextStyle(color:Colors.white, decorationColor: Colors.deepPurpleAccent ,fontSize: 18.0, fontWeight: FontWeight.w400,fontFamily: 'Raleway' )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:16.0),
+                          child: _emailField,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top:8.0),
+                          child: _passwordField,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 1.0,top:8.0,right:1.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 48.0,
+                            child:CustomTextButtonWidget(StringResources.buttonLoginText, Colors.deepPurple, ()=> loginUser()),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24, left:16.0, right: 16.0),
+                          child: GestureDetector(
+                            child: Text(StringResources.buttonForgotPasswordText,
+                                style: TextStyle(color:Colors.white, fontSize: 18.0, fontFamily: 'Raleway', decoration: TextDecoration.underline)
+                            ),
+                            onTap: (){
+
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: CustomTextButtonWidget(StringResources.buttonRegisterAccountText, Colors.deepPurpleAccent,
+                                  ()=> AppHelper.goToPage(context, false, '/registrationPage')),
+                        ),
+                      ],),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
         ),
-      ) ,
+        )
     );
 
   }

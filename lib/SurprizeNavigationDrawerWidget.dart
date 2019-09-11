@@ -57,11 +57,11 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
          ),
           Padding(
             padding: const EdgeInsets.only(left:16.0),
-            child: Text(_player.name, style: TextStyle(color:  Colors.white, fontFamily: 'Roboto' ,fontSize: 24, fontWeight: FontWeight.w300)),
+            child: Text(_player.name, style: TextStyle(color:  Colors.white, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w300)),
           ),
           Padding(
             padding: const EdgeInsets.only(left:16.0),
-            child: Text(_player.email, style: TextStyle(color: Colors.white, fontFamily: 'Roboto' ,fontSize: 14, fontWeight: FontWeight.w300)),
+            child: Text(_player.email, style: TextStyle(color: Colors.white, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300)),
           ),
         ],
       ),
@@ -107,8 +107,8 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: <Widget>[
-          Text("Entertained by silicon guys", style: TextStyle(color:  Colors.black, fontFamily: 'Roboto' ,fontSize: 18, fontWeight: FontWeight.w300)),
-          Text("siliconguy123@gmail.com", style: TextStyle(color:  Colors.black, fontFamily: 'Roboto' ,fontSize: 12, fontWeight: FontWeight.w300)),
+          Text("Entertained by silicon guys", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
+          Text("siliconguy123@gmail.com", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w300)),
         ],
       ),
     );

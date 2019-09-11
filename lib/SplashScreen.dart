@@ -11,7 +11,8 @@ class SplashScreen extends StatelessWidget{
     return MaterialApp(
       home: Scaffold(
           body: Container(
-            color:Colors.purple[800],
+            decoration: BoxDecoration(
+                image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -20,7 +21,7 @@ class SplashScreen extends StatelessWidget{
                   Center(child:Text("A product of silicon guys",
                       style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Roboto',
+                          fontFamily: 'Raleway',
                           fontSize: 21,
                           fontWeight: FontWeight.w400)
                   )),

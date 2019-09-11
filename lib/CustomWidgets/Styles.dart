@@ -31,7 +31,10 @@ class CustomRaisedButton extends RaisedButton
   CustomRaisedButton(String label, Function onpressed, Color color) : super
       (onPressed: onpressed,
         shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(6.0)),
-       child: Text(label, style: TextStyle(fontSize: ButtonFontSize, color: Colors.white)),
+       child: Padding(
+         padding: const EdgeInsets.all(4.0),
+         child: Text(label, textAlign: TextAlign.center, style: TextStyle(fontSize: ButtonFontSize, fontFamily:'Raleway',color: Colors.white)),
+       ),
        color:color,
        );
 }

@@ -25,7 +25,7 @@ class CustomProgressbarWidget {
                         color2)),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text(progressValue, style: TextStyle(color: color2)),
+                      child: Text(progressValue, style: TextStyle(color: color2, fontFamily: 'Raleway')),
                     )
                   ],),
                 )

@@ -82,8 +82,8 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
       initialYear: y,
       initialMonth: m,
       initialDate: d,
-      cancel: Text('Cancel'),
-      confirm: Text('Confirm'),
+      cancel: Text('Cancel',style: TextStyle(fontFamily: 'Raleway')),
+      confirm: Text('Confirm',style: TextStyle(fontFamily: 'Raleway')),
       dateFormat: 'yyyy-mm-dd',
       onChanged: (year, month, date) {
 
@@ -117,7 +117,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text("DOB   " + currentDate,
-                      style: TextStyle(fontSize: 16.0)
+                      style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway')
                   ),
                 )
               ],
@@ -126,7 +126,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
           Visibility(visible: _showValidation, child: Padding(
             padding: const EdgeInsets.only(top:8.0, left: 16.0),
             child: Text("Enter DOB from calendar", style:
-                TextStyle(color:Colors.red, fontSize: 11.0)),
+                TextStyle(color:Colors.red, fontFamily:'Raleway',fontSize: 11.0)),
           )),
         ],
       ),

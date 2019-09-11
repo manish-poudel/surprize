@@ -118,7 +118,7 @@ class AppHelper{
           child: Text(
             text,
             style: TextStyle(
-                fontFamily: 'Roboto',
+                fontFamily: 'Raleway',
                 fontSize: textSize,
                 color: color),
           ),
@@ -156,7 +156,7 @@ class AppHelper{
   /// Button with text widget
   Widget buttonText(String text) {
     return Text(text,
-        style: TextStyle(color: Colors.purple[800], fontFamily: 'Roboto' ,fontSize: 18, fontWeight: FontWeight.w500));
+        style: TextStyle(color: Colors.purple[800], fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w500));
   }
 
   /// Flat button with route
@@ -184,10 +184,10 @@ class AppHelper{
   /// Widget for app small header
  static Widget appSmallHeader(String heading){
    return Padding(
-     padding: const EdgeInsets.all(16.0),
+     padding: const EdgeInsets.all(12.0),
      child: Text(heading,
          style: TextStyle(
-             fontFamily: 'Roboto',
+             fontFamily: 'Raleway',
              color: Colors.black54,
              fontSize: 18,
              fontWeight: FontWeight.w500)),
@@ -197,7 +197,7 @@ class AppHelper{
   /// App header
   static Widget appHeaderDivider(){
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top:1.0),
       child: Container(
         height: 8,
         color: Colors.grey[200],
@@ -222,7 +222,8 @@ class AppHelper{
 
   /// Open image gallery
   static Future openImageGallery() async {
-    var file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    File file = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print("Picked file" + file.toString());
     return file;
   }
 
@@ -240,9 +241,16 @@ class AppHelper{
 
   /// Open image gallery, crop and return it
   static Future pickAndCropPhoto(maxHeight, maxWidth) async {
-    var image = await AppHelper.openImageGallery();
-    var croppedImage = await AppHelper.cropImage(image, maxHeight, maxWidth);
-    return croppedImage;
+    File image = await AppHelper.openImageGallery();
+    print("Image" + image.toString());
+    try {
+      var croppedImage = await AppHelper.cropImage(image, maxHeight, maxWidth);
+      return croppedImage;
+    }
+    catch(error){
+      print(error.toString());
+    }
+
   }
 
   /// Get date from list

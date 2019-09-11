@@ -10,7 +10,6 @@ class CustomDropDownWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     _state = CustomDropDownWidgetState(_listItems, _label, this._selectedItem);
     return _state;
   }
@@ -42,12 +41,12 @@ class CustomDropDownWidget extends StatefulWidget {
     // TODO: implement build
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        hint:Text(_label),
+        hint:Text(_label,style: TextStyle(fontFamily: 'Raleway'),),
         value: _selectedItem,
         items:  _listItems.map((String value){
           return new DropdownMenuItem<String>(
               value:value,
-              child: new Text(value));
+              child: new Text(value,style: TextStyle(fontFamily: 'Raleway')));
         }).toList(),
         onChanged: (String value){
           onChanged(value);

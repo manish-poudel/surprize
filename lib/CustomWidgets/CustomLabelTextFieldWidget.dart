@@ -68,6 +68,7 @@ class _CustomLabelTextFieldWidgetState
         child: Row(children: <Widget>[
       Flexible(
           child: TextFormField(
+            style: TextStyle(fontFamily: 'Raleway'),
         controller: textcontroller,
         keyboardType: TextInputType.emailAddress,
         validator: _validation,
@@ -79,6 +80,7 @@ class _CustomLabelTextFieldWidgetState
             border: InputBorder.none,
             enabled: true,
             labelText: _label,
+            labelStyle: TextStyle(fontFamily: 'Raleway'),
             fillColor: _color,
             enabledBorder:
                 OutlineInputBorder(

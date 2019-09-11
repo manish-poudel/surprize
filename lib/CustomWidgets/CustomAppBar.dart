@@ -17,7 +17,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
             Navigator.of(_context).pop();
           },
         ),
-        title: Text(_appBarTitle),
+        title: Text(_appBarTitle, style:TextStyle(fontFamily: 'Raleway'),),
     );
   }
 

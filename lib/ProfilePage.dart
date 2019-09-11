@@ -76,7 +76,7 @@ class ProfilePageState extends State<ProfilePage> {
               return _popUpMenuChoice.map((ProfileMenu menu){
                 return PopupMenuItem<ProfileMenu>(
                   value: menu,
-                  child:ListTile(leading: Icon(menu.icon), title:Text(menu.title))
+                  child:ListTile(leading: Icon(menu.icon), title:Text(menu.title,style: TextStyle(fontFamily: 'Raleway')))
                 );
               }).toList();
           },
@@ -151,7 +151,7 @@ class ProfilePageState extends State<ProfilePage> {
               _player.name,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Roboto',
+                  fontFamily: 'Raleway',
                   fontSize: 24,
                   fontWeight: FontWeight.w400,
                   color: Colors.white),
@@ -164,7 +164,7 @@ class ProfilePageState extends State<ProfilePage> {
               _player.country,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontFamily: 'Roboto',
+                  fontFamily: 'Raleway',
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                   color: Colors.white),
@@ -249,7 +249,7 @@ class ProfilePageState extends State<ProfilePage> {
             child: Text(
               text,
               style: TextStyle(
-                  fontFamily: 'Roboto',
+                  fontFamily: 'Raleway',
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Colors.purple[800]),

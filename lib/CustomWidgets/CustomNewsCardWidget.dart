@@ -51,7 +51,7 @@ class CustomNewsCardWidget extends StatelessWidget{
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top:8.0, right:16.0),
                   child: Text("Surprize has finally declared its first winner",
-                    style: TextStyle(
+                    style: TextStyle(fontFamily: 'Raleway',
                         fontSize: 18, fontWeight: FontWeight.w300),),
                 ),
 
@@ -59,6 +59,7 @@ class CustomNewsCardWidget extends StatelessWidget{
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
                   child: Text("12/12/2012", style: TextStyle(fontSize: 12,
+                      fontFamily: 'Raleway',
                       color: Colors.grey,
                       fontWeight: FontWeight.w300)),
                 ),
@@ -94,14 +95,15 @@ class CustomNewsCardWidget extends StatelessWidget{
               padding: const EdgeInsets.all(8),
               child: Text(
                   "We are in the new era of surprize where you can earn loads of money with just a click..",
-                 textAlign: TextAlign.left, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16, color:Colors.black, fontWeight: FontWeight.w400, )),
+                 textAlign: TextAlign.left, overflow: TextOverflow.ellipsis,style:
+              TextStyle(fontSize: 16, color:Colors.black, fontFamily: 'Raleway',fontWeight: FontWeight.w400, )),
             ),
           ),
 
           /// Click for more button
           Padding(
             padding: const EdgeInsets.only(left:8.0),
-            child: FlatButton(child: Text("Click for more")),
+            child: FlatButton(child: Text("Click for more", style: TextStyle(fontFamily: 'Raleway'))),
           )
         ],
       ),

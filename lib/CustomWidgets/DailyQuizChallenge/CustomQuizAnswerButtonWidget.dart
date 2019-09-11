@@ -108,7 +108,7 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
             child: Padding(padding: EdgeInsets.all(16.0),
             child: Center(
                 child: Text(_quizAnswer, style: TextStyle(color: Colors.white, fontSize: 18.0,
-                    fontFamily: 'Roboto')),
+                    fontFamily: 'Raleway')),
             ),
             ),
           ),
