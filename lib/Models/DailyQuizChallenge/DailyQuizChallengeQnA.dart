@@ -22,4 +22,12 @@ class DailyQuizChallengeQnA {
     _rightAnswer = map[FirestoreResources.fieldQuizCorrectAnswer];
   }
 
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map[FirestoreResources.fieldQuizId] = _quizId;
+    map[FirestoreResources.fieldQuizQuestion] = _question;
+    map[FirestoreResources.fieldQuizAnswers] = answers;
+    map[FirestoreResources.fieldQuizCorrectAnswer] = _rightAnswer;
+    return map;
+  }
 }

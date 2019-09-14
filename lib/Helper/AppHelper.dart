@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -44,6 +45,13 @@ class AppHelper{
     }
   }
 
+  ///cupertino route
+ static void cupertinoRoute(buildContext,pageName){
+   Navigator.push(
+       buildContext,
+       CupertinoPageRoute(
+           builder: (context) => pageName));
+  }
   /*
   Go to new page.
    */
@@ -267,4 +275,6 @@ class AppHelper{
    }
   return dobList;
  }
+
+
 }

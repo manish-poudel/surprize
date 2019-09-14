@@ -24,14 +24,14 @@ class DailyQuizChallengePage {
   /// Check if quiz is on
   Future<QuizState> dailyQuizState() async {
     DocumentSnapshot documentSnapshot = await Firestore.instance.collection(
-        FirestoreResources.collectionQuizName).document("h9Y2waV1lifvEjOW2ajW").get();
+        FirestoreResources.collectionQuizName).document(FirestoreResources.fieldQuizDocumentName).get();
     return QuizState.fromMap(documentSnapshot.data);
   }
 
   /// Listen for daily quiz game on
    listenForDailyQuizGameOn(Function value){
     Firestore.instance.collection(
-        FirestoreResources.collectionQuizName).document("h9Y2waV1lifvEjOW2ajW").snapshots().listen((snapshot){
+        FirestoreResources.collectionQuizName).document(FirestoreResources.fieldQuizDocumentName).snapshots().listen((snapshot){
        value(QuizState.fromMap(snapshot.data));
     });
   }

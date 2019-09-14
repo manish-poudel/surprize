@@ -40,6 +40,7 @@ class FirestoreResources{
   static final String fieldQuizQuestion = 'question';
   static final String fieldQuizAnswers = 'answers';
   static final String fieldQuizCorrectAnswer = 'correct_answer_value';
+  static final String fieldQuizDocumentName = 'quizDocument';
 
   /*****************************************************************/
 
@@ -64,6 +65,15 @@ class FirestoreResources{
 
   /**********************************************************************/
   /// Related to storage
-
   static final String storageProfileFolder = "User profile images";
+  static final String storageQuizLetters = "Quiz letter";
+
+  // Related to quiz letters
+  static final String collectionQuizLetterName = "/Quiz Letters";
+  static final String fieldQuizLetterId = "Id";
+  static final String fieldQuizLetterSubject = "Subject";
+  static final String fieldQuizLetterBody = "Body";
+  static final String fieldQuizLetterQuiz = "Quiz";
+  static final String fieldQuizLetterImage = "Image Url";
+  static final String fieldQuizLetterAddedDate = "Added date";
 }

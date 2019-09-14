@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:Surprize/Helper/AppColor.dart';
-import 'package:Surprize/Helper/AppHelper.dart';
 
 class CustomProgressbarWidget {
 

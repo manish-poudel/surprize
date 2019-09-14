@@ -1,3 +1,4 @@
+import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
@@ -29,55 +30,43 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   double _screenWidth;
 
+  int _selectedIndex = 0;
+
+  List<Widget> _leaderboardOptions;
+
   @override
   Widget build(BuildContext context) {
+
+    _leaderboardOptions = <Widget>[_dailyQuizBody(), _weeklyScoreBody(), _allTimeScoreBody()];
 
     _screenWidth = MediaQuery.of(context).size.width;
 
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
-        home: DefaultTabController(
-            length: 3,
-            child: Scaffold(
-                appBar: AppBar(
-                  leading: GestureDetector(
-                    child: Icon(Icons.arrow_back, color: Colors.white),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  title: Text("Leaderboard", style: TextStyle(fontFamily: 'Raleway')),
-                  bottom: _leaderboardTabs(),
-                ),
-                body: _leaderboardBody())));
+        home: Scaffold(
+            appBar: CustomAppBar("Leaderboard",context),
+
+            bottomNavigationBar: BottomNavigationBar(items: const<BottomNavigationBarItem>[
+              BottomNavigationBarItem(icon: Icon(Icons.stars), title: Text("Daily quiz",style: TextStyle(fontFamily: 'Raleway'))),
+              BottomNavigationBarItem(icon: Icon(Icons.view_week), title: Text("Weekly Score",style: TextStyle(fontFamily: 'Raleway'))),
+              BottomNavigationBarItem(icon: Icon(Icons.score), title: Text("All time score",style: TextStyle(fontFamily: 'Raleway'))),
+            ], currentIndex:_selectedIndex,  selectedItemColor: Colors.purple, onTap: _onItemSelected),
+
+            body: _leaderboardOptions.elementAt(_selectedIndex)));
   }
 
-  /// Main leaderboard body page
-  TabBarView _leaderboardBody() {
-    return TabBarView(
-      children: [
-        _dailyQuizBody(),
-        _weeklyScoreBody(),
-        _allTimeScoreBody(),
-      ],
-    );
+  /// On bottom navigation bar selected
+  _onItemSelected(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
-  /// Main leaderboard tabs
-  TabBar _leaderboardTabs() {
-    return TabBar(
-      tabs: [
-        Tab(icon: Icon(Icons.card_giftcard), child: Text("Daily quiz",style: TextStyle(fontFamily: 'Raleway'))),
-        Tab(icon: Icon(Icons.view_week), child: Text("Weekly Score",style: TextStyle(fontFamily: 'Raleway'))),
-        Tab(icon: Icon(Icons.score), child: Text("All Time Score",style: TextStyle(fontFamily: 'Raleway'))),
-      ],
-    );
-  }
 
   /// Daily quiz body for leaderboard page
-  Widget _dailyQuizBody() {
-    if (!_dailyQuizWinnerDataLoaded) return Center(child: CircularProgressIndicator());
-    return Center(
+   Widget _dailyQuizBody() {
+    return !_dailyQuizWinnerDataLoaded? Center(child: CircularProgressIndicator()):
+     Center(
         child: Column(
       children: <Widget>[
         Container(
@@ -87,8 +76,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: (Text(
-            _isDailyQuizWinner
-                ? "Congrats! You are a winner of daily quiz challenge."
+            _isDailyQuizWinner? "Congrats! You are a winner of daily quiz challenge."
                 : "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18, fontFamily: 'Raleway'),
@@ -99,9 +87,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   /// Weekly score body for leaderboard page
-  Widget _weeklyScoreBody() {
-    if (!_weeklyScorerLeaderboardLoaded) return Center(child: CircularProgressIndicator());
-    return Column(
+   _weeklyScoreBody() {
+   return !_weeklyScorerLeaderboardLoaded? Center(child: CircularProgressIndicator()):
+     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         myScore(_weeklyScorerMap[widget._playerId]),
@@ -115,9 +103,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   /// All time score body for leaderboard page
-  Widget _allTimeScoreBody() {
-    if (!_allTimeScorerLeaderboardLoaded) return Center(child: CircularProgressIndicator());
-    return Column(
+   _allTimeScoreBody() {
+    return !_allTimeScorerLeaderboardLoaded? Center(child: CircularProgressIndicator()):
+     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         myScore(_allTimeScorerMap[widget._playerId]),

@@ -133,7 +133,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
     FirestoreOperations().getNestedCollectionReference(
         FirestoreResources.collectionQuizName,
         FirestoreResources.collectionQuestionAndAnswersList,
-        "h9Y2waV1lifvEjOW2ajW").snapshots().listen((querySnapshot) {
+        FirestoreResources.fieldQuizDocumentName).snapshots().listen((querySnapshot) {
 
       setState(() {
          _dailyQuizChallengeQnAList = querySnapshot.documents.map((documentSnapshot) =>
@@ -167,7 +167,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   void listenForQuizState() {
     // Listen for the quiz state
     FirestoreOperations().getSnapshotStream(
-        FirestoreResources.collectionQuizName, "h9Y2waV1lifvEjOW2ajW")
+        FirestoreResources.collectionQuizName, FirestoreResources.fieldQuizDocumentName)
         .listen((snapshot) {
       setState(() {
         _quizState = QuizState.fromMap(snapshot.data);
@@ -366,7 +366,7 @@ void goToScoreSummaryPage(){
 
 /// Listen of quiz state change
 listenForQuizStateChange(){
-  Firestore.instance.collection(FirestoreResources.collectionQuizName).document("h9Y2waV1lifvEjOW2ajW").snapshots()
+  Firestore.instance.collection(FirestoreResources.collectionQuizName).document(FirestoreResources.fieldQuizDocumentName).snapshots()
       .listen((snapshot){
         QuizState quizState = QuizState.fromMap(snapshot.data);
         if(quizState.quizState == CurrentQuizState.QUIZ_IS_OFF){

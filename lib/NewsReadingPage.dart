@@ -1,3 +1,4 @@
+import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
@@ -18,15 +19,7 @@ class NewsReadingPageState extends State<NewsReadingPage>{
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-            appBar: AppBar(
-              leading: GestureDetector(
-                child: Icon(Icons.arrow_back, color: Colors.white),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              title: Text("News", style: TextStyle(fontFamily: 'Raleway')),
-            ),
+            appBar:  CustomAppBar("News",context),
           body:SingleChildScrollView(child: newsContent())
         ));
   }

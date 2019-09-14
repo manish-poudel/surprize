@@ -1,4 +1,9 @@
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
+import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
+import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
+import 'package:Surprize/QuizLettersPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/DailyQuizChallengePage.dart';
 import 'package:Surprize/SurprizeNavigationDrawerWidget.dart';
@@ -9,6 +14,7 @@ import 'DailyQuizChallengeGamePlayPage.dart';
 import 'Helper/AppHelper.dart';
 import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
 import 'Models/DailyQuizChallenge/QuizState.dart';
+import 'Resources/FirestoreResources.dart';
 
 
 //// MAKE SURE YOU REMOVE DEPENDENCIES IN GRADLE FOR EG, FIRESTORE... AND CHECK IF IT WORK.. thEY MAY BE NOT BE REQUIRED!!!!!
@@ -31,6 +37,9 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   bool _showDailyQuizChallengeWidget = false;
 
+  QuizLetterDisplay quizLetterDisplay;
+
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +48,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
     _animationController.repeat();
     _dailyQuizChallengePage = new DailyQuizChallengePage(context);
     isDailyQuizAvailable();
+    getQuizLetters();
   }
 
   /// Is daily quiz available
@@ -54,7 +64,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
@@ -77,24 +86,13 @@ class PlayerDashboardState extends State<PlayerDashboard>
               child: CustomUpcomingEventsWidget()),
           dailyQuizOnWidget(),
           AppHelper.appHeaderDivider(),
-          Container(
-              color: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  CustomQuizLettersWidget(),
-                  Align(alignment:Alignment.center ,child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text("Learn more", style: TextStyle(fontFamily: 'Raleway'),),
-                  ))
-                ],
-              )),
+          Visibility(visible:quizLetterDisplay != null,child: GestureDetector(child: quizLettersSmallContainer(), onTap: () => AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId)))),
           AppHelper.appHeaderDivider(),
           AppHelper.appSmallHeader("Hear from us"),
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: CustomNewsCardWidget(),
           ),
-
         ],
       )),
     );
@@ -134,7 +132,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
             CustomRoundedEdgeButton(
                 onClicked: () => Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    CupertinoPageRoute(
                         builder: (context) =>
                             DailyQuizChallengeGamePlayPage())),
                 color: Colors.purple[800],
@@ -144,4 +142,32 @@ class PlayerDashboardState extends State<PlayerDashboard>
       ),
     );
   }
+
+  /// Quiz letter small container
+  Widget quizLettersSmallContainer(){
+
+    return Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top:8.0, left: 16, bottom: 4),
+              child: Text("Quiz Letters", style: TextStyle(fontFamily: 'Raleway', color: Colors.grey, fontWeight: FontWeight.w500)),
+            ),
+            CustomQuizLettersWidget(quizLetterDisplay),
+          ],
+        ));
+  }
+
+  /// Quiz letters
+  void getQuizLetters() {
+    Firestore.instance.collection(FirestoreResources.collectionQuizLetterName).limit(1).orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true).
+    getDocuments().then((docSnapshot){
+      setState(() {
+        quizLetterDisplay = QuizLetterDisplay(false,QuizLetter.fromMap(docSnapshot.documents[0].data), true, false);
+      });
+    });
+  }
+
 }
