@@ -51,19 +51,18 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
         children:<Widget>[
           Flexible(child:
           TextField(
-            style: TextStyle(fontFamily: 'Raleway'),
-            controller: textFldcontroller,
-            decoration: InputDecoration(
-                filled: true,
-                enabled: true,
-                labelText:_label,
-                fillColor: _color,
-                border:InputBorder.none,
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 0.0, color: Colors.white)
-                )
-
+            style: TextStyle(fontFamily: 'Raleway',color: _color),
+            controller: textFldcontroller,   decoration: InputDecoration(
+            fillColor: _color,
+            hintText: _label,
+            hintStyle: TextStyle(color:_color),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: _color),
             ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.purple),
+            ),
+          ),
           maxLines: null,
             keyboardType: TextInputType.multiline,
           )

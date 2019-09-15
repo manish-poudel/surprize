@@ -44,11 +44,11 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
       child: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: 16.0),
             child: passwordField(),
           ),
           Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 16.0),
             child: passwordAgainField(),
           )
         ],
@@ -57,27 +57,25 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
   }
 
   Widget passwordField(){
-    return Container(
-        child: Row(children: <Widget>[
-          Flexible(
-              child: TextFormField(
-                style: TextStyle(fontFamily: 'Raleway'),
-                controller: passwordController,
-                keyboardType: TextInputType.emailAddress,
-                validator: _validatePassword,
-                onSaved: (String val){
-                  _passwordValue = val;
-                },
-                decoration: InputDecoration(
-                    filled: true,
-                    enabled: true,
-                    labelText: "Enter password",
-                    fillColor: Colors.white,
-                    border: InputBorder.none,
-                    enabledBorder:
-                    OutlineInputBorder(borderSide: BorderSide(width: 0.0))),
-              ))
-        ]));
+    return TextFormField(
+      style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
+      controller: passwordController,
+      keyboardType: TextInputType.emailAddress,
+      validator: _validatePassword,
+      onSaved: (String val){
+        _passwordValue = val;
+      },
+      decoration: InputDecoration(
+        hintText: "Enter password",
+        hintStyle: TextStyle(color:Colors.black),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+        ),
+      ),
+    );
   }
 
   Widget passwordAgainField(){
@@ -85,7 +83,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
         child: Row(children: <Widget>[
           Flexible(
               child: TextFormField(
-                style: TextStyle(fontFamily: 'Raleway'),
+                style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
                 controller: rePasswordController,
                 keyboardType: TextInputType.emailAddress,
                 validator: _validatePasswordAgain,
@@ -93,13 +91,15 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
                   _passwordValue = val;
                 },
                 decoration: InputDecoration(
-                    filled: true,
-                    enabled: true,
-                    labelText: "Enter password Again",
-                    fillColor: Colors.white,
-                    border: InputBorder.none,
-                    enabledBorder:
-                    OutlineInputBorder(borderSide: BorderSide(width: 0.0))),
+                  hintText: "Password again",
+                  hintStyle: TextStyle(color:Colors.black),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.purple),
+                  ),
+                ),
               ))
         ]));
   }

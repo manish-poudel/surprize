@@ -64,29 +64,26 @@ class _CustomLabelTextFieldWidgetState
 
   @override
   Widget build(context) {
-    return Container(
-        child: Row(children: <Widget>[
-      Flexible(
-          child: TextFormField(
-            style: TextStyle(fontFamily: 'Raleway'),
-        controller: textcontroller,
-        keyboardType: TextInputType.emailAddress,
-        validator: _validation,
-        onSaved: (String val){
-          _value = val;
-        },
+    return TextFormField(
+      style: TextStyle(fontFamily: 'Raleway', color: _color),
+    controller: textcontroller,
+    keyboardType: TextInputType.emailAddress,
+    validator: _validation,
+    onSaved: (String val){
+    _value = val;
+    },
         decoration: InputDecoration(
-            filled: true,
-            border: InputBorder.none,
-            enabled: true,
-            labelText: _label,
-            labelStyle: TextStyle(fontFamily: 'Raleway'),
-            fillColor: _color,
-            enabledBorder:
-                OutlineInputBorder(
-                    borderSide: BorderSide(color:Colors.white,width: 1.0))),
-      ))
-    ]));
+          fillColor: _color,
+          hintText: _label,
+          hintStyle: TextStyle(color:_color),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: _color),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.purple),
+          ),
+        )
+    );
   }
 
 }

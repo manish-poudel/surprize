@@ -6,7 +6,7 @@ class StringResources{
 
   // Login page related
   static final String loginHeadingDisplay = "Enter your login information";
-  static final String buttonForgotPasswordText = "Forgot my password";
+  static final String buttonForgotPasswordText = "Forgot password?";
   static final String buttonRegisterAccountText = "Haven't Registered? Create Account";
   static final String buttonLoginText = "Login";
   static final String loginProgressInformationDisplay = "Login in...";
@@ -16,9 +16,9 @@ class StringResources{
   static final String snackBarRegistrationSuccessMessage = "Registration Completed";
   static final String registrationProgressInformationDisplayMessage = "Saving your data...";
   static final String registrationPageCreateAccountTitleDisplay = "Create Account";
-  static final String registrationPageLoginCredentialHeaderDisplay = "Login Information";
-  static final String registrationPagePersonalInformationHeaderDisplay = "Personal Information";
-  static final String buttonCreateAccountText = "Create";
+  static final String registrationPageLoginCredentialHeaderDisplay = "Let's start with login information!";
+  static final String registrationPagePersonalInformationHeaderDisplay = "Let's us get to know you bit!";
+  static final String buttonCreateAccountText = "Set up";
   static final String elaText = "By creating account, you agree to our";
   static final String elaTextButton = "Terms and Conditions";
   static final String goBackToolTipText = 'Go back';

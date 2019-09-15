@@ -9,7 +9,6 @@ import 'CustomWidgets/CustomDropDownWidget.dart';
 import 'CustomWidgets/CustomLabelTextFieldWidget.dart';
 import 'CustomWidgets/CustomMultiLineTextFieldWidget.dart';
 import 'CustomWidgets/CustomPhoneNumberWidget.dart';
-import 'CustomWidgets/CustomTextButtonWidget.dart';
 import 'Helper/AppHelper.dart';
 import 'Memory/UserMemory.dart';
 import 'UserProfileManagement/UserProfile.dart';
@@ -48,15 +47,14 @@ class EditProfilePageState extends State<EditProfilePage> {
   /// Init player widgets
    initWidgets(){
      _player = UserMemory().getPlayer();
-    _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.white, validation: AppHelper.validateName);
-    _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender, "Gender");
+    _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.black, validation: AppHelper.validateName);
+    _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender, "Gender", Colors.black, Colors.white);
 
       List<int> dob = AppHelper.getDateListFromString(_player.dob, "/");
-    _dobDatePickerWidget = CustomDatePickerWidget(dob[0],dob[1],dob[2]);
+    _dobDatePickerWidget = CustomDatePickerWidget(dob[0],dob[1],dob[2], Colors.black);
 
-    List<String> phoneCodeAndNumber = _player.phoneNumber.split(" ");
-    _phoneNumberWidget = CustomPhoneNumberWidget(phoneCodeAndNumber[0], phoneCodeAndNumber[1]);
-    _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address, Colors.white);
+    _phoneNumberWidget = CustomPhoneNumberWidget("+977", _player.phoneNumber, Colors.black);
+    _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address, Colors.black);
     _customRegistrationProgressBar = new CustomProgressbarWidget();
   }
 
@@ -89,26 +87,19 @@ class EditProfilePageState extends State<EditProfilePage> {
               _nameField,
               Padding(
                 padding: const EdgeInsets.only(left: 1.0, top: 8.0, right: 1.0),
-                child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    height: 58.0,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(4.0))),
-                    child: SizedBox(
-                        width: double.infinity,
-                        height: 48.0,
-                        child: _genderDropDownWidget)),
+                child: SizedBox(
+                    width: double.infinity,
+                    height: 48.0,
+                    child: _genderDropDownWidget),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 16.0),
                   child: _dobDatePickerWidget),
               Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 24.0),
                   child: _phoneNumberWidget),
               Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 16.0),
                   child: _multiLineAddressTextFieldWidget),
               Padding(
                 padding: const EdgeInsets.only(left: 1.0, top: 32.0, right: 1.0),
@@ -116,7 +107,7 @@ class EditProfilePageState extends State<EditProfilePage> {
                   width: double.infinity,
                   height: 48.0,
                   child:
-                      CustomTextButtonWidget("Update", Colors.green, () => validateAndUpdateProfile()),
+                      FlatButton(color:Colors.green,child: Text("Update",style: TextStyle(fontFamily: 'Raleway', color: Colors.white)), onPressed: () => validateAndUpdateProfile()),
                 ),
               ),
             ],
@@ -141,8 +132,8 @@ class EditProfilePageState extends State<EditProfilePage> {
     _player.name = _nameField.getValue();
      _player.gender = _genderDropDownWidget.selectedItem();
      _player.dob = _dobDatePickerWidget.getSelectedDate();
-     _player.phoneNumber = _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber();
-     _player.country = _phoneNumberWidget.getCountryName();
+     _player.phoneNumber = _phoneNumberWidget.getPhoneNumber();
+     _player.country = "Nepal";
      _player.address = _multiLineAddressTextFieldWidget.getValue();
 
      UserProfile().updateProfile(_player.membershipId, _player).then((value){

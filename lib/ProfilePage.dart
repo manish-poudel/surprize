@@ -32,9 +32,12 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isImageLoading = false;
   UserBLOC _userBLOC;
 
-  List<ProfileMenu> _popUpMenuChoice = [ProfileMenu(profileMenuType:ProfileMenuType.EDIT_PAGE,
-      title: "Edit Profile",
-      icon: Icons.edit)];
+  List<ProfileMenu> _popUpMenuChoice = [
+    ProfileMenu(
+        profileMenuType: ProfileMenuType.EDIT_PAGE,
+        title: "Edit Profile",
+        icon: Icons.edit)
+  ];
 
   @override
   void initState() {
@@ -52,48 +55,47 @@ class ProfilePageState extends State<ProfilePage> {
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-            appBar: CustomAppBarWithAction("Profile", context, appBarActions()
-            ),
+            appBar: CustomAppBarWithAction("Profile", context, appBarActions()),
             body: SingleChildScrollView(
                 child: StreamBuilder(
-                        stream: _userBLOC.player,
-                        builder: (BuildContext context, AsyncSnapshot<Player> playerSnapshot){
-                          _player = playerSnapshot.data;
-                          print("Player" + _player.toString());
-                            if(_player == null){
-                             return noProfileDisplay();
-                            }
-                          return displayProfile();
-                        }))));
+                    stream: _userBLOC.player,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<Player> playerSnapshot) {
+                      _player = playerSnapshot.data;
+                      print("Player" + _player.toString());
+                      if (_player == null) {
+                        return noProfileDisplay();
+                      }
+                      return displayProfile();
+                    }))));
   }
 
   /// App bar actions
-  List<Widget> appBarActions(){
-   return [
+  List<Widget> appBarActions() {
+    return [
       PopupMenuButton<ProfileMenu>(
-          onSelected: _OnPopUpMenuItemSelected,
-          itemBuilder: (BuildContext context){
-              return _popUpMenuChoice.map((ProfileMenu menu){
-                return PopupMenuItem<ProfileMenu>(
-                  value: menu,
-                  child:ListTile(leading: Icon(menu.icon), title:Text(menu.title,style: TextStyle(fontFamily: 'Raleway')))
-                );
-              }).toList();
-          },
+        onSelected: _OnPopUpMenuItemSelected,
+        itemBuilder: (BuildContext context) {
+          return _popUpMenuChoice.map((ProfileMenu menu) {
+            return PopupMenuItem<ProfileMenu>(
+                value: menu,
+                child: ListTile(
+                    leading: Icon(menu.icon),
+                    title: Text(menu.title,
+                        style: TextStyle(fontFamily: 'Raleway'))));
+          }).toList();
+        },
       )
-   ];
+    ];
   }
 
   /// If pop up menu item is selected
-  void _OnPopUpMenuItemSelected(ProfileMenu value){
-    if(value.profileMenuType == ProfileMenuType.EDIT_PAGE){
+  void _OnPopUpMenuItemSelected(ProfileMenu value) {
+    if (value.profileMenuType == ProfileMenuType.EDIT_PAGE) {
       Navigator.push(
-          context,
-          CupertinoPageRoute(
-          builder: (context) => EditProfilePage()));
+          context, CupertinoPageRoute(builder: (context) => EditProfilePage()));
     }
   }
-
 
   @override
   void dispose() {
@@ -126,7 +128,7 @@ class ProfilePageState extends State<ProfilePage> {
         Center(child: profilePhotoContainer()),
         personalInformationHolder(),
         AppHelper.appHeaderDivider(),
-        AppHelper.appSmallHeader("Recent Activities"),
+        AppHelper.appSmallHeader("Recent Activity"),
         Container(child: recentActivityList()),
       ],
     );
@@ -157,11 +159,10 @@ class ProfilePageState extends State<ProfilePage> {
                   color: Colors.white),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
-              _player.country,
+              _player.email,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontFamily: 'Raleway',
@@ -169,7 +170,7 @@ class ProfilePageState extends State<ProfilePage> {
                   fontWeight: FontWeight.w400,
                   color: Colors.white),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -192,19 +193,21 @@ class ProfilePageState extends State<ProfilePage> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           image: _player.profileImageURL.isEmpty
-                              ? AssetImage(
-                                  ImageResources.emptyUserProfilePlaceholderImage)
+                              ? AssetImage(ImageResources
+                                  .emptyUserProfilePlaceholderImage)
                               : CachedNetworkImageProvider(
                                   _player.profileImageURL),
                           fit: BoxFit.fill)),
-                  child:      /// Image upload progress
-                  Visibility(
-                      visible: _isImageLoading,
-                      child: CircularProgressIndicator(
-                          value: _imageUploadProgressValue,
-                          backgroundColor: Colors.white,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.purple[600]))),
+                  child:
+
+                      /// Image upload progress
+                      Visibility(
+                          visible: _isImageLoading,
+                          child: CircularProgressIndicator(
+                              value: _imageUploadProgressValue,
+                              backgroundColor: Colors.white,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.purple[600]))),
                 ),
               ],
             ),
@@ -214,21 +217,24 @@ class ProfilePageState extends State<ProfilePage> {
 
   /// Profile information holder
   Widget personalInformationHolder() {
-    return Card(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: Column(children: <Widget>[
-          textWithIcon(Icons.email, _player.email, Colors.purple),
-          textWithIcon(Icons.phone, _player.phoneNumber, Colors.purple),
-          textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
-          textWithIcon(Icons.place, _player.address, Colors.purple),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: textWithIcon(
-                Icons.people_outline, _player.gender, Colors.purple),
-          ),
-        ]),
-      ),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: Column(children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: textWithIcon(Icons.place, _player.country, Colors.purple),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: textWithIcon(
+              Icons.location_city, _player.address, Colors.purple),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child:
+              textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
+        ),
+      ]),
     );
   }
 
@@ -241,7 +247,13 @@ class ProfilePageState extends State<ProfilePage> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 8.0),
-          child: Card(child: Icon(iconData, color: color)),
+          child: CircleAvatar(
+              backgroundColor: Colors.grey[100],
+              child: Icon(
+                iconData,
+                color: Colors.purple,
+                size: 18,
+              )),
         ),
         Expanded(
           child: Padding(
@@ -252,7 +264,7 @@ class ProfilePageState extends State<ProfilePage> {
                   fontFamily: 'Raleway',
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
-                  color: Colors.purple[800]),
+                  color: color),
             ),
           ),
         )
@@ -260,7 +272,7 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Map<String, Activity>_recentActivityMap = Map();
+  Map<String, Activity> _recentActivityMap = Map();
 
   /// Get all recent activity list
   Widget recentActivityList() {
@@ -273,8 +285,8 @@ class ProfilePageState extends State<ProfilePage> {
                   fontWeight: FontWeight.w300,
                   color: Colors.grey)));
 
-
     List<Activity> recentActivityList = _recentActivityMap.values.toList();
+
     /// Sort the recent activity list
     recentActivityList.sort((Activity activity, Activity activity2) =>
         activity2.id.compareTo(activity.id));
@@ -296,10 +308,9 @@ class ProfilePageState extends State<ProfilePage> {
 
   /// Get and listen recent activity list
   void getRecentActivityList() {
-
     UserProfile().getActivity(_player.membershipId, (Activity activity) {
       setState(() {
-        if(_recentActivityMap.containsKey(activity.id)){
+        if (_recentActivityMap.containsKey(activity.id)) {
           _recentActivityMap.remove(activity.id);
         }
         _recentActivityMap.putIfAbsent(activity.id, () => activity);
@@ -330,7 +341,8 @@ class ProfilePageState extends State<ProfilePage> {
         _isImageLoading = true;
         _imageUploadProgressValue = event.snapshot.bytesTransferred.toDouble() /
             event.snapshot.totalByteCount.toDouble();
-        print("Image upload prgress value" + _imageUploadProgressValue.toString());
+        print("Image upload prgress value" +
+            _imageUploadProgressValue.toString());
       });
     });
 

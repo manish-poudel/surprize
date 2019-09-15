@@ -9,8 +9,9 @@ class CustomDatePickerWidget extends StatefulWidget{
   int y;
   int m;
   int d;
+  Color color;
 
-  CustomDatePickerWidget(this.y, this.m, this.d);
+  CustomDatePickerWidget(this.y, this.m, this.d, this.color);
 
   String getSelectedDate(){
     return _customDatePickerWidgetState.currentDate;
@@ -30,15 +31,17 @@ class CustomDatePickerWidget extends StatefulWidget{
 
 class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
 
-  String currentDate;
+  String currentDate = "";
   bool _properDateSelected = false;
   bool _showValidation = false;
 
 
   @override
   void initState() {
-    currentDate =  widget.y.toString() + "/" + widget.m.toString() + "/" + widget.d.toString();
     super.initState();
+    if(widget.y != 0 && widget.y != 0 && widget.d != 0)
+      currentDate =  widget.y.toString() + "/" + widget.m.toString() + "/" + widget.d.toString();
+
   }
 
   CustomDatePickerWidgetState();
@@ -97,42 +100,30 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return GestureDetector(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            height:58.0,
-            decoration: BoxDecoration(color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(4.0))
-            ),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  icon:Icon(Icons.calendar_today, color: Colors.red),
-                  tooltip: 'Set date',
-                  onPressed: () => openDatePicker(widget.y,widget.m,widget.d),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("DOB   " + currentDate,
-                      style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway')
-                  ),
-                )
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        GestureDetector(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom:8.0),
+              child: Text("DOB   " + currentDate,
+                  style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway', color: widget.color)
+              ),
             ),
           ),
-          Visibility(visible: _showValidation, child: Padding(
-            padding: const EdgeInsets.only(top:8.0, left: 16.0),
-            child: Text("Enter DOB from calendar", style:
-                TextStyle(color:Colors.red, fontFamily:'Raleway',fontSize: 11.0)),
-          )),
-        ],
-      ),
-      onTap: (){
-        openDatePicker(widget.y,widget.m,widget.d);
-      },
+          onTap: (){
+            openDatePicker(widget.y,widget.m,widget.d);
+          },
+        ),
+        Container(height: 1 , color: widget.color),
+        Visibility(visible: _showValidation, child: Padding(
+          padding: const EdgeInsets.only(top:8.0, left: 16.0),
+          child: Text("Enter DOB from calendar", style:
+          TextStyle(color:Colors.red, fontFamily:'Raleway',fontSize: 11.0)),
+        )),
+      ],
     );
   }
 

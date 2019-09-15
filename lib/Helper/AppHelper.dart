@@ -52,6 +52,14 @@ class AppHelper{
        CupertinoPageRoute(
            builder: (context) => pageName));
   }
+
+  ///cupertino route
+  static void cupertinoRouteWithPushReplacement(buildContext,pageName){
+    Navigator.pushReplacement(
+        buildContext,
+        CupertinoPageRoute(
+            builder: (context) => pageName));
+  }
   /*
   Go to new page.
    */

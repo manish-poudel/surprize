@@ -1,17 +1,12 @@
+import 'package:Surprize/ProfileSetUpPage.dart';
+import 'package:Surprize/SplashScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
-import 'package:Surprize/Helper/AppColor.dart';
-import 'package:Surprize/Models/Player.dart';
-import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/Resources/StringResources.dart';
 
-import 'CustomWidgets/CustomLabelTextFieldWidget.dart';
-import 'CustomWidgets/CustomPhoneNumberWidget.dart';
-import 'CustomWidgets/CustomDatePickerWidget.dart';
-import 'CustomWidgets/CustomMultiLineTextFieldWidget.dart';
-import 'CustomWidgets/CustomTextButtonWidget.dart';
-import 'CustomWidgets/CustomDropDownWidget.dart';
+import 'CustomWidgets/CustomAppBar.dart';
 import 'Helper/AppHelper.dart';
 import 'package:Surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
 import 'package:Surprize/CustomWidgets/LoginPage/CustomLoginCredentialRegWidget.dart';
@@ -25,210 +20,105 @@ class RegistrationPage extends StatefulWidget {
   }
 }
 
-class RegistrationPageState extends State<RegistrationPage> {
+class RegistrationPageState extends State<RegistrationPage> with SingleTickerProviderStateMixin  {
 
   // keys
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyForLoginInformation = GlobalKey<FormState>();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool _autoValidate = false;
+  bool _autoValidateForLoginInformation = false;
+
+
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   // Form widgets
   CustomLoginCredentialRegWidget _customLoginCredentialRegWidget=  CustomLoginCredentialRegWidget();
-  CustomLabelTextFieldWidget _nameField = CustomLabelTextFieldWidget("Name", "",Colors.white, validation: AppHelper.validateName);
-  CustomDropDownWidget _genderDropDownWidget=  CustomDropDownWidget(['Male', 'Female', 'Other'], "Male","Gender");
-  CustomDatePickerWidget _dobDatePickerWidget = CustomDatePickerWidget(1991,1,1);
-  CustomPhoneNumberWidget _phoneNumberWidget = CustomPhoneNumberWidget("+1", "");
-  CustomMultiLineTextFieldWidget _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", "",Colors.white);
-  CustomELAWidget _customELAWidget = new CustomELAWidget();
-  CustomProgressbarWidget _customRegistrationProgressBar = new CustomProgressbarWidget();
+  CustomProgressbarWidget _customLoginProgressbar = new CustomProgressbarWidget();
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return MaterialApp(
+      theme: ThemeData(primaryColor: Colors.purple[800]),
       home: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: AppColor.colorPrimary,
-        body: Container(
-          decoration: BoxDecoration(
-              image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
-          ),
-          child: SingleChildScrollView(
-            child: new Form(
-              key: _formKey,
-              autovalidate: _autoValidate,
-              child: registrationFormUI(context),
-            ),
+        appBar: CustomAppBar("Registration", context),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                  decoration: BoxDecoration(
+                    color: Colors.purple[800],
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Image.asset(ImageResources.appMainLogo),
+                  alignment: FractionalOffset.center
+              ),
+              registrationFormLoginInformation(),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget registrationFormUI(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding:
-          const EdgeInsets.only(top: 18.0, left: 16.0, right: 16.0),
-          child: Center(
-              child: Row(
-                children: <Widget>[
-                  IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white),
-                      tooltip: StringResources.goBackToolTipText,
-                      onPressed: () {
-                        AppHelper.pop(context);
-                      }
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 32.0),
-                    child: Text(StringResources.registrationPageCreateAccountTitleDisplay,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32.0,
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              )
+
+  // Registration form login
+  registrationFormLoginInformation(){
+    return Form(
+      key: _formKeyForLoginInformation,
+      autovalidate: _autoValidateForLoginInformation,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+            child: Text(StringResources.registrationPageLoginCredentialHeaderDisplay,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Raleway')),
           ),
-        ),
-        Divider(color: Colors.white, height: 12.0),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-          child: Text(StringResources.registrationPageLoginCredentialHeaderDisplay,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontFamily: 'Raleway')),
-        ),
-        _customLoginCredentialRegWidget,
-
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-          child: Text(StringResources.registrationPagePersonalInformationHeaderDisplay,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontFamily: 'Raleway')),
-        ),
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _nameField,
-              Padding(
-                padding: const EdgeInsets.only(left: 1.0, top: 8.0, right: 1.0),
-                child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    height: 58.0,
-                    decoration: BoxDecoration(color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(4.0))
-                    ),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 48.0,
-                      child: _genderDropDownWidget
-                    )
-                ),
-              ),
-
-              Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: _dobDatePickerWidget
-              ),
-
-              Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: _phoneNumberWidget
-              ),
-
-              Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: _multiLineAddressTextFieldWidget
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: _customELAWidget,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 1.0, top: 32.0, right: 1.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 48.0,
-                  child: CustomTextButtonWidget(StringResources.buttonCreateAccountText, Colors.green, () => validateAndRegisterPlayer()),
-                ),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _customLoginCredentialRegWidget,
           ),
-        ),
-      ],
+          Center(child: FlatButton(color:Colors.green,child:Text("Create", style: TextStyle(color:Colors.white,fontSize:18,fontFamily: 'Raleway')),onPressed: () => onPressedLoginInformationNextButton()))
+        ],
+      ),
     );
   }
 
-  /*
-  Validate inputs
-   */
-  void validateAndRegisterPlayer(){
-    if(_formKey.currentState.validate() && _dobDatePickerWidget.isProperlyValidated()){
-      _customRegistrationProgressBar.startProgressBar(context, StringResources.registrationProgressInformationDisplayMessage, Colors.purple[800], Colors.white);
-      registerUser(_customLoginCredentialRegWidget.getEmail(), _customLoginCredentialRegWidget.getPassword());
-    }
-    else{
-      setState(() {
-        _autoValidate = true;
-      });
-    }
+  onPressedLoginInformationNextButton(){
+    if(!_formKeyForLoginInformation.currentState.validate())
+      return;
+
+    _customLoginProgressbar.startProgressBar(context, "Registering ...", Colors.white, Colors.black);
+    registerUser();
   }
 
-  /*
-  Create authentication information
-   */
 
-  void registerUser(String email, String password){
-    // Creating authentication
-    FirestoreOperations().regUser(email, password).then((firebaseUser){
-
-      // Save user profile information to the database
-      registerPlayer(firebaseUser.uid, Player(
-        firebaseUser.uid, // Player Id
-        _nameField.getValue(), // Player Name
-        _dobDatePickerWidget.getSelectedDate(), // Player DOB
-        _multiLineAddressTextFieldWidget.getValue(), // Player Address
-        _phoneNumberWidget.getCountryName(), // Player country
-        _genderDropDownWidget.selectedItem(), // Player Gender
-        email, // Player Email
-        _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber(), // Player phone number
-        DateTime.now(), // Player membership date
-        "" // Player profile Image URL (To be updated later)
-      ).toMap());
-
+  // Register user
+  void registerUser(){
+    FirestoreOperations().regUser(_customLoginCredentialRegWidget.getEmail(), _customLoginCredentialRegWidget.getPassword()).then((firebaseUser){
+      _customLoginProgressbar.stopAndEndProgressBar(context);
+      AppHelper.cupertinoRouteWithPushReplacement(context,ProfileSetUpPage(firebaseUser));
     }).catchError((error){
-      _customRegistrationProgressBar.stopAndEndProgressBar(context);
+      _customLoginProgressbar.stopAndEndProgressBar(context);
       AppHelper.showSnackBar(error.toString(), _scaffoldKey);
     });
+    // Creating authentication
   }
 
-  /*
-  Register player information
-   */
-  void registerPlayer(String docId, Map playerMap){
-      FirestoreOperations().createData(FirestoreResources.userCollectionName, docId, playerMap).then((value){
-        _customRegistrationProgressBar.stopAndEndProgressBar(context);
-        AppHelper.showSnackBar(StringResources.snackBarRegistrationSuccessMessage, _scaffoldKey);
-        AppHelper.goToPage(context, true, '/playerDashboard');
-      }).catchError((error){
-        _customRegistrationProgressBar.stopAndEndProgressBar(context);
-        AppHelper.showSnackBar(error.toString(), _scaffoldKey);
-      });
-  }
+
+
 }
 
 

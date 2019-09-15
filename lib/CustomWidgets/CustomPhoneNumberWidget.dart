@@ -7,8 +7,9 @@ class CustomPhoneNumberWidget extends StatefulWidget {
 
   String _initialSelection;
   String _phoneNumber;
+  Color color;
 
-  CustomPhoneNumberWidget(this._initialSelection, this._phoneNumber);
+  CustomPhoneNumberWidget(this._initialSelection, this._phoneNumber, this.color);
 
   @override
   State<StatefulWidget> createState() {
@@ -52,36 +53,32 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
   Widget build(BuildContext context) {
     String _phoneNumberValue;
     // TODO: implement build
-    return Container(
-      height: 58.0,
-      decoration: BoxDecoration(color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(4.0))
-      ),
-      child: Row(
-        children: <Widget>[
-         CountryCodePicker(
-                onChanged: (code) {
-                  _countryCode = code.toString();
-                  _countryName = code.name;
-                },
-                initialSelection: widget._initialSelection,
-         ),
-         Expanded(
-           child:TextFormField(
-             style: TextStyle(fontFamily: 'Raleway'),
-             controller: controller ,
-             keyboardType: TextInputType.emailAddress,
-              validator: validateMobile,
-                onSaved: (String val){
-                  _phoneNumberValue = val;
-                  },
-                 decoration: InputDecoration.collapsed(
-               hintText: "Phone number"
-             ),
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+           Expanded(
+             child:TextFormField(
+               style: TextStyle(fontFamily: 'Raleway', color:widget.color),
+               controller: controller ,
+               keyboardType: TextInputType.emailAddress,
+                validator: validateMobile,
+                  onSaved: (String val){
+                    _phoneNumberValue = val;
+                    },
+                   decoration: InputDecoration.collapsed(
+                 hintText: "Phone number",
+                     hintStyle: TextStyle(color: widget.color)
+               ),
+             )
            )
-         )
-        ],
-      ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top:8.0),
+          child: Container(height: 1, color: widget.color),
+        )
+      ],
     );
   }
 

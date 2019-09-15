@@ -51,6 +51,13 @@ class PlayerDashboardState extends State<PlayerDashboard>
     getQuizLetters();
   }
 
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   /// Is daily quiz available
   isDailyQuizAvailable() async {
 
@@ -153,7 +160,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top:8.0, left: 16, bottom: 4),
-              child: Text("Quiz Letters", style: TextStyle(fontFamily: 'Raleway', color: Colors.grey, fontWeight: FontWeight.w500)),
+              child: Text("Quiz Letters", style: TextStyle(fontFamily: 'Raleway', color: Colors.black, fontWeight: FontWeight.w500)),
             ),
             CustomQuizLettersWidget(quizLetterDisplay),
           ],

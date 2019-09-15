@@ -1,6 +1,5 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
-import 'package:Surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,7 +30,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   void initState() {
     super.initState();
     this._openedQuizId = widget._openedQuizId;
-    getQuizLetters();
+   getQuizLetters();
   }
 
   @override
@@ -86,7 +85,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
 
   /// Quiz letters
   void getQuizLetters() {
-    Firestore.instance.collection(FirestoreResources.collectionQuizLetterName)..orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true).snapshots().listen((snapshot){
+    Firestore.instance.collection(FirestoreResources.collectionQuizLetterName).orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true).snapshots().listen((snapshot){
 
       if(snapshot.documents.length == 0)
         setState(() {

@@ -5,7 +5,10 @@ class CustomProgressbarWidget {
   BuildContext _selfContext;
   // End progress bar
   stopAndEndProgressBar(context){
-    Navigator.of(_selfContext).pop();
+    try {
+      Navigator.of(_selfContext).pop();
+    }
+    catch(error){}
   }
 
   // Start progress bar

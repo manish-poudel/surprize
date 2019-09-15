@@ -5,8 +5,10 @@ class CustomDropDownWidget extends StatefulWidget {
   String _selectedItem;
   String _label;
   CustomDropDownWidgetState _state;
+  Color _color;
+  Color _canvasColor;
 
-  CustomDropDownWidget(this._listItems, this._selectedItem, this._label);
+  CustomDropDownWidget(this._listItems, this._selectedItem, this._label, this._color, this._canvasColor);
 
   @override
   State<StatefulWidget> createState() {
@@ -39,14 +41,22 @@ class CustomDropDownWidget extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return DropdownButtonHideUnderline(
+    return Theme(
+        data: new ThemeData(
+            canvasColor: widget._canvasColor,
+            hintColor: widget._color),
       child: DropdownButton<String>(
-        hint:Text(_label,style: TextStyle(fontFamily: 'Raleway'),),
+        hint:Text(_label,style: TextStyle(fontFamily: 'Raleway')),
+        underline: Container(
+          height: 1,
+          color: widget._color,
+        ),
+        iconSize: 0,
         value: _selectedItem,
         items:  _listItems.map((String value){
           return new DropdownMenuItem<String>(
               value:value,
-              child: new Text(value,style: TextStyle(fontFamily: 'Raleway')));
+              child: new Text(value,style: TextStyle(fontFamily: 'Raleway',color: widget._color)));
         }).toList(),
         onChanged: (String value){
           onChanged(value);
