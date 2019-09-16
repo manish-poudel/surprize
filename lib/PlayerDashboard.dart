@@ -1,4 +1,5 @@
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
 import 'package:Surprize/QuizLettersPage.dart';
@@ -173,7 +174,9 @@ class PlayerDashboardState extends State<PlayerDashboard>
     Firestore.instance.collection(FirestoreResources.collectionQuizLetterName).limit(1).orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true).
     getDocuments().then((docSnapshot){
       setState(() {
-        quizLetterDisplay = QuizLetterDisplay(false,QuizLetter.fromMap(docSnapshot.documents[0].data), true, false);
+       QuizLetter quizLetter =  QuizLetter.fromMap(docSnapshot.documents[0].data);
+        quizLetterDisplay = QuizLetterDisplay(quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
+            false, quizLetter, true, false);
         customQuizLettersWidget = CustomQuizLettersWidget(quizLetterDisplay);
       });
     });

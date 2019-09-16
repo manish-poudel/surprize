@@ -1,3 +1,4 @@
+import 'package:Surprize/QuizLettersPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,12 +91,13 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-        drawerButtonNavigation(DailyQuizChallengeNotAvailablePage(DateTime.now()), Icon(Icons.people, color: Colors.purple),"No quiz"),
-        drawerButtonNavigationWithPadding(DailyQuizChallengeGamePlayPage(),Icon(Icons.people, color: Colors.purple), "Quiz available"),
-        goToGamePlay(),
-        drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"), drawerButtonNavigationWithPadding(NewsReadingPage(),Icon(Icons.assignment, color: Colors.purple), "News"),
-        drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
-        drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
+            goToGamePlay(),
+            drawerButtonNavigationWithPadding(QuizLettersPage(null),Icon(Icons.event_note, color: Colors.purple), "Quiz letters"),
+            drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
+        drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"),
+            drawerButtonNavigationWithPadding(NewsReadingPage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
+
+       // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
         logOutButton()
       ]),
     );
@@ -145,7 +147,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget goToGamePlay(){
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
-        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple),() => DailyQuizChallengePage(_selfContext).openPage(), "Play Quiz")
+        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple),() => DailyQuizChallengePage(_selfContext).openPage(), "Daily quiz challenge")
     );
   }
 }

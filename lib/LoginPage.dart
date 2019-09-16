@@ -61,6 +61,13 @@ class LoginPage extends StatefulWidget {
                   child: Image.asset(ImageResources.appMainLogo),
                   alignment: FractionalOffset.center
               ),
+              Container(
+                  decoration: BoxDecoration(
+                    color: Colors.purple[300],
+                  ),
+                  child: Text("A doorway to surprizes", style: TextStyle(color: Colors.white)),
+                  alignment: FractionalOffset.center
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, top:8, right: 16.0),
                 child: Container(

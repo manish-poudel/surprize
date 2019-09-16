@@ -46,7 +46,6 @@ class QuizLetterBLOC {
 
   /// Delete quiz letters
   Future<int> deleteQuizLetter(String uid) async {
-    print("Deleting");
     int result = await SQLiteManager().deleteFavouriteQuote(uid);
     _quizLettersMap.remove(uid);
     _quizLetters.add(_quizLettersMap);
@@ -63,6 +62,7 @@ class QuizLetterBLOC {
     DailyQuizChallengeQnA dailyQuizChallengeQnA = DailyQuizChallengeQnA.fromSQLiteMap(map);
     QuizLetter quizLetter = QuizLetter.fromSQLiteMap(map, dailyQuizChallengeQnA);;
     return QuizLetterDisplay(
+        map[SQLiteDatabaseResources.fieldQuizLetterDisplayId],
         map[SQLiteDatabaseResources.fieldQuizLetterLiked] == "true",
         quizLetter,
         map[SQLiteDatabaseResources.fieldQuizLetterExpanded] == "true",

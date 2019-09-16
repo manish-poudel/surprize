@@ -20,6 +20,7 @@ class SQLiteDatabaseResources{
   static final String fieldQuizLetterURL = "url";
   static final String fieldQuizLetterCreationTime  = "createdTime";
 
+  static final String fieldQuizLetterDisplayId = "id";
   static final String fieldQuizLetterLiked = "isLiked";
   static final String fieldQuizLetterExpanded = "isExpanded";
   static final String fieldQuizLetterBodyReveal= "revealBody";
@@ -30,7 +31,8 @@ class SQLiteDatabaseResources{
   /// get quiz table creation string
   static String getFavouriteTable(){
     return SQLiteHelper.createTable(tableQuizFavourite) +
-        SQLiteHelper.primaryColumn(fieldQuizLetterId) + "," +
+        SQLiteHelper.primaryColumn(fieldQuizLetterDisplayId) + "," +
+        SQLiteHelper.column(fieldQuizLetterId) + "," +
         SQLiteHelper.column(fieldQuizLetterUserId) + "," +
         SQLiteHelper.column(fieldQuizLetterSubject) + "," +
         SQLiteHelper.column(fieldQuizLetterBody) + "," +
@@ -75,22 +77,23 @@ class SQLiteDatabaseResources{
 
   static final String insertIntoFavQuoteTableStatement =  SQLiteHelper.insertStatement(tableQuizFavourite) +
   SQLiteHelper.insertColumnAppend([
-    SQLiteDatabaseResources.fieldQuizLetterId,
-    SQLiteDatabaseResources.fieldQuizLetterUserId,
-    SQLiteDatabaseResources.fieldQuizLetterSubject,
-    SQLiteDatabaseResources.fieldQuizLetterBody,
-    SQLiteDatabaseResources.fieldQuizLetterCreationTime,
-    SQLiteDatabaseResources.fieldQuizLetterURL,
-    SQLiteDatabaseResources.fieldQuizId,
-    SQLiteDatabaseResources.fieldQuizQuestion,
-    SQLiteDatabaseResources.fieldQuizAnswerOne,
-    SQLiteDatabaseResources.fieldQuizAnswerTwo,
-    SQLiteDatabaseResources.fieldQuizAnswerThree,
-    SQLiteDatabaseResources.fieldQuizAnswerFour,
-    SQLiteDatabaseResources.fieldQuizRightAnswer,
-    SQLiteDatabaseResources.fieldQuizLetterLiked,
-    SQLiteDatabaseResources.fieldQuizLetterExpanded,
-    SQLiteDatabaseResources.fieldQuizLetterBodyReveal
-  ]) + ") " + getInsertValueField(16);
+    fieldQuizLetterDisplayId,
+    fieldQuizLetterId,
+    fieldQuizLetterUserId,
+    fieldQuizLetterSubject,
+    fieldQuizLetterBody,
+    fieldQuizLetterCreationTime,
+    fieldQuizLetterURL,
+    fieldQuizId,
+    fieldQuizQuestion,
+    fieldQuizAnswerOne,
+    fieldQuizAnswerTwo,
+    fieldQuizAnswerThree,
+    fieldQuizAnswerFour,
+    fieldQuizRightAnswer,
+    fieldQuizLetterLiked,
+    fieldQuizLetterExpanded,
+    fieldQuizLetterBodyReveal
+  ]) + ") " + getInsertValueField(17);
 
 }

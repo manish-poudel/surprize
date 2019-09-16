@@ -1,7 +1,6 @@
-
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
-import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/Resources/TableResources.dart';
 import 'package:Surprize/SqliteDb/SQLiteManager.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ class CustomQuizLettersWidget extends StatefulWidget with WidgetsBindingObserver
    _CustomQuizLettersWidgetState state;
 
   CustomQuizLettersWidget(this._quizLetterDisplay);
+
   @override
   _CustomQuizLettersWidgetState createState() {
     state =  _CustomQuizLettersWidgetState();
@@ -27,7 +27,7 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child:Column(
         children: <Widget>[
-          QuizLettersExpandableWidget(widget._quizLetterDisplay, (bool) => onFavButtonHandleClicked(), (){}),
+          QuizLettersExpandableWidget("Server",widget._quizLetterDisplay, (bool) => onFavButtonHandleClicked(), (){}),
           _playButton()
         ],
       )
@@ -41,7 +41,7 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
     });
     !widget._quizLetterDisplay.quizLetterLiked
         ? SQLiteManager().deleteFavouriteQuote(
-        widget._quizLetterDisplay.quizLetter.quizLettersId)
+        widget._quizLetterDisplay.displayId)
         : SQLiteManager().insertFavouriteQuote(widget._quizLetterDisplay);
   }
 
@@ -66,7 +66,7 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
 
 
   Future getLikedValue() async {
-    List list = await SQLiteManager().getQuotes(widget._quizLetterDisplay.quizLetter.quizLettersId);
+    List list = await SQLiteManager().getQuotes(widget._quizLetterDisplay.displayId);
     if(list.length == 0)
       return;
     setState(() {

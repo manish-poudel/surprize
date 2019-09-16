@@ -95,6 +95,7 @@ class _FavQuizLetterPageState extends State<FavQuizLetterPage> {
     QuizLetter quizLetter = QuizLetter.fromSQLiteMap(
         map, dailyQuizChallengeQnA);
     return QuizLetterDisplay(
+        map[SQLiteDatabaseResources.fieldQuizLetterDisplayId],
         map[SQLiteDatabaseResources.fieldQuizLetterLiked] == "true",
         quizLetter,
         map[SQLiteDatabaseResources.fieldQuizLetterExpanded] == "true",

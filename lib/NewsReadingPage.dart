@@ -1,8 +1,6 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:Surprize/Memory/UserMemory.dart';
-import 'package:Surprize/Resources/FirestoreResources.dart';
 
 class NewsReadingPage extends StatefulWidget{
   @override

@@ -38,7 +38,7 @@ class DailyQuizChallengeQnA {
     _answer = [map[SQLiteDatabaseResources.fieldQuizAnswerOne],
       map[SQLiteDatabaseResources.fieldQuizAnswerTwo],
       map[SQLiteDatabaseResources.fieldQuizAnswerThree],
-      map[SQLiteDatabaseResources.fieldQuizAnswerOne]];
+      map[SQLiteDatabaseResources.fieldQuizAnswerFour]];
     _rightAnswer = int.parse(map[SQLiteDatabaseResources.fieldQuizRightAnswer]);
   }
 }

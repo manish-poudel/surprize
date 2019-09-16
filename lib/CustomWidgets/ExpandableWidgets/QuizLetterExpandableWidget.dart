@@ -1,17 +1,21 @@
-import 'package:Surprize/BLOC/QuizLetterBLOC.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/CustomExpandableWidget.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/CustomSimpleQuizQuestionsDisplayWidget.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/Resources/TableResources.dart';
 import 'package:Surprize/SqliteDb/SQLiteManager.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class QuizLettersExpandableWidget extends StatefulWidget {
+
   QuizLetterDisplay _quizLetterDisplay;
   Function onPressedFavWidget;
   Function onPressedShareButton;
-  QuizLettersExpandableWidget(this._quizLetterDisplay, this.onPressedFavWidget, this.onPressedShareButton);
+  String source;
+
+  QuizLettersExpandableWidget(this.source, this._quizLetterDisplay, this.onPressedFavWidget, this.onPressedShareButton);
 
   @override
   _QuizLettersExpandableWidgetState createState() =>
@@ -21,6 +25,7 @@ class QuizLettersExpandableWidget extends StatefulWidget {
 class _QuizLettersExpandableWidgetState
     extends State<QuizLettersExpandableWidget> {
 
+  CustomSimpleQuizQuestionDisplay customSimpleQuizQuestionDisplay;
   @override
   void initState() {
     super.initState();
@@ -29,6 +34,9 @@ class _QuizLettersExpandableWidgetState
 
   @override
   Widget build(BuildContext context) {
+    customSimpleQuizQuestionDisplay = CustomSimpleQuizQuestionDisplay(
+        widget._quizLetterDisplay.quizLetter.dailyQuizChallengeQnA);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -44,8 +52,7 @@ class _QuizLettersExpandableWidgetState
             childrenWidgets: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: CustomSimpleQuizQuestionDisplay(
-                    widget._quizLetterDisplay.quizLetter.dailyQuizChallengeQnA),
+                child: customSimpleQuizQuestionDisplay,
               ),
               Container(height: 0.5, color: Colors.grey[200]),
               Padding(
@@ -77,12 +84,21 @@ class _QuizLettersExpandableWidgetState
 
   /// Leading for expandable widget
   Widget _leading() {
-    return widget._quizLetterDisplay.quizLetter.quizLettersUrl.isEmpty
+    // if it is from server
+    return widget.source == "Server"?widget._quizLetterDisplay.quizLetter.quizLettersUrl.isEmpty
         ? Image.asset(ImageResources.emptyUserProfilePlaceholderImage,
-            height: 100, width: 80, fit: BoxFit.fill,)
+            height: 100, width: 80, fit: BoxFit.fill)
         : FadeInImage.assetNetwork(
             image: widget._quizLetterDisplay.quizLetter.quizLettersUrl,
-            placeholder: ImageResources.emptyImageLoadingUrlPlaceholder, height: 100, width:80,fit: BoxFit.fill);
+            placeholder: ImageResources.emptyImageLoadingUrlPlaceholder, height: 100, width:80,fit: BoxFit.fill):
+
+        // if it is from sqlite
+    widget._quizLetterDisplay.quizLetter.quizLettersUrl.isEmpty
+    ? Image.asset(ImageResources.emptyUserProfilePlaceholderImage,
+    height: 100, width: 80, fit: BoxFit.fill)
+        : CachedNetworkImage(imageUrl: widget._quizLetterDisplay.quizLetter.quizLettersUrl,height: 100, width:80,fit: BoxFit.fill,
+        placeholder: (context, url) => Image.asset(ImageResources.emptyImageLoadingUrlPlaceholder,height: 100, width:80,fit: BoxFit.fill),
+    );
   }
 
   /// Title for expandable widget
@@ -109,13 +125,15 @@ class _QuizLettersExpandableWidgetState
               ? Icon(Icons.favorite)
               : Icon(Icons.favorite_border),
           color: Colors.redAccent,
-          onPressed: () => widget.onPressedFavWidget(widget._quizLetterDisplay.quizLetterLiked)),
+          onPressed: () {
+            widget.onPressedFavWidget(widget._quizLetterDisplay.quizLetterLiked);
+          }),
       IconButton(icon: Icon(Icons.share), onPressed: () => widget.onPressedShareButton())
     ]);
   }
 
   Future getLikedValue() async {
-    List list = await SQLiteManager().getQuotes(widget._quizLetterDisplay.quizLetter.quizLettersId);
+    List list = await SQLiteManager().getQuotes(widget._quizLetterDisplay.quizLetter.quizLettersId + UserMemory().getPlayer().membershipId);
     if(list == null)
       return;
     if(list.length == 0)

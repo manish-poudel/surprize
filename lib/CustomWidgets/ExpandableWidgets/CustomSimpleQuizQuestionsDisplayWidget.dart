@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 class CustomSimpleQuizQuestionDisplay extends StatefulWidget {
 
   DailyQuizChallengeQnA dailyQuizChallengeQnA;
+  _CustomSimpleQuizQuestionDisplayState state;
+
+  refreshColor(){
+    state.refreshColor();
+  }
+
   CustomSimpleQuizQuestionDisplay(this.dailyQuizChallengeQnA);
 
   @override
-  _CustomSimpleQuizQuestionDisplayState createState() => _CustomSimpleQuizQuestionDisplayState();
-}
+  _CustomSimpleQuizQuestionDisplayState createState() {
+    state =  _CustomSimpleQuizQuestionDisplayState();
+    return state;
+}}
 
 class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuestionDisplay> {
 
@@ -17,10 +25,17 @@ class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuesti
   Color questionAnswerThirdColor;
   Color questionAnswerFourthColor;
 
+
   @override
   void initState() {
     super.initState();
     initButtonColor();
+  }
+
+  refreshColor(){
+    setState(() {
+      initButtonColor();
+    });
   }
 
   void initButtonColor(){
@@ -30,8 +45,17 @@ class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuesti
      questionAnswerFourthColor = Colors.white;
   }
 
+
+  @override
+  void didUpdateWidget(CustomSimpleQuizQuestionDisplay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    initButtonColor();
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: Column(
         children: <Widget>[

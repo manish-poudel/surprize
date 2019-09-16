@@ -79,6 +79,7 @@ class SQLiteManager {
     print(SQLiteDatabaseResources.getFavouriteTable());
     SQLiteDb db = await getSQLiteDatabaseInstance();
     int id = await db.createDataRaw(SQLiteDatabaseResources.insertIntoFavQuoteTableStatement, [
+      quizLetterDisplay.quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
       quizLetterDisplay.quizLetter.quizLettersId,
       UserMemory().getPlayer().membershipId,
       quizLetterDisplay.quizLetter.quizLettersSubject,
@@ -103,8 +104,8 @@ class SQLiteManager {
   deleteFavouriteQuote(String delId) async {
     SQLiteDb db = await getSQLiteDatabaseInstance();
     int id = await db.deleteData(SQLiteDatabaseResources.tableQuizFavourite,
-        SQLiteDatabaseResources.fieldQuizLetterId + " =? AND "
-            + SQLiteDatabaseResources.fieldQuizLetterUserId + " =?", [delId, UserMemory().getPlayer().membershipId]);
+        SQLiteDatabaseResources.fieldQuizLetterDisplayId + " =? "
+            , [delId]);
     print(id.toString() +  "Deleted");
   }
 
@@ -122,7 +123,7 @@ class SQLiteManager {
     SQLiteDb sqLiteDatabase = await getSQLiteDatabaseInstance();
     List<Map> list = await sqLiteDatabase
         .getDataByCondition(SQLiteDatabaseResources.tableQuizFavourite, SQLiteDatabaseResources.fieldQuizLetterUserId + " =? AND "
-        + SQLiteDatabaseResources.fieldQuizLetterId + " =?", [UserMemory().getPlayer().membershipId, id]);
+        + SQLiteDatabaseResources.fieldQuizLetterDisplayId + " =?", [UserMemory().getPlayer().membershipId, id]);
     return list;
   }
 
