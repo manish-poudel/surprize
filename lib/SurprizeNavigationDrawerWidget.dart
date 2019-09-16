@@ -1,3 +1,4 @@
+import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,7 @@ import 'DailyQuizChallengePage.dart';
 import 'DailyQuizChallengeScoreSummaryPage.dart';
 import 'LeaderboardPage.dart';
 import 'Models/Player.dart';
-import 'NewsReadingPage.dart';
+import 'NoticeReadingPage.dart';
 import 'ProfilePage.dart';
 import 'Resources/ImageResources.dart';
 
@@ -95,7 +96,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(QuizLettersPage(null),Icon(Icons.event_note, color: Colors.purple), "Quiz letters"),
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
         drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"),
-            drawerButtonNavigationWithPadding(NewsReadingPage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
+            drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
 
        // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
         logOutButton()

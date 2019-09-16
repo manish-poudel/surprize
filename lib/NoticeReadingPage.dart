@@ -2,15 +2,15 @@ import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-class NewsReadingPage extends StatefulWidget{
+class NoticeReadingPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return NewsReadingPageState();
+    return NoticeReadingPageState();
   }
 }
 
-class NewsReadingPageState extends State<NewsReadingPage>{
+class NoticeReadingPageState extends State<NoticeReadingPage>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

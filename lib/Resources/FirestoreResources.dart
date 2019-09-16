@@ -76,4 +76,15 @@ class FirestoreResources{
   static final String fieldQuizLetterQuiz = "Quiz";
   static final String fieldQuizLetterImage = "Image Url";
   static final String fieldQuizLetterAddedDate = "Added date";
+
+  // Related to quiz letter
+
+  static final String collectionNotice = "/Notice";
+  static final String fieldNoticeId = "Id";
+  static final String fieldNoticeTitle = "Notice";
+  static final String fieldNoticeBody = "Body";
+  static final String fieldNoticeImageUrl = "Image Url";
+  static final String fieldNoticeImageDesc = "Image Desc";
+  static final String fieldNoticeAddedDate = "Added date";
+
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../NewsReadingPage.dart';
+import '../NoticeReadingPage.dart';
 
 class CustomNewsCardWidget extends StatelessWidget{
 
@@ -12,7 +12,7 @@ class CustomNewsCardWidget extends StatelessWidget{
     return  GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => NewsReadingPage()),
+        MaterialPageRoute(builder: (context) => NoticeReadingPage()),
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
