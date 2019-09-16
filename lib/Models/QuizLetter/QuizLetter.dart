@@ -1,6 +1,7 @@
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/TableResources.dart';
 
 class QuizLetter{
   String quizLettersId;
@@ -32,5 +33,15 @@ class QuizLetter{
     map[FirestoreResources.fieldQuizLetterQuiz] = dailyQuizChallengeQnA.toMap();
 
     return map;
+  }
+
+
+  QuizLetter.fromSQLiteMap(Map<String, dynamic> map, DailyQuizChallengeQnA dailyQuizChallenge){
+    quizLettersId = map[SQLiteDatabaseResources.fieldQuizLetterId];
+    quizLettersSubject = map[SQLiteDatabaseResources.fieldQuizLetterSubject];
+    quizLettersBody = map[SQLiteDatabaseResources.fieldQuizLetterBody];
+    quizLettersUrl = map[SQLiteDatabaseResources.fieldQuizLetterURL];
+    addedDate = DateTime.now();
+    dailyQuizChallengeQnA = dailyQuizChallenge;
   }
 }

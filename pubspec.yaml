@@ -34,6 +34,7 @@ dependencies:
   flutter_html:
   esys_flutter_share: 1.0.2
   social_share_plugin:
+  sqflite:
 
 dev_dependencies:
   flutter_test:

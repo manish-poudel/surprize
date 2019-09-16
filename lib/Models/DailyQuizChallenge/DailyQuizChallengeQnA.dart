@@ -1,4 +1,5 @@
 import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/TableResources.dart';
 
 class DailyQuizChallengeQnA {
 
@@ -29,5 +30,15 @@ class DailyQuizChallengeQnA {
     map[FirestoreResources.fieldQuizAnswers] = answers;
     map[FirestoreResources.fieldQuizCorrectAnswer] = _rightAnswer;
     return map;
+  }
+
+  DailyQuizChallengeQnA.fromSQLiteMap(Map<String, dynamic> map){
+    _quizId = map[SQLiteDatabaseResources.fieldQuizId];
+    _question = map[SQLiteDatabaseResources.fieldQuizQuestion];
+    _answer = [map[SQLiteDatabaseResources.fieldQuizAnswerOne],
+      map[SQLiteDatabaseResources.fieldQuizAnswerTwo],
+      map[SQLiteDatabaseResources.fieldQuizAnswerThree],
+      map[SQLiteDatabaseResources.fieldQuizAnswerOne]];
+    _rightAnswer = int.parse(map[SQLiteDatabaseResources.fieldQuizRightAnswer]);
   }
 }

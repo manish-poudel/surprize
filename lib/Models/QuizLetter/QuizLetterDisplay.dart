@@ -8,4 +8,5 @@ class QuizLetterDisplay{
   bool revealBody;
 
   QuizLetterDisplay(this.quizLetterLiked, this.quizLetter, this.initiallyExpanded, this.revealBody);
+
 }

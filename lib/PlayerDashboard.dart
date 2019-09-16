@@ -38,12 +38,12 @@ class PlayerDashboardState extends State<PlayerDashboard>
   bool _showDailyQuizChallengeWidget = false;
 
   QuizLetterDisplay quizLetterDisplay;
+  CustomQuizLettersWidget customQuizLettersWidget;
 
 
   @override
   void initState() {
     super.initState();
-
     _animationController = new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationController.repeat();
     _dailyQuizChallengePage = new DailyQuizChallengePage(context);
@@ -93,7 +93,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
               child: CustomUpcomingEventsWidget()),
           dailyQuizOnWidget(),
           AppHelper.appHeaderDivider(),
-          Visibility(visible:quizLetterDisplay != null,child: GestureDetector(child: quizLettersSmallContainer(), onTap: () => AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId)))),
+          quizLetterDisplay != null?GestureDetector(child: quizLettersSmallContainer(), onTap: () => AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId))
+          ):Visibility(visible: false,child: Container()),
           AppHelper.appHeaderDivider(),
           AppHelper.appSmallHeader("Hear from us"),
           Padding(
@@ -173,6 +174,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
     getDocuments().then((docSnapshot){
       setState(() {
         quizLetterDisplay = QuizLetterDisplay(false,QuizLetter.fromMap(docSnapshot.documents[0].data), true, false);
+        customQuizLettersWidget = CustomQuizLettersWidget(quizLetterDisplay);
       });
     });
   }

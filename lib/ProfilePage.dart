@@ -14,7 +14,7 @@ import 'Helper/AppHelper.dart';
 import 'Models/Activity.dart';
 import 'Models/PopUpMenus/ProfileMenu.dart';
 import 'Resources/ImageResources.dart';
-import 'UserProfileManagement/UserBLOC.dart';
+import 'package:Surprize/BLOC/UserBLOC.dart';
 import 'UserProfileManagement/UserProfile.dart';
 
 class ProfilePage extends StatefulWidget {
