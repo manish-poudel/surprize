@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:Surprize/Models/DailyQuizChallenge/PlayState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
@@ -71,15 +73,18 @@ class LeaderboardManager{
   /// Save for daily quiz winner
   void _saveForDailyQuizWinner(int scoreFromQuiz, Function dailyQuizWinnerSaved){
 
-    _isDailyQuizWinner = false;
-    /// if user has received full score
-    if(scoreFromQuiz == ScoreSystem.getFullSoreFromQuizPlay()){
-      _isDailyQuizWinner = true;
-    }
-    _saveToFirestore(FirestoreResources.leaderboardDaily ,(value){
+    _isDailyQuizWinner = (scoreFromQuiz == ScoreSystem.getFullSoreFromQuizPlay());
+
+    QuizPlay quizPlay;
+    quizPlay = _isDailyQuizWinner?QuizPlay(PlayState.WON, DateTime.now()):QuizPlay(PlayState.LOST,DateTime.now());
+
+    DocumentReference leaderboardDocRef = FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
+        FirestoreResources.leaderboardSubCollection, FirestoreResources.leaderboardDaily).document(_userId);
+    leaderboardDocRef.setData(quizPlay.toMap()).then((value){
       dailyQuizWinnerSaved(value);
     });
   }
+
 
   /// Save score to the database
   void _saveToFirestore(String leaderboardType, Function scoredSaved){
@@ -89,12 +94,6 @@ class LeaderboardManager{
       /// For saving score weekly and all time basis
       if(leaderboardType == FirestoreResources.leaderboardAllTime || leaderboardType == FirestoreResources.leaderboardWeekly){
         _saveScore(leaderboardDocRef, (value){
-          scoredSaved(value);
-        });
-      }
-
-      else if(leaderboardType == FirestoreResources.leaderboardDaily){
-        _saveDailyQuizWinner(leaderboardDocRef,(value){
           scoredSaved(value);
         });
       }
@@ -116,16 +115,6 @@ class LeaderboardManager{
     });
   }
 
-  /// Save daily quiz winner
-  void _saveDailyQuizWinner(DocumentReference documentReference, Function scoreSaved){
-   documentReference.setData({
-     FirestoreResources.fieldDailyQuizWinner: _isDailyQuizWinner
-   }).then((value){
-     scoreSaved(true);
-   }).catchError((error){
-     scoreSaved(false);
-   });
-  }
 
 /// Get all time score
   getScorer(String leaderboardType, String fieldValue, Function getScorer) async {
@@ -142,10 +131,12 @@ class LeaderboardManager{
   }
 
 /// Get daily Score winner
-  Future<bool> getDailyScoreWinner(String uid) async {
+  Future<QuizPlay> getDailyScoreWinner(String uid) async {
     DocumentSnapshot documentSnapshot = await FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
         FirestoreResources.leaderboardSubCollection, FirestoreResources.leaderboardDaily).document(uid).get();
-    return documentSnapshot.data[FirestoreResources.fieldDailyQuizWinner];
+    if(documentSnapshot.exists)
+       return QuizPlay.fromMap(documentSnapshot.data);
+    return null;
   }
 
 /// Get player data
@@ -155,6 +146,8 @@ class LeaderboardManager{
     Player player = Player.fromMap(documentSnapshot.data);
     return player;
   }
+
+
 
 
 }

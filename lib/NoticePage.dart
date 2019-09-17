@@ -1,4 +1,5 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,11 +44,26 @@ class _NoticePageState extends State<NoticePage> {
     );
   }
 
+
   Widget noticeList(){
     List<Notice> noticeList = _noticeMap.values.toList();
 
-    if(noticeList.length == 0)
-      return Text("No notice");
+    if(noticeList.length == 0) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(Icons.new_releases, color: Colors.grey,),
+              Text("No notice", style: TextStyle(
+                  fontSize: 14, fontFamily: 'Raleway', color: Colors.grey)),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Container(
       child: ListView.builder(
@@ -60,7 +76,7 @@ class _NoticePageState extends State<NoticePage> {
               padding: const EdgeInsets.only(left:8.0, right: 8.0),
               child: Column(
                 children: <Widget>[
-                  Text(noticeList[index].title)
+                  Card(child: CustomNoticeViewWidget(noticeList[index]))
                 ],
               ),
             );

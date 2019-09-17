@@ -60,13 +60,6 @@ class RegistrationPageState extends State<RegistrationPage> with SingleTickerPro
                   child: Image.asset(ImageResources.appMainLogo),
                   alignment: FractionalOffset.center
               ),
-              Container(
-                  decoration: BoxDecoration(
-                    color: Colors.purple[300],
-                  ),
-                  child: Text("Creating doorway", style: TextStyle(color: Colors.white)),
-                  alignment: FractionalOffset.center
-              ),
               registrationFormLoginInformation(),
             ],
           ),

@@ -35,6 +35,7 @@ dependencies:
   esys_flutter_share: 1.0.2
   social_share_plugin:
   sqflite:
+  intl:
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,9 @@ flutter:
     - assets/user_placeholder.png
     - assets/dailyQuizPlayBackgroundMusic.mp3
     - assets/image_placeholder.png
+    - assets/facebook_icon.png
+    - assets/instagram_icon.png
+    - assets/twitter_icon.png
 
   fonts:
     - family: Roboto

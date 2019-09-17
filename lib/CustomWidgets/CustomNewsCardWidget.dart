@@ -1,19 +1,17 @@
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/Notice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../NoticeReadingPage.dart';
-
 class CustomNewsCardWidget extends StatelessWidget{
 
+  Notice notice;
+  CustomNewsCardWidget(this.notice);
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return  GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NoticeReadingPage()),
-      ),
       child: Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 8.0),
         child: Container(
@@ -50,7 +48,7 @@ class CustomNewsCardWidget extends StatelessWidget{
                 /// News Heading
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, top:8.0, right:16.0),
-                  child: Text("Surprize has finally declared its first winner",
+                  child: Text(notice.title,
                     style: TextStyle(fontFamily: 'Raleway',
                         fontSize: 18, fontWeight: FontWeight.w300),),
                 ),
@@ -58,7 +56,7 @@ class CustomNewsCardWidget extends StatelessWidget{
                 /// News date
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
-                  child: Text("12/12/2012", style: TextStyle(fontSize: 12,
+                  child: Text(AppHelper.dateToReadableString(notice.addedTime), style: TextStyle(fontSize: 12,
                       fontFamily: 'Raleway',
                       color: Colors.grey,
                       fontWeight: FontWeight.w300)),

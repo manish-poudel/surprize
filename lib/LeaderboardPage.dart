@@ -1,13 +1,17 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Models/Leaderboard.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
+import 'Models/DailyQuizChallenge/PlayState.dart';
 import 'Resources/ImageResources.dart';
 
 class LeaderboardPage extends StatefulWidget {
+
   String _playerId;
   LeaderboardPage(this._playerId);
 
@@ -23,7 +27,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   bool _weeklyScorerLeaderboardLoaded = false;
   bool _allTimeScorerLeaderboardLoaded = false;
 
-  bool _isDailyQuizWinner;
+  QuizPlay _quizPlay;
 
   Map<String, Leaderboard> _allTimeScorerMap = new Map();
   Map<String, Leaderboard> _weeklyScorerMap = new Map();
@@ -65,25 +69,54 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   /// Daily quiz body for leaderboard page
    Widget _dailyQuizBody() {
-    return !_dailyQuizWinnerDataLoaded? Center(child: CircularProgressIndicator()):
-     Center(
-        child: Column(
-      children: <Widget>[
-        Container(
-          color: Colors.grey[50],
-          child: Image.asset(ImageResources.dailyQuizChallengeLogo),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: (Text(
-            _isDailyQuizWinner? "Congrats! You are a winner of daily quiz challenge."
-                : "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, fontFamily: 'Raleway'),
-          )),
-        ),
-      ],
-    ));
+    return SingleChildScrollView(
+      child: !_dailyQuizWinnerDataLoaded? Center(child: CircularProgressIndicator()):
+       Center(
+          child: Column(
+        children: <Widget>[
+          Container(
+            color: Colors.grey[50],
+            child: Image.asset(ImageResources.dailyQuizChallengeLogo),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: (Text(_dailyQuizPlayChallengeText() ,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18, fontFamily: 'Raleway'),
+            )),
+          ),
+          _quizPlay != null?Visibility(
+            visible: (_quizPlay.playState == PlayState.WON || _quizPlay.playState == PlayState.LOST),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                (Text("Last played on: " ,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18,fontFamily: 'Raleway', fontWeight: FontWeight.w500),
+                )),
+                Text(AppHelper.dateToReadableString(_quizPlay.playedOn) ,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18, color:Colors.grey,fontFamily: 'Raleway',fontWeight: FontWeight.w300),
+                )
+              ],
+            ),
+          ):Container()
+        ],
+      )),
+    );
+  }
+
+  String _dailyQuizPlayChallengeText(){
+   if(_quizPlay == null)
+     return "";
+   if(_quizPlay.playState == PlayState.WON)
+     return "Congratulation! You are a winner of daily quiz challenge!";
+   if(_quizPlay.playState == PlayState.LOST)
+     return "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.";
+    if(_quizPlay.playState == PlayState.NOT_PLAYED)
+      return "You haven't played Daily Quiz Challenge.";
+    return "";
   }
 
   /// Weekly score body for leaderboard page
@@ -126,10 +159,11 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     getWeeklyScorer();
   }
 
-  Future checkForDailyWinner() async {
-    bool isWinner = await LeaderboardManager().getDailyScoreWinner(widget._playerId);
+   checkForDailyWinner() async {
+     _quizPlay = await LeaderboardManager().getDailyScoreWinner(widget._playerId);
     setState(() {
-      _isDailyQuizWinner = isWinner;
+      if(_quizPlay == null)
+        _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now());
       _dailyQuizWinnerDataLoaded = true;
     });
   }

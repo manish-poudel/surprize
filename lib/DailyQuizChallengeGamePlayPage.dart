@@ -269,6 +269,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top:42.0),
@@ -280,59 +281,62 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       ),
         ),
             Padding(
-                padding: const EdgeInsets.only(top: 24.0),
+                padding: const EdgeInsets.only(top: 8.0),
                 child: _customCountDownTimerWidget
             ),
-            Stack(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 24, left:0.0),
-                  child: Center(
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-                      child: Center(
-                        child: Text(
-                          (currentIndex + 1).toString(),
-                          style: TextStyle(color: Colors.white, fontFamily: 'Raleway',fontSize:24, fontWeight: FontWeight.w500),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24, left:0.0),
+                    child: Center(
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
+                        child: Center(
+                          child: Text(
+                            (currentIndex + 1).toString(),
+                            style: TextStyle(color: Colors.white, fontFamily: 'Raleway',fontSize:24, fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top:64, left: 8.0, right: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color:Colors.black26,
-                              offset: Offset(1.0, 3.0),
-                              blurRadius: 21.0
+                  Padding(
+                    padding: const EdgeInsets.only(top:64, left: 8.0, right: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                                color:Colors.black26,
+                                offset: Offset(1.0, 3.0),
+                                blurRadius: 21.0
+                            ),
+                          ],
+                          border: new Border.all(color: Colors.white10, width: 0),
+                          borderRadius:  new BorderRadius.all(Radius.circular(21.0))
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left:4.0, right: 4.0, top: 4.0),
+                            child: _quizQuestion,
                           ),
+
+                          _firstAnswer,
+                          _secondAnswer,
+                          _thirdAnswer,
+                          _fourthAnswer,
+
                         ],
-                        border: new Border.all(color: Colors.white10, width: 0),
-                        borderRadius:  new BorderRadius.all(Radius.circular(21.0))
+                      ),
                     ),
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left:4.0, right: 4.0, top: 4.0),
-                          child: _quizQuestion,
-                        ),
-
-                        _firstAnswer,
-                        _secondAnswer,
-                        _thirdAnswer,
-                        _fourthAnswer,
-
-                      ],
-                    ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             )],
         ),
       );

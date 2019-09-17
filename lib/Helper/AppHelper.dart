@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:Surprize/LoginPage.dart';
+import 'package:intl/intl.dart';
+
 class AppHelper{
   /*
   Pop and removed current page, and push with new page
@@ -156,8 +159,11 @@ class AppHelper{
   }
 
   static String dateToReadableString(DateTime time){
-   return time.year.toString() + "/" + time.month.toString() + "/" + time.day.toString()
-       + ", " + addLeadZeroToNumber(time.hour)  + ":" + addLeadZeroToNumber(time.minute);
+   DateFormat dateFormat =  DateFormat();
+
+    String dateTime = dateFormat.add_yMd().add_jm().format(time);
+    List<String> splitDateAndTime = dateTime.split(" ");
+    return splitDateAndTime[0] + ", " + splitDateAndTime[1] + " " + splitDateAndTime[2];
   }
 
   static String addLeadZeroToNumber(int time){
@@ -284,5 +290,50 @@ class AppHelper{
   return dobList;
  }
 
+  Widget socialMediaWidget(){
+   return Column(
+     children: <Widget>[
+       Padding(
+         padding: const EdgeInsets.only(top:16.0),
+         child: Text("Finds us on:",style:TextStyle(
+             fontFamily: 'Raleway',
+             color: Colors.black,
+             fontSize: 16,
+             fontWeight: FontWeight.w400)),
+       ),
+       Padding(
+         padding: const EdgeInsets.only(top:8.0),
+         child: imageIconButton(),
+       )
+     ]
+   );
+ }
 
+  // Image icon button
+  Widget imageIconButton(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        imageButton(ImageResources.facebookIcon, (){
+
+        }),
+        Padding(
+          padding: const EdgeInsets.only(left:8.0, right: 8.0),
+          child: imageButton(ImageResources.instagramIcon, (){
+
+          }),
+        ),
+        imageButton(ImageResources.twitterIcon, (){
+
+        })
+      ],
+    );
+  }
+
+  Widget imageButton(String image,Function onPressed){
+    return GestureDetector(
+        child:Image.asset(image, height: 30, width: 30),
+        onTap: onPressed
+    );
+  }
 }

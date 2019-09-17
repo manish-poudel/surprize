@@ -1,8 +1,13 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/Notice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class NoticeReadingPage extends StatefulWidget{
+
+  Notice notice;
+  NoticeReadingPage(this.notice);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -13,11 +18,10 @@ class NoticeReadingPage extends StatefulWidget{
 class NoticeReadingPageState extends State<NoticeReadingPage>{
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-            appBar:  CustomAppBar("News",context),
+            appBar:  CustomAppBar("Notice",context),
           body:SingleChildScrollView(child: newsContent())
         ));
   }
@@ -25,9 +29,11 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
   /// News content
   Widget newsContent(){
     return Container(
-      child: Column(children: <Widget>[
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
         newsTitle(),
-        newsImage(),
+        Visibility(visible: widget.notice.photoUrl != null, child: Center(child: newsImage())),
         newsBody()
       ],),
     );
@@ -40,10 +46,10 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
      child: Column(
        crossAxisAlignment: CrossAxisAlignment.start,
        children: <Widget>[
-         Text("Surprize has finally declared its first winner", style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w500)),
+         Text(widget.notice.title, style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w500)),
          Padding(
            padding: const EdgeInsets.only(top:2.0),
-           child: Text("12/1/2019", style: TextStyle(color: Colors.grey, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w500)),
+           child: Text(AppHelper.dateToReadableString(widget.notice.addedTime), style: TextStyle(color: Colors.grey, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w500)),
          )
        ],
      ),
@@ -55,10 +61,12 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
     return Container(
         child: Column(
           children: <Widget>[
-            Image.network('http://lorempixel.com/400/200/', height: 200),
-            Container(
-                height: 20,
-                child: Text("Image short description here", style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300))),
+            Image.network(widget.notice.photoUrl, height: 200),
+            Visibility(visible: widget.notice.photoDesc.isNotEmpty || widget.notice.photoDesc != null,
+              child: Container(
+                  height: 20,
+                  child: Text(widget.notice.photoDesc, style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300))),
+            ),
           ],
         ));
   }
@@ -68,7 +76,7 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Html(
-        data: "test data"
+        data: widget.notice.body
       ),
     );
   }

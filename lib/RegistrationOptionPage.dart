@@ -35,13 +35,6 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                     child: Image.asset(ImageResources.appMainLogo),
                     alignment: FractionalOffset.center
                 ),
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.purple[300],
-                    ),
-                    child: Text("Choosing doorway to surprizes", style: TextStyle(color: Colors.white)),
-                    alignment: FractionalOffset.center
-                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
                   child: Text("Choose sign up method",

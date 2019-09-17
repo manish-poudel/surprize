@@ -12,6 +12,11 @@ class FirestoreResources{
   static final String fieldLeaderBoardScore = "score";
   static final String fieldDailyQuizWinner  = "isWinner";
 
+  /// Related to daily quiz challenge leaderboard
+
+  static final String fieldDailyQuizPlayState = "Play state";
+  static final String fieldDailyQuizLastPlayed = "Last played";
+
   /// Related to registration
 
   /// Player basic registration info related
@@ -41,6 +46,7 @@ class FirestoreResources{
   static final String fieldQuizAnswers = 'answers';
   static final String fieldQuizCorrectAnswer = 'correct_answer_value';
   static final String fieldQuizDocumentName = 'quizDocument';
+
 
   /*****************************************************************/
 

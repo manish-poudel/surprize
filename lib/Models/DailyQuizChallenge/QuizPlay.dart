@@ -1,0 +1,46 @@
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/PlayState.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+
+class QuizPlay{
+  PlayState playState;
+  DateTime playedOn;
+
+  QuizPlay(this.playState, this.playedOn);
+
+  Map<String, dynamic> toMap() {
+    var map = new Map<String, dynamic>();
+    map[FirestoreResources.fieldDailyQuizPlayState] = convertEnumToString(playState);
+    map[FirestoreResources.fieldDailyQuizLastPlayed] = playedOn;
+    return map;
+  }
+
+  QuizPlay.fromMap(Map<String, dynamic> map){
+    playState =  convertStringToEnum(map[FirestoreResources.fieldDailyQuizPlayState]);
+    playedOn =  AppHelper.convertToDateTime(map[FirestoreResources.fieldDailyQuizLastPlayed]);
+  }
+
+  /// Convert enum to string
+  PlayState convertStringToEnum(String playState){
+    switch(playState){
+      case "WON":
+        return PlayState.WON;
+      case "LOST":
+        return PlayState.LOST;
+      default:
+        return PlayState.UNKNOWN;
+    }
+  }
+
+  /// Convert enum to string
+  static String convertEnumToString(PlayState playState) {
+    switch (playState) {
+      case PlayState.WON:
+        return "WON";
+      case PlayState.LOST:
+        return "LOST";
+      default:
+        return "UNKNOWN";
+    }
+  }
+}

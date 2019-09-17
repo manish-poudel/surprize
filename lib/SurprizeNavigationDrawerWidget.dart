@@ -109,6 +109,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text("Entertained by silicon guys", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
           Text("siliconguy123@gmail.com", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w300)),

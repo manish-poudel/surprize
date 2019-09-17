@@ -16,6 +16,7 @@ class CustomRecentActivityWidget extends StatelessWidget {
   Widget recentActivityCard() {
     return Card(
       child: Container(
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.only(top:16.0, bottom: 16.0, left:8.0, right: 8.0),
           child: Column(

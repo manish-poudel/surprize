@@ -57,6 +57,7 @@ class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuesti
   Widget build(BuildContext context) {
 
     return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
       child: Column(
         children: <Widget>[
           Text(widget.dailyQuizChallengeQnA.question, textAlign:TextAlign.center,style:TextStyle(fontSize: 18, fontFamily: 'Raleway', fontWeight: FontWeight.w500)),
