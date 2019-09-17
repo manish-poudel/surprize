@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/UserPresenceState.dart';
+import 'package:Surprize/UserProfileManagement/UserProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CountDownTimerTypeEnum.dart';
@@ -11,13 +14,13 @@ import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Helper/SoundHelper.dart';
 import 'package:Surprize/Leaderboard/ScoreSystem.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
-import 'package:Surprize/Models/DailyQuizChallenge/QuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/Resources/SoundResources.dart';
 import 'package:Surprize/Resources/StringResources.dart';
 
-import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 
 class DailyQuizChallengeGamePlayPage extends StatefulWidget {
 
@@ -28,7 +31,7 @@ class DailyQuizChallengeGamePlayPage extends StatefulWidget {
   }
 }
 
-class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePlayPage> {
+class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePlayPage> with WidgetsBindingObserver{
 
   static double countDownTimerHeight = 120.0;
   static double countDownTimerWidth = 200.0;
@@ -69,6 +72,8 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
 
  int _totalScore = 0;
 
+ UserProfile _userProfile;
+
   static final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>();
 
@@ -76,21 +81,38 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     initQuizQuestion();
      listenForQuizState();
+    _userProfile = UserProfile();
+    _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
    _soundHelper = SoundHelper();
 
   }
 
-
-
   @override
   void dispose() {
-    super.dispose();
+    if(!_isGameFinished)
+      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.END_GAME_ABRUPTLY);
+    WidgetsBinding.instance.removeObserver(this);
     if(_soundHelper != null) {
       _soundHelper.stopSound();
     }
+    super.dispose();
+
   }
+
+  /// Detect the change in app lifecycle state
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.inactive || state == AppLifecycleState.paused){
+      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.END_GAME_ABRUPTLY);
+    }
+    if(state == AppLifecycleState.resumed){
+      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
+    }
+  }
+
 
   void setButtonClickable(bool clickable){
     _clickableButton = clickable;
@@ -233,6 +255,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
           _customCountDownTimerWidget.stopCountdown();
           _isGameFinished = true;
           setButtonClickable(false);
+          _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.PLAYED_GAME_AND_EXITED);
           goToScoreSummaryPage();
         }
       });
@@ -251,6 +274,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
     _fourthAnswer.resetColor();
   }
 
+
   /*
   Widget for quiz play
    */
@@ -263,7 +287,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       }
 
       if(!_isGameFinished) {
-        keepTimeTrack(10);
+        keepTimeTrack(4);
       }
 
       return  SingleChildScrollView(
@@ -364,7 +388,7 @@ Go to summary page after game is finished.
  */
 void goToScoreSummaryPage(){
   Navigator.pushReplacement(context, MaterialPageRoute(
-    builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalScore),
+    builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalScore,_quizState),
   ));
 }
 

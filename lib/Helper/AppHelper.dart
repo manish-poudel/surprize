@@ -117,6 +117,16 @@ class AppHelper{
       return null;
   }
 
+  static String validatePhone(String value){
+    if(value.isEmpty){
+      return 'Enter valid phone';
+    }
+    if (value.length < 10)
+      return 'Short number';
+    else
+      return null;
+  }
+
   /*
   Show Snackbar
    */

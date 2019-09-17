@@ -1,6 +1,7 @@
 import 'package:Surprize/Dashboard.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/LoginPage.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:Surprize/Resources/ImageResources.dart';
@@ -32,6 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if(user == null) {
         AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
       } else{
+        UserMemory().saveFirebaseUser(user);
         Dashboard(context,user).nav();
       }
     });

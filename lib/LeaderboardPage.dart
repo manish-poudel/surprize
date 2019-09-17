@@ -7,7 +7,7 @@ import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Models/Leaderboard.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
-import 'Models/DailyQuizChallenge/PlayState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
 import 'Resources/ImageResources.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -115,7 +115,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
    if(_quizPlay.playState == PlayState.LOST)
      return "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.";
     if(_quizPlay.playState == PlayState.NOT_PLAYED)
-      return "You haven't played Daily Quiz Challenge.";
+      return "New challenge is in progress.Get ready!";
     return "";
   }
 
@@ -163,7 +163,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
      _quizPlay = await LeaderboardManager().getDailyScoreWinner(widget._playerId);
     setState(() {
       if(_quizPlay == null)
-        _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now());
+        _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now(),"","");
       _dailyQuizWinnerDataLoaded = true;
     });
   }

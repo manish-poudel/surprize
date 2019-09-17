@@ -1,0 +1,6 @@
+enum UserPresenceState{
+  ONLINE,
+  PLAYED_GAME_AND_EXITED,
+  END_GAME_ABRUPTLY,
+  UNKNOWN
+}

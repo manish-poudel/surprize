@@ -1,12 +1,15 @@
 import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
 class QuizState{
+
+  String quizId;
+  String quizName;
   DateTime _quizStartTime;
   CurrentQuizState _currentQuizState;
 
-  QuizState(this._currentQuizState, this._quizStartTime);
+  QuizState(this.quizId, this.quizName, this._currentQuizState, this._quizStartTime);
 
   DateTime get quizStartTime => _quizStartTime;
   CurrentQuizState get quizState => _currentQuizState;
@@ -14,6 +17,8 @@ class QuizState{
   QuizState.fromMap(Map<dynamic, dynamic> map){
     _currentQuizState = _convertStringToEnum(map[FirestoreResources.fieldQuizState]);
     _quizStartTime = AppHelper.convertToDateTime(map[FirestoreResources.fieldQuizStartTime]);
+    quizId = map[FirestoreResources.fieldQuizStateId];
+    quizName = map[FirestoreResources.fieldQuizName];
   }
 
   /// Convert enum to string
@@ -35,6 +40,8 @@ class QuizState{
     map[FirestoreResources.fieldQuizState] =
         convertEnumToString(_currentQuizState);
     map[FirestoreResources.fieldQuizStartTime] = _quizStartTime;
+    map[FirestoreResources.fieldQuizStateId] = quizId;
+    map[FirestoreResources.fieldQuizName] = quizName;
     return map;
   }
 

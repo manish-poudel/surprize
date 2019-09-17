@@ -17,8 +17,8 @@ import 'CustomWidgets/CustomNewsCardWidget.dart';
 import 'CustomWidgets/CustomRoundedEdgeButton.dart';
 import 'DailyQuizChallengeGamePlayPage.dart';
 import 'Helper/AppHelper.dart';
-import 'Models/DailyQuizChallenge/CurrentQuizState.dart';
-import 'Models/DailyQuizChallenge/QuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'Resources/FirestoreResources.dart';
 
 
@@ -108,7 +108,10 @@ class PlayerDashboardState extends State<PlayerDashboard>
       Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: CustomUpcomingEventsWidget()),
-      dailyQuizOnWidget(),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: dailyQuizOnWidget(),
+      ),
       AppHelper.appHeaderDivider(),
           quizLetterDisplay != null?GestureDetector(child: quizLettersSmallContainer(), onTap: () => AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId))
       ):Visibility(visible: false,child: Container()),

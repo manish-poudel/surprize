@@ -1,6 +1,4 @@
 import 'package:Surprize/ProfileSetUpPage.dart';
-import 'package:Surprize/SplashScreen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
@@ -8,7 +6,6 @@ import 'package:Surprize/Resources/StringResources.dart';
 
 import 'CustomWidgets/CustomAppBar.dart';
 import 'Helper/AppHelper.dart';
-import 'package:Surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
 import 'package:Surprize/CustomWidgets/LoginPage/CustomLoginCredentialRegWidget.dart';
 import 'CustomWidgets/CustomProgressbarWidget.dart';
 

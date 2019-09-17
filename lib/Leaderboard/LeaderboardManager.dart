@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Surprize/Models/DailyQuizChallenge/PlayState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +26,7 @@ class LeaderboardManager{
   LeaderboardManager._internal();
 
   /// Save score after game play
-  void saveScoreAfterGamePlay(int scoreFromQuizPlay, Function allTimeScoredSaved, Function weeklyScoredSaved, Function dailyQuizWinnerSaved){
+  void saveScoreAfterGamePlay(int scoreFromQuizPlay, String playedQuizId, String playedQuizName, Function allTimeScoredSaved, Function weeklyScoredSaved, Function dailyQuizWinnerSaved){
 
     FirebaseAuth.instance.currentUser().then((firebaseUser){
       _userId = firebaseUser.uid;
@@ -38,7 +38,7 @@ class LeaderboardManager{
       saveForWeeklyScore((value){
         weeklyScoredSaved(value);
       });
-      _saveForDailyQuizWinner(scoreFromQuizPlay , (value){
+      _saveForDailyQuizWinner(scoreFromQuizPlay ,playedQuizId, playedQuizName, (value){
         dailyQuizWinnerSaved(value);
       });
     });
@@ -71,13 +71,12 @@ class LeaderboardManager{
   }
 
   /// Save for daily quiz winner
-  void _saveForDailyQuizWinner(int scoreFromQuiz, Function dailyQuizWinnerSaved){
+  void _saveForDailyQuizWinner(int scoreFromQuiz,String playedQuizId, String quizName, Function dailyQuizWinnerSaved){
 
     _isDailyQuizWinner = (scoreFromQuiz == ScoreSystem.getFullSoreFromQuizPlay());
 
     QuizPlay quizPlay;
-    quizPlay = _isDailyQuizWinner?QuizPlay(PlayState.WON, DateTime.now()):QuizPlay(PlayState.LOST,DateTime.now());
-
+    quizPlay = _isDailyQuizWinner?QuizPlay(PlayState.WON, DateTime.now(),playedQuizId,quizName):QuizPlay(PlayState.LOST,DateTime.now(), playedQuizId, quizName);
     DocumentReference leaderboardDocRef = FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
         FirestoreResources.leaderboardSubCollection, FirestoreResources.leaderboardDaily).document(_userId);
     leaderboardDocRef.setData(quizPlay.toMap()).then((value){

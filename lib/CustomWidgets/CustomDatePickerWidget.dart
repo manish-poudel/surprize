@@ -23,7 +23,6 @@ class CustomDatePickerWidget extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     _customDatePickerWidgetState = CustomDatePickerWidgetState();
     return _customDatePickerWidgetState;
   }
@@ -35,6 +34,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
   bool _properDateSelected = false;
   bool _showValidation = false;
 
+  Color hintColor = Colors.grey;
 
   @override
   void initState() {
@@ -61,6 +61,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
     setState(() {
       currentDate = year.toString() + "/" + month.toString() + "/" + date.toString();
       _properDateSelected = true;
+       hintColor = Colors.black;
       _showValidation = false;
         currentDate = year.toString() + "/" + month.toString() + "/" + date.toString();
     });
@@ -109,7 +110,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
             child: Padding(
               padding: const EdgeInsets.only(bottom:8.0),
               child: Text("DOB   " + currentDate,
-                  style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway', color: widget.color)
+                  style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway', color: hintColor)
               ),
             ),
           ),

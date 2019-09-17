@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,8 @@ import 'UserProfileManagement/UserProfile.dart';
 class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
   final int _totalScore;
 
-  DailyQuizChallengeScoreSummaryPage(this._totalScore);
+  QuizState quizState;
+  DailyQuizChallengeScoreSummaryPage(this._totalScore, this.quizState);
 
   @override
   State<StatefulWidget> createState() {
@@ -283,8 +285,7 @@ class DailyQuizChallengeScoreSummaryPageState
 
   /// Update Score for game play
   updateScoreForGamePlay(){
-    LeaderboardManager().saveScoreAfterGamePlay(widget._totalScore,
-
+    LeaderboardManager().saveScoreAfterGamePlay(widget._totalScore, widget.quizState.quizId, widget.quizState.quizName,
         /// if all time score is saved
             (value){
           print("ALL TIME SCORE SAVED: " + value.toString());

@@ -55,7 +55,7 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
             controller: textFldcontroller,   decoration: InputDecoration(
             fillColor: _color,
             hintText: _label,
-            hintStyle: TextStyle(color:_color),
+            hintStyle: TextStyle(color:Colors.grey),
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: _color),
             ),

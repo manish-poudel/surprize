@@ -21,7 +21,7 @@ class EntryPoint extends StatelessWidget{
         '/registrationPage': (BuildContext context) => RegistrationPage(),
         '/dailyQuizChallengeNotAvailablePage': (BuildContext context) => DailyQuizChallengeNotAvailablePage(DateTime.now()),
         '/dailyQuizChallengeGamePlayPage': (BuildContext context) => DailyQuizChallengeGamePlayPage(),
-        '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0),
+        '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0, null),
         '/playerProfilePage': (BuildContext context) => ProfilePage()
       },
       home: Scaffold(

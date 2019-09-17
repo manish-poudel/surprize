@@ -1,11 +1,13 @@
 
 import 'package:Surprize/Models/Player.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserMemory {
   static final UserMemory _userMemory =
   new UserMemory._internal();
 
   Player _player;
+  FirebaseUser firebaseUser;
 
 
   factory UserMemory() {
@@ -22,5 +24,10 @@ class UserMemory {
   /// Get player
   Player getPlayer() {
     return this._player;
+  }
+
+  // Save firebase
+  saveFirebaseUser(FirebaseUser firebaseUser){
+     this.firebaseUser = firebaseUser;
   }
 }

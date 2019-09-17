@@ -3,7 +3,6 @@ import 'package:Surprize/CustomWidgets/CustomDropDownWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomMultiLineTextFieldWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
-import 'package:Surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/LoginPage.dart';

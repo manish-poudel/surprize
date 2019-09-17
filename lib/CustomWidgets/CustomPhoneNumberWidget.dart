@@ -68,7 +68,7 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
                     },
                    decoration: InputDecoration.collapsed(
                  hintText: "Phone number",
-                     hintStyle: TextStyle(color: widget.color)
+                     hintStyle: TextStyle(color: Colors.grey)
                ),
              )
            )

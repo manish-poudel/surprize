@@ -67,7 +67,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
       },
       decoration: InputDecoration(
         hintText: "Enter password",
-        hintStyle: TextStyle(color:Colors.black),
+        hintStyle: TextStyle(color:Colors.grey),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
         ),
@@ -92,7 +92,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
                 },
                 decoration: InputDecoration(
                   hintText: "Password again",
-                  hintStyle: TextStyle(color:Colors.black),
+                  hintStyle: TextStyle(color:Colors.grey),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
                   ),

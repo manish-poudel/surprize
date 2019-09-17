@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:Surprize/Models/DailyQuizChallenge/UserPresence.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/UserPresenceState.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:Surprize/Models/Activity.dart';
@@ -32,6 +34,13 @@ class UserProfile{
     return Firestore.instance.collection(FirestoreResources.userCollectionName).document(userId).updateData(({
       FirestoreResources.fieldPlayerProfileURL : url
     }));
+  }
+
+  // Set user presence
+  void setUserPresence(String userId, UserPresenceState userPresenceState){
+    Firestore.instance.collection(FirestoreResources.collectionUserPresence)
+        .document(userId)
+        .setData(UserPresence(userPresenceState, DateTime.now()).toMap());
   }
 
   /// Add recent activity

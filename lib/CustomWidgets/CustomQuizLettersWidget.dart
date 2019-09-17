@@ -49,7 +49,7 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
   Widget _playButton(){
     return Container(
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(8.0),
         child: RichText(
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.left,

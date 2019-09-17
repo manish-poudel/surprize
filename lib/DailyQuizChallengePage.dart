@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:Surprize/Models/DailyQuizChallenge/CurrentQuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'DailyQuizChallengeGamePlayPage.dart';
 import 'DailyQuizChallengeNotAvailablePage.dart';
-import 'Models/DailyQuizChallenge/QuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 
 class DailyQuizChallengePage {
 
