@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "632716178229-lr6imd07fh723msbck6j8i09qpllelnd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.siliconguy.surprize",
+            "certificate_hash": "f43b5a471b4c439a00deb349ce79a77d1fc1a990"
+          }
+        },
+        {
           "client_id": "632716178229-cpekh5tvnk9h53o8n5drsiaqe26g382e.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -25,15 +33,42 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "632716178229-cpekh5tvnk9h53o8n5drsiaqe26g382e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632716178229:android:1f43e38f58aaf8a34fd27c",
+        "android_client_info": {
+          "package_name": "com.siliconguy.surprize_controller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "632716178229-cpekh5tvnk9h53o8n5drsiaqe26g382e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7zfrbnnmzDFyYwmEtYNNx0f5EI2szrfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "632716178229-cpekh5tvnk9h53o8n5drsiaqe26g382e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

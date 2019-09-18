@@ -115,7 +115,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
    if(_quizPlay.playState == PlayState.LOST)
      return "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.";
     if(_quizPlay.playState == PlayState.NOT_PLAYED)
-      return "New challenge is in progress.Get ready!";
+      return "New challenge is in progress. Get ready!";
     return "";
   }
 

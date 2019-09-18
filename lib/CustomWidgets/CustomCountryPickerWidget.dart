@@ -1,29 +1,48 @@
+import 'package:Surprize/CustomWidgets/CustomDropDownWidget.dart';
+import 'package:Surprize/Resources/CountryResources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_country_picker/flutter_country_picker.dart';
 
-class CustomCountryPickerWidget extends StatefulWidget{
+class CustomCountryPickerWidget extends StatefulWidget {
+
+  _CustomCountryPickerWidgetState state;
+  String initialSelection;
+
+  CustomCountryPickerWidget(this.initialSelection);
+
+  getValue(){
+   return state.getPickedValue();
+  }
+
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return CustomCountryPickerWidgetState();
+  _CustomCountryPickerWidgetState createState() {
+    state = _CustomCountryPickerWidgetState();
+    return state;
   }
 }
 
-class CustomCountryPickerWidgetState extends State<CustomCountryPickerWidget>{
-  Country country;
+class _CustomCountryPickerWidgetState extends State<CustomCountryPickerWidget> {
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(
-      height: 58.0,
-      child: CountryPicker(
-          onChanged: (Country country){
-            setState(() {
-              country = country;
-            });
-          }),
-    );
+  List<String> country;
+  CustomDropDownWidget customDropDownWidget;
+
+  getPickedValue(){
+    return customDropDownWidget.selectedItem();
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    country = new List();
+    CountryResources.getCountryAndCodeList.forEach((map){
+      country.add(map["name"].toString());
+    });
+    customDropDownWidget = CustomDropDownWidget(country, widget.initialSelection, "Select country", Colors.black, Colors.white);
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        child: customDropDownWidget);
+  }
 }

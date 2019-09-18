@@ -177,7 +177,7 @@ class ProfilePageState extends State<ProfilePage> {
                   color: Colors.white),
             ),
           ),
-          Visibility(visible: !UserMemory().firebaseUser.isEmailVerified,
+    /*      Visibility(visible: !UserMemory().firebaseUser.isEmailVerified,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -195,7 +195,7 @@ class ProfilePageState extends State<ProfilePage> {
                 ],
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );
@@ -249,10 +249,13 @@ class ProfilePageState extends State<ProfilePage> {
           padding: const EdgeInsets.all(4.0),
           child: textWithIcon(Icons.place, _player.country, Colors.purple),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: textWithIcon(
-              Icons.location_city, _player.address, Colors.purple),
+        Visibility(
+          visible: _player.address.isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: textWithIcon(
+                Icons.location_city, _player.address, Colors.purple),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(4.0),

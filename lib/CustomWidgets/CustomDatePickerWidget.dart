@@ -17,8 +17,8 @@ class CustomDatePickerWidget extends StatefulWidget{
     return _customDatePickerWidgetState.currentDate;
   }
 
-  bool isProperlyValidated(){
-   return _customDatePickerWidgetState.isProperlyValidate();
+   isProperlyValidated(){
+    _customDatePickerWidgetState.validate();
   }
 
   @override
@@ -34,6 +34,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
   bool _properDateSelected = false;
   bool _showValidation = false;
 
+  Color underLineColor = Colors.black;
   Color hintColor = Colors.grey;
 
   @override
@@ -41,26 +42,27 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
     super.initState();
     if(widget.y != 0 && widget.y != 0 && widget.d != 0)
       currentDate =  widget.y.toString() + "/" + widget.m.toString() + "/" + widget.d.toString();
-
   }
 
   CustomDatePickerWidgetState();
   /*
   Check for proper validation. If not, also set validation message.
    */
-  bool isProperlyValidate(){
-    if(!_properDateSelected){
+   validate(){
       setState(() {
           _showValidation = true;
+          underLineColor = Colors.red;
       });
-    }
-    return _properDateSelected;
   }
 
   void changeDate(int year, int month, int date){
     setState(() {
+      widget.y = year;
+      widget.m = month;
+      widget.d = date;
       currentDate = year.toString() + "/" + month.toString() + "/" + date.toString();
       _properDateSelected = true;
+      underLineColor = Colors.black;
        hintColor = Colors.black;
       _showValidation = false;
         currentDate = year.toString() + "/" + month.toString() + "/" + date.toString();
@@ -95,6 +97,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
       onConfirm: (year, month, date) {
         changeDate(year, month, date);
       },
+
     );
   }
 
@@ -110,7 +113,7 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
             child: Padding(
               padding: const EdgeInsets.only(bottom:8.0),
               child: Text("DOB   " + currentDate,
-                  style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway', color: hintColor)
+                  style: TextStyle(fontSize: 16.0, fontFamily: 'Raleway', color: Colors.black)
               ),
             ),
           ),
@@ -118,11 +121,11 @@ class CustomDatePickerWidgetState extends State<CustomDatePickerWidget>{
             openDatePicker(widget.y,widget.m,widget.d);
           },
         ),
-        Container(height: 1 , color: widget.color),
+        Container(height: 1 , color: underLineColor),
         Visibility(visible: _showValidation, child: Padding(
-          padding: const EdgeInsets.only(top:8.0, left: 16.0),
+          padding: const EdgeInsets.only(top:8.0),
           child: Text("Enter DOB from calendar", style:
-          TextStyle(color:Colors.red, fontFamily:'Raleway',fontSize: 11.0)),
+          TextStyle(color:Colors.red,fontSize: 11.0)),
         )),
       ],
     );

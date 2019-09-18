@@ -3,7 +3,12 @@ import 'package:Surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/RegistrationPage.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/SplashScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class RegistrationOptionPage extends StatefulWidget {
   @override
@@ -65,10 +70,10 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        FlatButton(color:Colors.blueAccent,onPressed:()=> AppHelper.goToPage(context, false, '/registrationPage'),
+                        FlatButton(color:Colors.blueAccent,onPressed:()=>  signInWithFacebook(),
                             child: Text("facebook",
                                 style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300))),
-                        FlatButton(color:Colors.red,onPressed:()=> AppHelper.cupertinoRoute(context, RegistrationPage()),
+                        FlatButton(color:Colors.red,onPressed:()=> signInWithGoogle(),
                             child: Text("Gmail",
                                 style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300)))
                       ],
@@ -85,5 +90,51 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
           ),
         )
     );
+  }
+
+  // Sign in using facebook
+  signInWithFacebook() async {
+    try {
+      var facebookLogin = new FacebookLogin();
+      var result = await facebookLogin.logInWithReadPermissions(
+          ['email', 'public_profile']);
+      switch (result.status) {
+        case FacebookLoginStatus.loggedIn:
+          AuthCredential credential = FacebookAuthProvider.getCredential(
+              accessToken: result.accessToken.token);
+          FirebaseAuth.instance.signInWithCredential(credential).then((
+              authResult) {
+            AppHelper.cupertinoRouteWithPushReplacement(
+                context, SplashScreen());
+          });
+          break;
+        case FacebookLoginStatus.cancelledByUser:
+          break;
+        case FacebookLoginStatus.error:
+          break;
+      }
+    }catch(error){
+
+    }
+  }
+
+  // Sign in using google
+  signInWithGoogle() async{
+     GoogleSignIn googleSignIn = GoogleSignIn(
+       scopes: ['email']
+     );
+     try{
+       GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+       GoogleSignInAuthentication authentication = await googleSignInAccount.authentication;
+       AuthCredential authCredential = GoogleAuthProvider.getCredential(idToken: authentication.idToken, accessToken: authentication.accessToken);
+
+      FirebaseAuth.instance.signInWithCredential(authCredential).then((authResult){
+        AppHelper.cupertinoRouteWithPushReplacement(
+            context, SplashScreen());
+      });
+      
+     }catch(error){
+        print(error.toString());
+     }
   }
 }

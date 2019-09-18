@@ -121,10 +121,17 @@ class AppHelper{
     if(value.isEmpty){
       return 'Enter valid phone';
     }
-    if (value.length < 10)
-      return 'Short number';
-    else
+    try{
+      List values = value.split(" ");
+      print(values.length);
+      if(values.length != 1){
+        return "Don't put space between numbers";
+      }
+    }
+    catch(error){
       return null;
+    }
+    return null;
   }
 
   /*

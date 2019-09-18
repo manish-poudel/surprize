@@ -1,3 +1,4 @@
+import 'package:Surprize/CustomWidgets/CustomCountryPickerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
 import 'package:Surprize/Models/Activity.dart';
@@ -27,6 +28,7 @@ class EditProfilePageState extends State<EditProfilePage> {
   CustomLabelTextFieldWidget _nameField;
   CustomDropDownWidget _genderDropDownWidget;
   CustomDatePickerWidget _dobDatePickerWidget;
+  CustomCountryPickerWidget _countryPickerWidget;
   CustomPhoneNumberWidget _phoneNumberWidget;
   CustomMultiLineTextFieldWidget _multiLineAddressTextFieldWidget;
 
@@ -50,10 +52,25 @@ class EditProfilePageState extends State<EditProfilePage> {
     _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.black, validation: AppHelper.validateName);
     _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender, "Gender", Colors.black, Colors.white);
 
+    try {
       List<int> dob = AppHelper.getDateListFromString(_player.dob, "/");
-    _dobDatePickerWidget = CustomDatePickerWidget(dob[0],dob[1],dob[2], Colors.black);
-
-    _phoneNumberWidget = CustomPhoneNumberWidget("+977", _player.phoneNumber, Colors.black);
+      _dobDatePickerWidget =
+          CustomDatePickerWidget(dob[0], dob[1], dob[2], Colors.black);
+    }
+    catch(error){
+      _dobDatePickerWidget =
+          CustomDatePickerWidget(1992, 12, 9, Colors.black);
+    }
+     _countryPickerWidget = CustomCountryPickerWidget(_player.country);
+     try {
+       List phoneNumber = _player.phoneNumber.split(" ");
+       _phoneNumberWidget = CustomPhoneNumberWidget(
+           phoneNumber[0], phoneNumber[1], Colors.black,validation: AppHelper.validatePhone);
+     }
+     catch(error){
+       _phoneNumberWidget = CustomPhoneNumberWidget(
+           "+61", "", Colors.black);
+     }
     _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address, Colors.black);
     _customRegistrationProgressBar = new CustomProgressbarWidget();
   }
@@ -86,17 +103,20 @@ class EditProfilePageState extends State<EditProfilePage> {
             children: <Widget>[
               _nameField,
               Padding(
-                padding: const EdgeInsets.only(left: 1.0, top: 8.0, right: 1.0),
+                padding: const EdgeInsets.only(left: 1.0, top: 16.0, right: 1.0),
                 child: SizedBox(
                     width: double.infinity,
                     height: 48.0,
                     child: _genderDropDownWidget),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
+                  padding: const EdgeInsets.only(top: 24.0),
                   child: _dobDatePickerWidget),
               Padding(
-                  padding: const EdgeInsets.only(top: 24.0),
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: _countryPickerWidget),
+              Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: _phoneNumberWidget),
               Padding(
                   padding: const EdgeInsets.only(top: 16.0),
@@ -132,8 +152,8 @@ class EditProfilePageState extends State<EditProfilePage> {
     _player.name = _nameField.getValue();
      _player.gender = _genderDropDownWidget.selectedItem();
      _player.dob = _dobDatePickerWidget.getSelectedDate();
-     _player.phoneNumber = _phoneNumberWidget.getPhoneNumber();
-     _player.country = "Nepal";
+     _player.phoneNumber = _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber();
+     _player.country = _countryPickerWidget.getValue();
      _player.address = _multiLineAddressTextFieldWidget.getValue();
 
      UserProfile().updateProfile(_player.membershipId, _player).then((value){

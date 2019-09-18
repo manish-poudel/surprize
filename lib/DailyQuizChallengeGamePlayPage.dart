@@ -287,7 +287,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       }
 
       if(!_isGameFinished) {
-        keepTimeTrack(4);
+        keepTimeTrack(1);
       }
 
       return  SingleChildScrollView(

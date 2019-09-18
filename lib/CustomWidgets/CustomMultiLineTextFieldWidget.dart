@@ -47,27 +47,25 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
 
   @override
   Widget build(context) {
-    return Container(child: Row(
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(color:Colors.grey[300],shape: BoxShape.rectangle, border: new Border.all(
+        color: Colors.grey[200],
+        width: 0.5,
+      )),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
         children:<Widget>[
           Flexible(child:
           TextField(
             style: TextStyle(fontFamily: 'Raleway',color: _color),
-            controller: textFldcontroller,   decoration: InputDecoration(
-            fillColor: _color,
+            controller: textFldcontroller,   decoration: InputDecoration.collapsed(
             hintText: _label,
             hintStyle: TextStyle(color:Colors.grey),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: _color),
-            ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.purple),
-            ),
           ),
           maxLines: null,
             keyboardType: TextInputType.multiline,
           )
-
-
           )
         ]
 
