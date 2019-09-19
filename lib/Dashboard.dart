@@ -1,3 +1,4 @@
+import 'package:Surprize/FirebaseMessaging/PushNotification/PushNotification.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Player.dart';
@@ -21,6 +22,8 @@ class Dashboard{
     UserProfile().getProfile(_firebaseUser.uid).then((DocumentSnapshot documentSnapshot) {
       if(documentSnapshot.data != null) {
         UserMemory().savePlayer(Player.fromMap(documentSnapshot.data));
+        PushNotification().configure();
+        PushNotification().getDeviceTokenId();
         AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
       }
       else{
