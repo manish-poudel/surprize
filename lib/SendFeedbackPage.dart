@@ -75,7 +75,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
     }
 
     String userId = UserMemory().getPlayer().membershipId;
-    String reportId = Firestore.instance.collection(FirestoreResources.collectionReport).id;
+    String reportId = Firestore.instance.collection(FirestoreResources.collectionReport).document().documentID;
 
     Report report = Report(reportId, customDropDownWidget.selectedItem(),
         customMultiLineTextFieldWidget.getValue(), userId, DateTime.now(), "", null);

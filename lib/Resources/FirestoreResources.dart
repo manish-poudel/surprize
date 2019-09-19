@@ -110,15 +110,15 @@ class FirestoreResources {
 
   static get fieldReportBody => 'Body';
 
-  static get fieldReportedBy => 'Reported by';
+  static get fieldReportedBy => 'ReportedBy';
 
-  static get fieldReportedOn => 'Reported on';
+  static get fieldReportedOn => 'ReportedOn';
 
   static get fieldReportReply => 'Reply';
 
-  static get fieldRepliedOn => 'Replied on';
+  static get fieldRepliedOn => 'RepliedOn';
 
   static String get collectionReport => '/Report';
 
-  static String get collectionReportList => '/Report list';
+  static String get collectionReportList => '/Reportlist';
 }

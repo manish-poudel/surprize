@@ -43,7 +43,7 @@ class PushNotification {
   saveToken(String id) async {
     String token = await getDeviceTokenId();
     Firestore.instance.collection("/Device token").document(id).setData({
-      "Device id":token
+      "DeviceId":token
     });
   }
 }
