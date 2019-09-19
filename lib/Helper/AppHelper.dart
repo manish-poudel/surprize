@@ -49,11 +49,11 @@ class AppHelper{
   }
 
   ///cupertino route
- static void cupertinoRoute(buildContext,pageName){
-   Navigator.push(
-       buildContext,
-       CupertinoPageRoute(
-           builder: (context) => pageName));
+  static cupertinoRoute(buildContext,pageName){
+    return Navigator.push(
+        buildContext,
+        CupertinoPageRoute(
+            builder: (context) => pageName));
   }
 
   ///cupertino route
@@ -66,12 +66,12 @@ class AppHelper{
   /*
   Go to new page.
    */
- static void goToPage(context, bool removePage, String destPage){
+  static void goToPage(context, bool removePage, String destPage){
     if(removePage == true) {
       popAndPushReplacement(context, destPage);
     }
     if(removePage == false){
-     push(context, destPage);
+      push(context, destPage);
     }
   }
 
@@ -107,10 +107,10 @@ class AppHelper{
   /*
   validate name
    */
- static String validateName(String value) {
-   if(value.isEmpty){
-     return 'Enter valid name';
-   }
+  static String validateName(String value) {
+    if(value.isEmpty){
+      return 'Enter valid name';
+    }
     if (value.length < 3)
       return 'Name must be more than 2 character';
     else
@@ -144,7 +144,7 @@ class AppHelper{
   /*
   Text with icon
    */
- static Widget textWithIcon(IconData icon, String text, double padding, double textSize,  Color color) {
+  static Widget textWithIcon(IconData icon, String text, double padding, double textSize,  Color color) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -164,19 +164,19 @@ class AppHelper{
   }
 
   static DateTime convertToDateTime(time){
-   DateTime convertedDateTime;
-      try{
-        Timestamp timestamp = time;
-        convertedDateTime = DateTime.fromMillisecondsSinceEpoch(timestamp.seconds * 1000);
-      }
-      catch(error) {
-        print("DATE TIME CONVERSION ERROR: " + convertedDateTime.toString());
-      }
-      return convertedDateTime;
+    DateTime convertedDateTime;
+    try{
+      Timestamp timestamp = time;
+      convertedDateTime = DateTime.fromMillisecondsSinceEpoch(timestamp.seconds * 1000);
+    }
+    catch(error) {
+      print("DATE TIME CONVERSION ERROR: " + convertedDateTime.toString());
+    }
+    return convertedDateTime;
   }
 
   static String dateToReadableString(DateTime time){
-   DateFormat dateFormat =  DateFormat();
+    DateFormat dateFormat =  DateFormat();
 
     String dateTime = dateFormat.add_yMd().add_jm().format(time);
     List<String> splitDateAndTime = dateTime.split(" ");
@@ -184,11 +184,11 @@ class AppHelper{
   }
 
   static String addLeadZeroToNumber(int time){
-   String readableTime = time.toString();
-   if(time < 9){
-     return readableTime.padLeft(2,"0");
-   }
-   return readableTime;
+    String readableTime = time.toString();
+    if(time < 9){
+      return readableTime.padLeft(2,"0");
+    }
+    return readableTime;
   }
 
 
@@ -207,8 +207,8 @@ class AppHelper{
         child: Row(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left:16.0),
-              child: icon
+                padding: const EdgeInsets.only(left:16.0),
+                child: icon
             ),
             Padding(
               padding: const EdgeInsets.only(left:16.0),
@@ -221,16 +221,16 @@ class AppHelper{
   }
 
   /// Widget for app small header
- static Widget appSmallHeader(String heading){
-   return Padding(
-     padding: const EdgeInsets.all(12.0),
-     child: Text(heading,
-         style: TextStyle(
-             fontFamily: 'Raleway',
-             color: Colors.black54,
-             fontSize: 18,
-             fontWeight: FontWeight.w500)),
-   );
+  static Widget appSmallHeader(String heading){
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Text(heading,
+          style: TextStyle(
+              fontFamily: 'Raleway',
+              color: Colors.black54,
+              fontSize: 18,
+              fontWeight: FontWeight.w500)),
+    );
   }
 
   /// App header
@@ -244,7 +244,7 @@ class AppHelper{
     );
   }
   /// Method for logging out user
-   logoutUser(context) {
+  logoutUser(context) {
     FirebaseAuth.instance.signOut().then((value) {
       try {
         Navigator.pushReplacement(
@@ -294,37 +294,37 @@ class AppHelper{
 
   /// Get date from list
   static List<int> getDateListFromString(String dob, String splitBy){
-   List<int> dobList = new List();
-   try {
-     dob.split(splitBy).forEach((value) {
-       dobList.add(int.parse(value));
-     });
-   }
-   catch(error){
-     print(error.toString());
-     return [DateTime.now().year,DateTime.now().month,DateTime.now().day];
-   }
-  return dobList;
- }
+    List<int> dobList = new List();
+    try {
+      dob.split(splitBy).forEach((value) {
+        dobList.add(int.parse(value));
+      });
+    }
+    catch(error){
+      print(error.toString());
+      return [DateTime.now().year,DateTime.now().month,DateTime.now().day];
+    }
+    return dobList;
+  }
 
   Widget socialMediaWidget(){
-   return Column(
-     children: <Widget>[
-       Padding(
-         padding: const EdgeInsets.only(top:16.0),
-         child: Text("Finds us on:",style:TextStyle(
-             fontFamily: 'Raleway',
-             color: Colors.black,
-             fontSize: 16,
-             fontWeight: FontWeight.w400)),
-       ),
-       Padding(
-         padding: const EdgeInsets.only(top:8.0),
-         child: imageIconButton(),
-       )
-     ]
-   );
- }
+    return Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top:16.0),
+            child: Text("Finds us on:",style:TextStyle(
+                fontFamily: 'Raleway',
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w400)),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top:8.0),
+            child: imageIconButton(),
+          )
+        ]
+    );
+  }
 
   // Image icon button
   Widget imageIconButton(){

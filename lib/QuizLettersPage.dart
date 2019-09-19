@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/BLOC/QuizLetterBLOC.dart';
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
@@ -71,6 +73,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
     quizLetterBLOC.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     quizLetterBLOC = QuizLetterBLOC();
@@ -126,14 +129,14 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
           itemBuilder: (BuildContext context, int index) {
             return QuizLettersExpandableWidget("Server",quizLetterList[index],
                     (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
-                () => onShareButtonHandle(quizLetterList[index]));
+                    () => onShareButtonHandle(quizLetterList[index]));
           }),
     );
   }
 
 
   /// On fav button handle clicked event
-   onFavButtonHandleClickForQuizLetter(QuizLetterDisplay quizLetterDisplay, bool){
+  onFavButtonHandleClickForQuizLetter(QuizLetterDisplay quizLetterDisplay, bool){
     setState(() {
       _quizLetterDisplayList[
       quizLetterDisplay.displayId]
@@ -171,15 +174,15 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(child: Text("No favourites", style: TextStyle(fontSize: 18,fontFamily: 'Raleway'))),
-         Padding(
-           padding: const EdgeInsets.only(left:16.0, right: 16.0),
-           child: Text("Daily quiz letters are replaced with new ones. You can save by adding them to your favourite list!", textAlign: TextAlign.center, style: TextStyle(fontSize: 14,fontFamily: 'Raleway', color: Colors.grey)),
-         ),
+          Padding(
+            padding: const EdgeInsets.only(left:16.0, right: 16.0),
+            child: Text("Daily quiz letters are replaced with new ones. You can save by adding them to your favourite list!", textAlign: TextAlign.center, style: TextStyle(fontSize: 14,fontFamily: 'Raleway', color: Colors.grey)),
+          ),
         ],
       );
 
     List<QuizLetterDisplay> quizLetterList =
-        quizLetterDisplayList.values.toList();
+    quizLetterDisplayList.values.toList();
 
     return Container(
       child: ListView.builder(

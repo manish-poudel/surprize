@@ -103,4 +103,22 @@ class FirestoreResources {
   static final String collectionUserPresence = "/User Presence";
   static final String fieldUserPresenceState = "Current State";
   static final String fieldUserPresenceStateChangedTime = "State changed at";
+
+  static get fieldReportId => 'Id';
+
+  static get fieldReportSubject => 'Subject';
+
+  static get fieldReportBody => 'Body';
+
+  static get fieldReportedBy => 'Reported by';
+
+  static get fieldReportedOn => 'Reported on';
+
+  static get fieldReportReply => 'Reply';
+
+  static get fieldRepliedOn => 'Replied on';
+
+  static String get collectionReport => '/Report';
+
+  static String get collectionReportList => '/Report list';
 }

@@ -96,8 +96,7 @@ class ProfilePageState extends State<ProfilePage> {
   /// If pop up menu item is selected
   void _OnPopUpMenuItemSelected(ProfileMenu value) {
     if (value.profileMenuType == ProfileMenuType.EDIT_PAGE) {
-      Navigator.push(
-          context, CupertinoPageRoute(builder: (context) => EditProfilePage()));
+      AppHelper.cupertinoRoute(context, EditProfilePage());
     }
   }
 
@@ -113,15 +112,15 @@ class ProfilePageState extends State<ProfilePage> {
       padding: EdgeInsets.only(top: _screenHeight / 2 - 92),
       child: Center(
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          CircularProgressIndicator(backgroundColor: Colors.purple),
-          Padding(
-            padding: const EdgeInsets.only(top: 0.0),
-            child: CircularProgressIndicator(),
-          )
-        ],
-      )),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator(backgroundColor: Colors.purple),
+              Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: CircularProgressIndicator(),
+              )
+            ],
+          )),
     );
   }
 
@@ -134,7 +133,7 @@ class ProfilePageState extends State<ProfilePage> {
           personalInformationHolder(),
           //AppHelper.appSmallHeader("Recent Activity"),
           //Container(child: recentActivityList()),
-         Visibility(visible:_player.phoneNumber.isEmpty, child: phoneForm()),
+          Visibility(visible:_player.phoneNumber.isEmpty, child: phoneForm()),
         ],
       ),
     );
@@ -177,7 +176,7 @@ class ProfilePageState extends State<ProfilePage> {
                   color: Colors.white),
             ),
           ),
-    /*      Visibility(visible: !UserMemory().firebaseUser.isEmailVerified,
+          /*      Visibility(visible: !UserMemory().firebaseUser.isEmailVerified,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -219,20 +218,20 @@ class ProfilePageState extends State<ProfilePage> {
                       image: DecorationImage(
                           image: _player.profileImageURL.isEmpty
                               ? AssetImage(ImageResources
-                                  .emptyUserProfilePlaceholderImage)
+                              .emptyUserProfilePlaceholderImage)
                               : CachedNetworkImageProvider(
-                                  _player.profileImageURL),
+                              _player.profileImageURL),
                           fit: BoxFit.fill)),
                   child:
 
-                      /// Image upload progress
-                      Visibility(
-                          visible: _isImageLoading,
-                          child: CircularProgressIndicator(
-                              value: _imageUploadProgressValue,
-                              backgroundColor: Colors.white,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.purple[600]))),
+                  /// Image upload progress
+                  Visibility(
+                      visible: _isImageLoading,
+                      child: CircularProgressIndicator(
+                          value: _imageUploadProgressValue,
+                          backgroundColor: Colors.white,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.purple[600]))),
                 ),
               ],
             ),
@@ -260,7 +259,7 @@ class ProfilePageState extends State<ProfilePage> {
         Padding(
           padding: const EdgeInsets.all(4.0),
           child:
-              textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
+          textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
         ),
         Padding(
           padding: const EdgeInsets.all(4.0),
@@ -370,7 +369,7 @@ class ProfilePageState extends State<ProfilePage> {
   /// Upload image to server
   uploadImage(File url) {
     StorageUploadTask uploadTask =
-        UserProfile().uploadFileToStorage(url, _player.membershipId);
+    UserProfile().uploadFileToStorage(url, _player.membershipId);
     listenImageUploadProgress(uploadTask);
   }
 
@@ -410,21 +409,21 @@ class ProfilePageState extends State<ProfilePage> {
 
 
   Widget phoneForm(){
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Container(width: MediaQuery.of(context).size.width * 0.8, child: _phoneField),
-                FlatButton(color:Colors.green, child: Text("Save", style: TextStyle(fontFamily:'Raleway',color: Colors.white)), onPressed: () => editProfile())
-              ],
-            ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(width: MediaQuery.of(context).size.width * 0.8, child: _phoneField),
+              FlatButton(color:Colors.green, child: Text("Save", style: TextStyle(fontFamily:'Raleway',color: Colors.white)), onPressed: () => editProfile())
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
   editProfile() {
@@ -434,9 +433,9 @@ class ProfilePageState extends State<ProfilePage> {
     _player.phoneNumber = _phoneField.getValue();
     UserMemory().savePlayer(_player);
     UserProfile().updateProfile(_player.membershipId, _player).then((_){
-     setState(() {
-       _player = _player;
-     });
+      setState(() {
+        _player = _player;
+      });
     });
   }
 }

@@ -38,6 +38,7 @@ class _QuizLettersExpandableWidgetState
         widget._quizLetterDisplay.quizLetter.dailyQuizChallengeQnA);
 
     return Column(
+      key:Key(widget._quizLetterDisplay.displayId),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Card(

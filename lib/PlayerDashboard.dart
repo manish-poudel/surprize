@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:Surprize/DailyQuizChallengePage.dart';
 import 'package:Surprize/SurprizeNavigationDrawerWidget.dart';
 import 'CustomUpcomingEventsWidget.dart';
-import 'CustomWidgets/CustomNewsCardWidget.dart';
 import 'CustomWidgets/CustomRoundedEdgeButton.dart';
 import 'DailyQuizChallengeGamePlayPage.dart';
 import 'Helper/AppHelper.dart';
@@ -68,18 +67,17 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   /// Is daily quiz available
   isDailyQuizAvailable() async {
-
     _dailyQuizChallengePage.listenForDailyQuizGameOn((QuizState quizState){
       setState(() {
         _showDailyQuizChallengeWidget = (quizState.quizState != CurrentQuizState.QUIZ_IS_OFF);
       });
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
             appBar: AppBar(title: Text("Home", style: TextStyle(fontFamily: 'Raleway'))),
@@ -87,7 +85,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
             body: Container(
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(child: Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   dashboardBody(),
@@ -103,21 +101,21 @@ class PlayerDashboardState extends State<PlayerDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-      //  profileInformationHolder(),
-      AppHelper.appSmallHeader("Upcoming events"),
-      Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: CustomUpcomingEventsWidget()),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: dailyQuizOnWidget(),
-      ),
-      AppHelper.appHeaderDivider(),
-          quizLetterDisplay != null?GestureDetector(child: quizLettersSmallContainer(), onTap: () => AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId))
-      ):Visibility(visible: false,child: Container()),
-      AppHelper.appHeaderDivider(),
-      noticeView(),
-      AppHelper.appHeaderDivider(),
+          //  profileInformationHolder(),
+          AppHelper.appSmallHeader("Upcoming events"),
+          Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: CustomUpcomingEventsWidget()),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: dailyQuizOnWidget(),
+          ),
+          AppHelper.appHeaderDivider(),
+          quizLetterDisplay != null?GestureDetector(child: quizLettersSmallContainer(), onTap: () =>  AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId))
+          ):Visibility(visible: false,child: Container()),
+          AppHelper.appHeaderDivider(),
+          noticeView(),
+          AppHelper.appHeaderDivider(),
         ],
       ),
     );
@@ -235,14 +233,13 @@ class PlayerDashboardState extends State<PlayerDashboard>
     Firestore.instance.collection(FirestoreResources.collectionQuizLetterName).limit(1).orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true).
     getDocuments().then((docSnapshot){
       setState(() {
-       QuizLetter quizLetter =  QuizLetter.fromMap(docSnapshot.documents[0].data);
+        QuizLetter quizLetter =  QuizLetter.fromMap(docSnapshot.documents[0].data);
         quizLetterDisplay = QuizLetterDisplay(quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
             false, quizLetter, true, false);
         customQuizLettersWidget = CustomQuizLettersWidget(quizLetterDisplay);
       });
     });
   }
-
 
   /// Quiz letters
   void getLatestNotice() {

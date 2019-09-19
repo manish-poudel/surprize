@@ -40,15 +40,15 @@ class EditProfilePageState extends State<EditProfilePage> {
   bool _autoValidate = false;
 
   @override
-   initState()  {
+  initState()  {
     initWidgets();
     super.initState();
   }
 
 
   /// Init player widgets
-   initWidgets(){
-     _player = UserMemory().getPlayer();
+  initWidgets(){
+    _player = UserMemory().getPlayer();
     _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.black, validation: AppHelper.validateName);
     _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender, "Gender", Colors.black, Colors.white);
 
@@ -61,17 +61,17 @@ class EditProfilePageState extends State<EditProfilePage> {
       _dobDatePickerWidget =
           CustomDatePickerWidget(1992, 12, 9, Colors.black);
     }
-     _countryPickerWidget = CustomCountryPickerWidget(_player.country);
-     try {
-       List phoneNumber = _player.phoneNumber.split(" ");
-       _phoneNumberWidget = CustomPhoneNumberWidget(
-           phoneNumber[0], phoneNumber[1], Colors.black,validation: AppHelper.validatePhone);
-     }
-     catch(error){
-       _phoneNumberWidget = CustomPhoneNumberWidget(
-           "+61", "", Colors.black);
-     }
-    _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address, Colors.black);
+    _countryPickerWidget = CustomCountryPickerWidget(_player.country);
+    try {
+      List phoneNumber = _player.phoneNumber.split(" ");
+      _phoneNumberWidget = CustomPhoneNumberWidget(
+          phoneNumber[0], phoneNumber[1], Colors.black,validation: AppHelper.validatePhone);
+    }
+    catch(error){
+      _phoneNumberWidget = CustomPhoneNumberWidget(
+          "+61", "", Colors.black);
+    }
+    _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address, Colors.black,100);
     _customRegistrationProgressBar = new CustomProgressbarWidget();
   }
 
@@ -82,11 +82,11 @@ class EditProfilePageState extends State<EditProfilePage> {
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-          key:_scaffoldKey,
+            key:_scaffoldKey,
             appBar: CustomAppBar("Edit Profile", context),
             body: SingleChildScrollView(
               child: Form(
-                autovalidate: _autoValidate,
+                  autovalidate: _autoValidate,
                   key: _formKey,
                   child: editProfileWidget()),
             )));
@@ -96,7 +96,7 @@ class EditProfilePageState extends State<EditProfilePage> {
   Widget editProfileWidget() {
     return Card(
       child: Container(
-        color:Colors.grey[100],
+          color:Colors.grey[100],
           padding: EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +127,7 @@ class EditProfilePageState extends State<EditProfilePage> {
                   width: double.infinity,
                   height: 48.0,
                   child:
-                      FlatButton(color:Colors.green,child: Text("Update",style: TextStyle(fontFamily: 'Raleway', color: Colors.white)), onPressed: () => validateAndUpdateProfile()),
+                  FlatButton(color:Colors.green,child: Text("Update",style: TextStyle(fontFamily: 'Raleway', color: Colors.white)), onPressed: () => validateAndUpdateProfile()),
                 ),
               ),
             ],
@@ -139,7 +139,7 @@ class EditProfilePageState extends State<EditProfilePage> {
   validateAndUpdateProfile(){
     if(_formKey.currentState.validate()){
       _customRegistrationProgressBar.startProgressBar(context, "Updating ...", Colors.white, Colors.black);
-     updateProfile();
+      updateProfile();
     }
     else{
       setState(() {
@@ -150,18 +150,18 @@ class EditProfilePageState extends State<EditProfilePage> {
   /// Update user profile
   updateProfile(){
     _player.name = _nameField.getValue();
-     _player.gender = _genderDropDownWidget.selectedItem();
-     _player.dob = _dobDatePickerWidget.getSelectedDate();
-     _player.phoneNumber = _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber();
-     _player.country = _countryPickerWidget.getValue();
-     _player.address = _multiLineAddressTextFieldWidget.getValue();
+    _player.gender = _genderDropDownWidget.selectedItem();
+    _player.dob = _dobDatePickerWidget.getSelectedDate();
+    _player.phoneNumber = _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber();
+    _player.country = _countryPickerWidget.getValue();
+    _player.address = _multiLineAddressTextFieldWidget.getValue();
 
-     UserProfile().updateProfile(_player.membershipId, _player).then((value){
-       UserMemory().savePlayer(_player);
-       addActivity();
-       _customRegistrationProgressBar.stopAndEndProgressBar(context);
-       Navigator.pop(context);
-     });
+    UserProfile().updateProfile(_player.membershipId, _player).then((value){
+      UserMemory().savePlayer(_player);
+      addActivity();
+      _customRegistrationProgressBar.stopAndEndProgressBar(context);
+      Navigator.pop(context);
+    });
   }
 
   /// Add to recent activity

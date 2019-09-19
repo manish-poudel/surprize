@@ -44,14 +44,7 @@ class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuesti
      questionAnswerThirdColor = Colors.white;
      questionAnswerFourthColor = Colors.white;
   }
-
-
-  @override
-  void didUpdateWidget(CustomSimpleQuizQuestionDisplay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    initButtonColor();
-  }
-
+  
 
   @override
   Widget build(BuildContext context) {

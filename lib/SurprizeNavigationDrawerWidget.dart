@@ -1,3 +1,5 @@
+import 'package:Surprize/FeedbackPage.dart';
+import 'package:Surprize/SendFeedbackPage.dart';
 import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,13 +9,9 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 
 import 'CustomWidgets/CustomNavigationDrawerWidget.dart';
-import 'DailyQuizChallengeGamePlayPage.dart';
-import 'DailyQuizChallengeNotAvailablePage.dart';
 import 'DailyQuizChallengePage.dart';
-import 'DailyQuizChallengeScoreSummaryPage.dart';
 import 'LeaderboardPage.dart';
 import 'Models/Player.dart';
-import 'NoticeReadingPage.dart';
 import 'ProfilePage.dart';
 import 'Resources/ImageResources.dart';
 
@@ -38,7 +36,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget drawerContent(){
     return Container(
       decoration: BoxDecoration(color: Colors.white),
-        child:  drawerList(),
+      child:  drawerList(),
     );
   }
 
@@ -50,13 +48,13 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-         Padding(
-           padding: const EdgeInsets.all(16.0),
-           child: CircleAvatar(radius: 40, backgroundColor: Colors.white, backgroundImage:
-           _player.profileImageURL.isEmpty?AssetImage(ImageResources.emptyUserProfilePlaceholderImage):
-           CachedNetworkImageProvider( _player.profileImageURL)
-           ),
-         ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: CircleAvatar(radius: 40, backgroundColor: Colors.white, backgroundImage:
+            _player.profileImageURL.isEmpty?AssetImage(ImageResources.emptyUserProfilePlaceholderImage):
+            CachedNetworkImageProvider( _player.profileImageURL)
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(left:16.0),
             child: Text(_player.name, style: TextStyle(color:  Colors.white, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w300)),
@@ -95,12 +93,14 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             goToGamePlay(),
             drawerButtonNavigationWithPadding(QuizLettersPage(null),Icon(Icons.event_note, color: Colors.purple), "Quiz letters"),
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
-        drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"),
+            drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"),
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
+            drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
 
-       // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
-        logOutButton()
-      ]),
+
+            // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
+            logOutButton()
+          ]),
     );
   }
 
@@ -119,7 +119,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   }
   /// Drawer navigation with no padding
   Widget drawerButtonNavigation(var navTo, Icon icon,  String buttonName){
-   return AppHelper().flatButtonWithRoute(icon,
+    return AppHelper().flatButtonWithRoute(icon,
             () => Navigator.push(
             _selfContext,
             CupertinoPageRoute(
@@ -132,7 +132,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget drawerButtonNavigationWithPadding(var navTo, Icon icon, String buttonName){
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
-      child: drawerButtonNavigation(navTo, icon, buttonName)
+        child: drawerButtonNavigation(navTo, icon, buttonName)
     );
   }
 
