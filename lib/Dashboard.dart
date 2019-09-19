@@ -23,7 +23,7 @@ class Dashboard{
       if(documentSnapshot.data != null) {
         UserMemory().savePlayer(Player.fromMap(documentSnapshot.data));
         PushNotification().configure();
-        PushNotification().getDeviceTokenId();
+        PushNotification().saveToken(UserMemory().getPlayer().membershipId);
         AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
       }
       else{

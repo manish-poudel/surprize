@@ -1,5 +1,8 @@
 
+import 'dart:async';
+
 import 'package:Surprize/FirebaseMessaging/PushNotification/LocalNotification.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotification {
@@ -30,9 +33,17 @@ class PushNotification {
     );
   }
 
-  getDeviceTokenId(){
-    _firebaseMessaging.getToken().then((token){
-      print(token);
+  /// Get device token id
+  Future<String> getDeviceTokenId() async {
+    String token = await _firebaseMessaging.getToken();
+    return token;
+  }
+
+  /// Save token to database
+  saveToken(String id) async {
+    String token = await getDeviceTokenId();
+    Firestore.instance.collection("/Device token").document(id).setData({
+      "Device id":token
     });
   }
 }

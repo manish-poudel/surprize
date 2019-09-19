@@ -22,7 +22,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
     logoImage = Image.asset(ImageResources.appMainLogo);
     checkIfUserLoggedIn(context);
   }
@@ -34,10 +33,6 @@ class _SplashScreenState extends State<SplashScreen> {
       if(user == null) {
         AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
       } else{
-        print("User details");
-        print("Phone number" + user.phoneNumber.toString());
-        print("Photo url" + user.photoUrl.toString());
-        print("Name" + user.displayName.toString());
         UserMemory().saveFirebaseUser(user);
         Dashboard(context,user).nav();
       }
