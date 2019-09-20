@@ -73,6 +73,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
                 ))));
   }
 
+
+
   getFeedbacks() {
     Firestore.instance
         .collection(FirestoreResources.collectionReport)

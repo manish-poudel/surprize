@@ -268,6 +268,7 @@ class DailyQuizChallengeScoreSummaryPageState
   Future shareWithFacebook() async {
     try {
       String value = await FacebookShare().shareToFacebookWithScore(widget._totalScore);
+      print("Shared value" + value);
       if(value == "APP_SHARED"){
         updateScoreForSharing();
         addRecentActivity(ActivityType.SHARING_APP_TO_FACEBOOK, ScoreSystem.getSoreFromSharingApp('Facebook').toString());

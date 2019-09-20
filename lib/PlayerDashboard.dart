@@ -1,3 +1,5 @@
+import 'package:Surprize/AppShare/FacebookShare.dart';
+import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/CustomWidgets/CustomFooterWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
@@ -89,7 +91,10 @@ class PlayerDashboardState extends State<PlayerDashboard>
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   dashboardBody(),
-                  Align(alignment:Alignment.bottomCenter,child: footer()),
+                  Align(alignment:Alignment.bottomCenter,child: GestureDetector(onTap: () async {
+                   int result = await FacebookShare().shareToFacebookWithScore(12);
+                   print(result.toString());
+                  }, child: footer())),
                 ],
               )),
             )));

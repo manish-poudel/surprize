@@ -293,7 +293,6 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       return  SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top:42.0),

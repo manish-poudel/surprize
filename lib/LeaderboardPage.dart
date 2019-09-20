@@ -1,7 +1,6 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Models/Leaderboard.dart';
