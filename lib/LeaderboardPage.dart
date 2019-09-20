@@ -263,28 +263,15 @@ class LeaderboardPageState extends State<LeaderboardPage> {
           Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child:Container(
-                  padding: EdgeInsets.all(0.0),
-                  width: 25,
-                  height: 25,
-                  decoration: BoxDecoration(
-                      color: color,
-                      border:
-                      new Border.all(color: Colors.purple, width: 0.5),
-                      borderRadius:
-                      new BorderRadius.all(Radius.circular(21.0))),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-                    child: Text(
-                        leaderboard == null
-                            ? ""
-                            : leaderboard.rank.toString(),
-                        style: TextStyle(
-                            color: Colors.purple,
-                            fontFamily: 'Raleway',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600)),
-                  )),
+              child:Text(
+                  leaderboard == null
+                      ? ""
+                      : leaderboard.rank.toString(),
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontFamily: 'Raleway',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600)),
             ),
           ),
 

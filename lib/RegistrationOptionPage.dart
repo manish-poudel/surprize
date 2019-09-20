@@ -4,6 +4,7 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/RegistrationPage.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/SplashScreen.dart';
+import 'package:Surprize/TermsAndConditionPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -81,8 +82,11 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                   ),
                 ),
 
-                Center(
-                  child: _customELAWidget,
+                GestureDetector(
+                  onTap: () => AppHelper.cupertinoRoute(context, TermsAndConditionPage()),
+                  child: Center(
+                    child: _customELAWidget,
+                  ),
                 ),
 
               ],

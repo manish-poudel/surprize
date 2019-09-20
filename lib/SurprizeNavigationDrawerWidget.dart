@@ -1,7 +1,7 @@
 import 'package:Surprize/FeedbackPage.dart';
-import 'package:Surprize/SendFeedbackPage.dart';
 import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
+import 'package:Surprize/SettingPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -76,6 +76,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
         children: <Widget>[
           profileDisplay(),
           drawerButtons(),
+          Container(color: Colors.white,height: 1),
           drawerFooter()
         ],
       ),
@@ -85,7 +86,6 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   /// Drawer button list
   Widget drawerButtons(){
     return Container(
-
       decoration: BoxDecoration(color: Colors.grey[100]),
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,13 +93,14 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             goToGamePlay(),
             drawerButtonNavigationWithPadding(QuizLettersPage(null),Icon(Icons.event_note, color: Colors.purple), "Quiz letters"),
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
-            drawerButtonNavigationWithPadding(ProfilePage(),Icon(Icons.person, color: Colors.purple), "Profile"),
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
-
+            Padding(
+              padding: const EdgeInsets.only(bottom:8.0),
+              child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple), "Settings"),
+            ),
 
             // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
-            logOutButton()
           ]),
     );
   }
@@ -111,8 +112,8 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("Entertained by silicon guys", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
-          Text("siliconguy123@gmail.com", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w300)),
+          Text("Entertained by Zeroek", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
+          Text("copyright@2019", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w300)),
         ],
       ),
     );
@@ -133,14 +134,6 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
         child: drawerButtonNavigation(navTo, icon, buttonName)
-    );
-  }
-
-  /// Widget logout button
-  Widget logOutButton(){
-    return Padding(
-        padding: const EdgeInsets.only(top: 1.0),
-        child:  AppHelper().flatButtonWithRoute(Icon(Icons.call_missed_outgoing, color: Colors.purple),() => AppHelper().logoutUser(_parentContext), "Logout")
     );
   }
 

@@ -83,7 +83,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
     Firestore.instance.collection(FirestoreResources.collectionReport).document(reportId).
     setData(report.toMap()).then((value){
       _customRegistrationProgressBar.stopAndEndProgressBar(context);
-      AppHelper.cupertinoRouteWithPushReplacement(context, FeedbackPage());
+     Navigator.of(context).pop();
     });
 
   }

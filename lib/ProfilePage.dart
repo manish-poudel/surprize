@@ -134,6 +134,11 @@ class ProfilePageState extends State<ProfilePage> {
           //AppHelper.appSmallHeader("Recent Activity"),
           //Container(child: recentActivityList()),
           Visibility(visible:_player.phoneNumber.isEmpty, child: phoneForm()),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(child: FlatButton(color:Colors.purple[400], onPressed: () => AppHelper.cupertinoRoute(context, EditProfilePage()),
+                child: Text("Edit profile", style: TextStyle(fontFamily: 'Raleway', fontSize:18,color:Colors.white)))),
+          )
         ],
       ),
     );

@@ -287,48 +287,41 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       }
 
       if(!_isGameFinished) {
-        keepTimeTrack(1);
+        keepTimeTrack(4);
       }
 
       return  SingleChildScrollView(
-        scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top:42.0),
+          padding: const EdgeInsets.only(top:32.0),
           child: Center(
           child: Text(
             StringResources.headingText,
             style: TextStyle(color: Colors.white, fontSize:24, fontFamily: 'Raleway', fontWeight: FontWeight.w300),
           ),
-      ),
+          ),
         ),
             Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: _customCountDownTimerWidget
+              padding: const EdgeInsets.all(32.0),
+              child: _customCountDownTimerWidget,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24, left:0.0),
-                    child: Center(
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-                        child: Center(
-                          child: Text(
-                            (currentIndex + 1).toString(),
-                            style: TextStyle(color: Colors.white, fontFamily: 'Raleway',fontSize:24, fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
+            Stack(
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
+                  child: Center(
+                    child: Text(
+                      (currentIndex + 1).toString(),
+                      style: TextStyle(color: Colors.white, fontFamily: 'Raleway',fontSize:24, fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:64, left: 8.0, right: 8.0),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left:18, right:18, top:32.0),
+                  child: SizedBox(
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -357,9 +350,9 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
                         ],
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             )],
         ),
       );
