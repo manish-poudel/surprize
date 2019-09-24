@@ -37,7 +37,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   void initState() {
     super.initState();
     SQLiteManager().initAppDatabase();
-    this._openedQuizId = widget._openedQuizId;
+    this._openedQuizId = (widget._openedQuizId != null?widget._openedQuizId:"0");
     getQuizLetters();
   }
 

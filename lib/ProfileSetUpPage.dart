@@ -2,7 +2,6 @@ import 'package:Surprize/CustomWidgets/CustomCountryPickerWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomDatePickerWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomDropDownWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
-import 'package:Surprize/CustomWidgets/CustomMultiLineTextFieldWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomPhoneNumberWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
@@ -49,8 +48,8 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
   @override
   void initState() {
     super.initState();
-    _nameField = CustomLabelTextFieldWidget("Name", widget._firebaseUser.displayName != null?widget._firebaseUser.displayName:"",Colors.black, validation: AppHelper.validateName);
-    _emailField = CustomLabelTextFieldWidget("Email", "",Colors.black, validation: AppHelper.validateEmail);
+    _nameField = CustomLabelTextFieldWidget("Name", widget._firebaseUser.displayName != null?widget._firebaseUser.displayName:"",Colors.black, false,validation: AppHelper.validateName);
+    _emailField = CustomLabelTextFieldWidget("Email", "",Colors.black, false,validation: AppHelper.validateEmail);
     _genderDropDownWidget=  CustomDropDownWidget(['Male', 'Female', 'Other'], "Male", "Gender",Colors.black, Colors.white);
     _dobDatePickerWidget = CustomDatePickerWidget(0,0,0, Colors.black);
     _countryPickerWidget = CustomCountryPickerWidget("Australia");

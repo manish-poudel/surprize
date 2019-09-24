@@ -91,10 +91,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   dashboardBody(),
-                  Align(alignment:Alignment.bottomCenter,child: GestureDetector(onTap: () async {
-                   int result = await FacebookShare().shareToFacebookWithScore(12);
-                   print(result.toString());
-                  }, child: footer())),
+                  Align(alignment:Alignment.bottomCenter,child: footer()),
                 ],
               )),
             )));
@@ -115,10 +112,10 @@ class PlayerDashboardState extends State<PlayerDashboard>
             padding: const EdgeInsets.all(8.0),
             child: dailyQuizOnWidget(),
           ),
-          AppHelper.appHeaderDivider(),
+          Visibility(visible:quizLetterDisplay != null,child: AppHelper.appHeaderDivider()),
           quizLetterDisplay != null?GestureDetector(child: quizLettersSmallContainer(), onTap: () =>  AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId))
           ):Visibility(visible: false,child: Container()),
-          AppHelper.appHeaderDivider(),
+          Visibility(visible:notice != null,child: AppHelper.appHeaderDivider()),
           noticeView(),
           AppHelper.appHeaderDivider(),
         ],

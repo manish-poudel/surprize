@@ -49,7 +49,7 @@ class EditProfilePageState extends State<EditProfilePage> {
   /// Init player widgets
   initWidgets(){
     _player = UserMemory().getPlayer();
-    _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.black, validation: AppHelper.validateName);
+    _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.black, false, validation: AppHelper.validateName);
     _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender, "Gender", Colors.black, Colors.white);
 
     try {

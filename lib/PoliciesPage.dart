@@ -1,22 +1,20 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/PoliciesPage.dart';
-import 'package:Surprize/ProfilePage.dart';
 import 'package:Surprize/WebViewPage.dart';
 import 'package:flutter/material.dart';
 
-class SettingPage extends StatefulWidget {
+class PoliciesPage extends StatefulWidget {
   @override
-  _SettingPageState createState() => _SettingPageState();
+  _PoliciesPageState createState() => _PoliciesPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _PoliciesPageState extends State<PoliciesPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.purple[800]),
       home: Scaffold(
-        appBar: CustomAppBar("Settings",context),
+        appBar: CustomAppBar("Policy",context),
         body: settingList(),
       ),
     );
@@ -26,9 +24,8 @@ class _SettingPageState extends State<SettingPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-       settingMenu("Profile", Icons.perm_identity, () => AppHelper.cupertinoRoute(context, ProfilePage())),
-        settingMenu("Policies",Icons.info, () => AppHelper.cupertinoRoute(context, PoliciesPage())),
-        settingMenu("Logout",Icons.call_missed_outgoing, () => AppHelper().logoutUser(context)),
+        settingMenu("Terms and conditions",Icons.info, () => AppHelper.cupertinoRoute(context, WebViewPage('Terms and conditions','https://surprize-5b596.firebaseapp.com/Terms_and_condition.html'))),
+        settingMenu("Privacy policy",Icons.data_usage,  () => AppHelper.cupertinoRoute(context, WebViewPage('Privacy and policy','https://surprize-5b596.firebaseapp.com/Privacy_and_policy.html'))),
       ],
     );
   }
@@ -39,7 +36,7 @@ class _SettingPageState extends State<SettingPage> {
       child: Padding(
         padding: const EdgeInsets.only(bottom:8.0),
         child: Container(
-          width: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,
             color: Colors.white,
             child: Row(
               children: <Widget>[

@@ -11,12 +11,14 @@ class CustomLabelTextFieldWidget extends StatefulWidget {
   _CustomLabelTextFieldWidgetState _state;
   Color _color = Colors.white;
   Function _validation;
+  bool showText;
 
-  CustomLabelTextFieldWidget(String label, String value, Color color, {Function validation}) {
+  CustomLabelTextFieldWidget(String label, String value, Color color, bool showText, {Function validation}) {
     _value = value;
     _label = label;
     _color = color;
     _validation = validation;
+    this.showText = showText;
   }
 
   String getValue() {
@@ -69,6 +71,7 @@ class _CustomLabelTextFieldWidgetState
     controller: textcontroller,
     keyboardType: TextInputType.emailAddress,
     validator: _validation,
+    obscureText: widget.showText,
     onSaved: (String val){
     _value = val;
     },

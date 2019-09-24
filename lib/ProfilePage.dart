@@ -33,7 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isImageLoading = false;
   UserBLOC _userBLOC;
 
-  CustomLabelTextFieldWidget _phoneField = CustomLabelTextFieldWidget("Add phone","", Colors.black, validation: AppHelper.validatePhone);
+  CustomLabelTextFieldWidget _phoneField = CustomLabelTextFieldWidget("Add phone","", Colors.black, false,validation: AppHelper.validatePhone);
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   List<ProfileMenu> _popUpMenuChoice = [

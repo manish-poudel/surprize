@@ -1,8 +1,15 @@
+import 'package:Surprize/DailyQuizChallengePage.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/LeaderboardPage.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/NoticePage.dart';
+import 'package:Surprize/QuizLettersPage.dart';
 import 'package:flutter/material.dart';
 
 class CustomFooterWidget extends StatefulWidget {
+
+  String quizLetterId;
+
   @override
   _CustomFooterWidgetState createState() => _CustomFooterWidgetState();
 }
@@ -25,29 +32,32 @@ class _CustomFooterWidgetState extends State<CustomFooterWidget> {
          child: Row(
            mainAxisAlignment: MainAxisAlignment.center,
            children: <Widget>[
-           textLink("DailyQuizChallenge"),
+           textLink("DailyQuizChallenge" ,() => DailyQuizChallengePage(context).openPage()),
            Padding(
              padding: const EdgeInsets.only(left:16.0, right: 16.0),
-             child: textLink("Quiz Letters"),
+             child: textLink("Quiz Letters" , () => AppHelper.cupertinoRoute(context, QuizLettersPage(null))),
            ),
-             textLink("Notice")
+             textLink("Notice",() => AppHelper.cupertinoRoute(context, NoticePage()))
            ],
          ),
        ),
-            textLink("Leaderboard"),
-          AppHelper().socialMediaWidget()
+            textLink("Leaderboard" ,() => AppHelper.cupertinoRoute(context, LeaderboardPage(UserMemory().getPlayer().membershipId))),
+          AppHelper().socialMediaWidget(context)
       ]),
     );
   }
 
   /// Text link
-  Widget textLink(name){
-    return Text(name,style:TextStyle(
-        fontFamily: 'Raleway',
-        color: Colors.grey,
-        decoration: TextDecoration.underline,
-        fontSize: 16,
-        fontWeight: FontWeight.w400));
+  Widget textLink(name, onTap){
+    return GestureDetector(
+      onTap: onTap ,
+      child: Text(name,style:TextStyle(
+          fontFamily: 'Raleway',
+          color: Colors.grey,
+          decoration: TextDecoration.underline,
+          fontSize: 16,
+          fontWeight: FontWeight.w400)),
+    );
   }
 
 }

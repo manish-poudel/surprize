@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/WebViewPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -307,7 +308,7 @@ class AppHelper{
     return dobList;
   }
 
-  Widget socialMediaWidget(){
+  Widget socialMediaWidget(context){
     return Column(
         children: <Widget>[
           Padding(
@@ -320,28 +321,28 @@ class AppHelper{
           ),
           Padding(
             padding: const EdgeInsets.only(top:8.0),
-            child: imageIconButton(),
+            child: imageIconButton(context),
           )
         ]
     );
   }
 
   // Image icon button
-  Widget imageIconButton(){
+  Widget imageIconButton(context){
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         imageButton(ImageResources.facebookIcon, (){
-
+          AppHelper.cupertinoRoute(context, WebViewPage("Like us on facebook","https://www.facebook.com/Surprize-116204473109749/"));
         }),
         Padding(
           padding: const EdgeInsets.only(left:8.0, right: 8.0),
           child: imageButton(ImageResources.instagramIcon, (){
-
+            AppHelper.cupertinoRoute(context, WebViewPage("Follow us on instagram","https://www.instagram.com/surprize.app/"));
           }),
         ),
         imageButton(ImageResources.twitterIcon, (){
-
+          AppHelper.cupertinoRoute(context, WebViewPage("Follow us on twitter","https://twitter.com/AppSurprize"));
         })
       ],
     );
@@ -352,5 +353,9 @@ class AppHelper{
         child:Image.asset(image, height: 30, width: 30),
         onTap: onPressed
     );
+  }
+
+  openUrl(String url){
+
   }
 }

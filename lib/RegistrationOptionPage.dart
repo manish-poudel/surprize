@@ -4,7 +4,7 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/RegistrationPage.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/SplashScreen.dart';
-import 'package:Surprize/TermsAndConditionPage.dart';
+import 'package:Surprize/WebViewPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -82,11 +82,8 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                   ),
                 ),
 
-                GestureDetector(
-                  onTap: () => AppHelper.cupertinoRoute(context, TermsAndConditionPage()),
-                  child: Center(
-                    child: _customELAWidget,
-                  ),
+                Center(
+                  child: _customELAWidget,
                 ),
 
               ],
@@ -133,6 +130,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
        AuthCredential authCredential = GoogleAuthProvider.getCredential(idToken: authentication.idToken, accessToken: authentication.accessToken);
 
       FirebaseAuth.instance.signInWithCredential(authCredential).then((authResult){
+
         AppHelper.cupertinoRouteWithPushReplacement(
             context, SplashScreen());
       });

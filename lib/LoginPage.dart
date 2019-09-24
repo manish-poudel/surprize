@@ -23,8 +23,8 @@ class LoginPage extends StatefulWidget {
   class LoginPageState extends State<LoginPage>{
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email","", Colors.black);
-    CustomLabelTextFieldWidget _passwordField = CustomLabelTextFieldWidget("Password","", Colors.black);
+    CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email","", Colors.black, false);
+    CustomLabelTextFieldWidget _passwordField = CustomLabelTextFieldWidget("Password","", Colors.black, true);
     CustomProgressbarWidget _customProgressBarWidget = CustomProgressbarWidget();
 
    /*
@@ -46,9 +46,11 @@ class LoginPage extends StatefulWidget {
 
     return MaterialApp(
       home:Scaffold(
-        resizeToAvoidBottomPadding:false,
+        resizeToAvoidBottomInset:true,
         key: _scaffoldKey,
-        appBar: AppBar(title: Text('Sign in', style: TextStyle(fontFamily: 'Raleway')), backgroundColor: Colors.purple[800]),
+        appBar: AppBar(
+            title: Text('Sign in', style: TextStyle(fontFamily: 'Raleway')),
+            backgroundColor: Colors.purple[800]),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(

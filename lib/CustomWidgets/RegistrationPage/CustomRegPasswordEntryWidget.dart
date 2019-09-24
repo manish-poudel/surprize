@@ -62,6 +62,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
       controller: passwordController,
       keyboardType: TextInputType.emailAddress,
       validator: _validatePassword,
+      obscureText: true,
       onSaved: (String val){
         _passwordValue = val;
       },
@@ -87,6 +88,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
                 controller: rePasswordController,
                 keyboardType: TextInputType.emailAddress,
                 validator: _validatePasswordAgain,
+                obscureText: true,
                 onSaved: (String val){
                   _passwordValue = val;
                 },

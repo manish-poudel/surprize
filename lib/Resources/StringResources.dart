@@ -20,7 +20,8 @@ class StringResources{
   static final String registrationPagePersonalInformationHeaderDisplay = "Let's us get to know you bit!";
   static final String buttonCreateAccountText = "Set up";
   static final String elaText = "By creating account, you agree to our";
-  static final String elaTextButton = "Terms and Conditions";
+  static final String elaTextButtonTermsAndCondition = "Terms and Conditions";
+  static final String elaTextButtonPrivacyAndPolicy = "Privacy and policy";
   static final String goBackToolTipText = 'Go back';
 
   // Related to daily quiz challenge page
