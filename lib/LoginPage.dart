@@ -1,3 +1,4 @@
+import 'package:Surprize/PasswordResetPage.dart';
 import 'package:Surprize/RegistrationOptionPage.dart';
 import 'package:Surprize/SplashScreen.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ class LoginPage extends StatefulWidget {
                             style: TextStyle(color:Colors.purple, fontSize: 18.0, fontFamily: 'Raleway', decoration: TextDecoration.underline)
                         ),
                         onTap: (){
-
+                          AppHelper.cupertinoRoute(context, PasswordResetPage());
                         },
                       ),
                     ),

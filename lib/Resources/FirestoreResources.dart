@@ -104,6 +104,7 @@ class FirestoreResources {
   static final String fieldUserPresenceState = "Current State";
   static final String fieldUserPresenceStateChangedTime = "State changed at";
 
+  /// Related to report
   static get fieldReportId => 'Id';
 
   static get fieldReportSubject => 'Subject';
@@ -121,4 +122,12 @@ class FirestoreResources {
   static String get collectionReport => '/Report';
 
   static String get collectionReportList => '/Reportlist';
+
+
+  /// Related to referral
+  static final String fieldReferralCollection = "/Referrals";
+  static final String fieldReferralId = 'Id';
+  static final String fieldReferralCode = "Code";
+  static final String fieldReferralCreateDate = "Created at";
+  static final String fieldReferralCreator = "Created by";
 }

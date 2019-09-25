@@ -86,12 +86,8 @@ class DailyQuizChallengeScoreSummaryPageState
                        ),
                      ),
                      Padding(
-                       padding: const EdgeInsets.only(top: 2.0),
-                       child: button("Share with Facebook", Colors.blue ,() => shareWithFacebook()),
-                     ),
-                     Padding(
                        padding: const EdgeInsets.only(top: 4.0, bottom:8.0),
-                       child: button("Share with other apps", Colors.purple[800] ,() => shareWithOtherApp()),
+                       child: button("Share", Colors.purple[800] ,() => shareWithOtherApp()),
                      ),
                    ],
                  ),
@@ -259,30 +255,12 @@ class DailyQuizChallengeScoreSummaryPageState
 
   /// Sharing with other app
   shareWithOtherApp() async {
-   String result = await ShareApp().shareAfterGamePlay(ScoreSystem.getSoreFromSharingApp("Others"));
+   ShareApp().shareAppToMedia(0);
   }
 
 
   bool hasAllTimeScoreSaved = false;
   bool hasWeeklyScoreSaved = false;
-  Future shareWithFacebook() async {
-    try {
-      String value = await FacebookShare().shareToFacebookWithScore(widget._totalScore);
-      print("Shared value" + value);
-      if(value == "APP_SHARED"){
-        updateScoreForSharing();
-        addRecentActivity(ActivityType.SHARING_APP_TO_FACEBOOK, ScoreSystem.getSoreFromSharingApp('Facebook').toString());
-      }
-      if(value == "APP_SHARE_CANCELED"){
-        Scaffold.of(context).showSnackBar(new SnackBar(
-          content: new Text("You've cancelled sharing the post. Sharing post can increase your points."),
-        ));
-      }
-    }
-    catch(error){
-      print(error.toString());
-    }
-  }
 
   /// Update Score for game play
   updateScoreForGamePlay(){

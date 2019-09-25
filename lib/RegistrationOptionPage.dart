@@ -4,7 +4,6 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/RegistrationPage.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/SplashScreen.dart';
-import 'package:Surprize/WebViewPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

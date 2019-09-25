@@ -22,7 +22,7 @@ class Dashboard{
     UserProfile().getProfile(_firebaseUser.uid).then((DocumentSnapshot documentSnapshot) {
       if(documentSnapshot.data != null) {
         UserMemory().savePlayer(Player.fromMap(documentSnapshot.data));
-        PushNotification().configure();
+        PushNotification().configure(context);
         PushNotification().saveToken(UserMemory().getPlayer().membershipId);
         try {
           Navigator.of(context).pop();

@@ -43,6 +43,9 @@ class _CustomCountryPickerWidgetState extends State<CustomCountryPickerWidget> {
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        child: customDropDownWidget);
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: customDropDownWidget,
+        ));
   }
 }

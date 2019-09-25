@@ -1,4 +1,7 @@
+import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
 import 'package:Surprize/FeedbackPage.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:Surprize/SettingPage.dart';
@@ -95,6 +98,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
+            drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0, QuizState("","",CurrentQuizState.QUIZ_IS_OFF,DateTime.now())),Icon(Icons.feedback, color: Colors.purple), "Summary"),
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),
               child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple), "Settings"),
@@ -112,7 +116,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("Entertained by Zeroek", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
+          Text("Entertained by Omek", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
           Text("copyright@2019", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w300)),
         ],
       ),

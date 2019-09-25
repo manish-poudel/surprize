@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                 logoImage,
-                  Center(child:Text("by Zeroek",
+                  Center(child:Text("by Omek",
                       style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'Raleway',

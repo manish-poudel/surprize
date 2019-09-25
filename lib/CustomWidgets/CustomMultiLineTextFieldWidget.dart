@@ -49,7 +49,6 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
   @override
   Widget build(context) {
     return Container(
-        height: widget.height,
         decoration: BoxDecoration(color:Colors.grey[300],shape: BoxShape.rectangle, border: new Border.all(
           color: Colors.grey[200],
           width: 0.5,
@@ -64,7 +63,7 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
                 hintText: _label,
                 hintStyle: TextStyle(color:Colors.grey),
               ),
-                maxLines: null,
+                maxLines: 7,
                 keyboardType: TextInputType.multiline,
               )
               )

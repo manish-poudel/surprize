@@ -1,9 +1,17 @@
 
 import 'dart:async';
 
+import 'package:Surprize/FeedbackPage.dart';
 import 'package:Surprize/FirebaseMessaging/PushNotification/LocalNotification.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Models/Notice.dart';
+import 'package:Surprize/NoticePage.dart';
+import 'package:Surprize/QuizLettersPage.dart';
+import 'package:Surprize/SplashScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_html/rich_text_parser.dart';
 
 class PushNotification {
 
@@ -17,18 +25,21 @@ class PushNotification {
 
   PushNotification._internal();
 
-  void configure(){
+  void configure(context){
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         LocalNotification().initialize();
         var messageList = message.values.toList();
         LocalNotification().showNotification(messageList[0]['title'],messageList[0]['body']);
+
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        var messageList = message.values.toList();
+        handleClickAction(context,messageList[1]["source"]);
       },
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        var messageList = message.values.toList();
+        handleClickAction(context,messageList[1]["source"]);
       },
     );
   }
@@ -46,4 +57,35 @@ class PushNotification {
       "DeviceId":token
     });
   }
+
+  /// Handle click action
+  handleClickAction(context,String source){
+   switch(source){
+     case "FEEDBACK_REPLY":
+       Navigator.push(
+           context,
+           MaterialPageRoute(
+               builder: (BuildContext context) => FeedbackPage()));
+       break;
+
+     case "NOTICE":
+       Navigator.push(
+           context,
+           MaterialPageRoute(
+               builder: (BuildContext context) => NoticePage()));
+       break;
+
+     case "QUIZ_LETTERS":
+       Navigator.push(
+           context,
+           MaterialPageRoute(
+               builder: (BuildContext context) => QuizLettersPage(null)));
+       break;
+
+     default:
+       Navigator.push(
+           context,
+           MaterialPageRoute(
+               builder: (BuildContext context) => SplashScreen()));
+   }}
 }

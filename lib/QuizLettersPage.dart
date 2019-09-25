@@ -219,6 +219,6 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
 
   /// On share button handle
   onShareButtonHandle(QuizLetterDisplay quizLetterDisplay){
-    ShareApp().shareQuizLetter(quizLetterDisplay.quizLetter.quizLettersUrl, quizLetterDisplay.quizLetter.quizLettersBody);
+    ShareApp().shareQuizLetter(quizLetterDisplay.quizLetter.quizLettersBody);
   }
 }

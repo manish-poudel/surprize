@@ -1,3 +1,4 @@
+import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
@@ -27,7 +28,9 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child:Column(
         children: <Widget>[
-          QuizLettersExpandableWidget("Server",widget._quizLetterDisplay, (bool) => onFavButtonHandleClicked(), (){}),
+          QuizLettersExpandableWidget("Server",widget._quizLetterDisplay, (bool) => onFavButtonHandleClicked(), (){
+            ShareApp().shareQuizLetter(widget._quizLetterDisplay.quizLetter.quizLettersBody);
+          }),
           _playButton()
         ],
       )

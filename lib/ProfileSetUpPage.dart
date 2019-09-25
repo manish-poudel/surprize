@@ -127,7 +127,9 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
 
                   Padding(
                       padding: const EdgeInsets.only(top: 16.0),
-                      child: _countryPickerWidget
+                      child: Container(
+                          width:MediaQuery.of(context).size.width,
+                          child: _countryPickerWidget)
                   ),
                 Visibility(
                   visible: widget._firebaseUser.phoneNumber == null,
