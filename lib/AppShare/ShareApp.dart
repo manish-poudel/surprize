@@ -10,7 +10,7 @@ class ShareApp{
   String referralId;
   String referralCode;
 
-   shareAppToMedia(int score) async {
+   shareAppToMedia() async {
     String code = createReferralCode();
     String body = "Referral code: " + code + "\n" + "Use this code while registration to earn points! \n \n" + "A chance to win cash prize and many more. Download app by clicking on the link:";
     Share.text("Surprize", body, 'text/plain');

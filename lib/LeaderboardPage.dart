@@ -330,4 +330,5 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                   fontWeight: FontWeight.w400)),
         ));
   }
+
 }

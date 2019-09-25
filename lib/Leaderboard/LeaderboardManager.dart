@@ -13,17 +13,12 @@ import 'package:Surprize/Resources/FirestoreResources.dart';
 /// Singleton leaderboard manager class for handling all operation related to leaderboard
 
 class LeaderboardManager{
-  static final LeaderboardManager _leaderboardManager = new LeaderboardManager._internal();
+
   String _userId;
   int _totalScore;
 
   bool _isDailyQuizWinner;
 
-  factory LeaderboardManager(){
-    return  _leaderboardManager;
-  }
-
-  LeaderboardManager._internal();
 
   /// Save score after game play
   void saveScoreAfterGamePlay(int scoreFromQuizPlay, String playedQuizId, String playedQuizName, Function allTimeScoredSaved, Function weeklyScoredSaved, Function dailyQuizWinnerSaved){
@@ -46,8 +41,10 @@ class LeaderboardManager{
 
 
   ///Save score after sharing
-  saveScoreAfterSharing(Function allTimeScoredSaved, Function weeklyScoredSaved){
-    _totalScore = ScoreSystem.getSoreFromSharingApp("Facebook");
+  saveScoreAfterSharing(int score,String id,Function allTimeScoredSaved, Function weeklyScoredSaved){
+    this._userId = id;
+    _totalScore = score;
+    print("About to save score" + _totalScore.toString());
     saveForAllTimeScore((value){
       allTimeScoredSaved(value);
     });
@@ -119,7 +116,7 @@ class LeaderboardManager{
   getScorer(String leaderboardType, String fieldValue, Function getScorer) async {
   /// Get all the score data
    QuerySnapshot querySnapshot = await FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
-        FirestoreResources.leaderboardSubCollection, leaderboardType).orderBy(fieldValue, descending: true).limit(10).getDocuments();
+        FirestoreResources.leaderboardSubCollection, leaderboardType).orderBy(fieldValue, descending: true).getDocuments();
 
    List<DocumentSnapshot> docSnapshot = querySnapshot.documents.toList();
    /// Add to leaderboard list

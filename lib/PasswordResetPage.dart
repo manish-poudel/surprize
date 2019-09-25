@@ -44,7 +44,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                   if(!_formKeyForPasswordResetPage.currentState.validate())
                     return;
 
-                  FirebaseAuth.instance.sendPasswordResetEmail(email: _customLabelTextFieldWidget.getValue()).then((_){
+                  FirebaseAuth.instance.sendPasswordResetEmail(email: _customLabelTextFieldWidget.getValue().trim()).then((_){
                       AppHelper.showSnackBar("Email sent", _scaffoldKey);
                       }).catchError((error){
                           AppHelper.showSnackBar("Error sending mail:" + error.toString(), _scaffoldKey);

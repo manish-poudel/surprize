@@ -33,7 +33,7 @@ class LoginPage extends StatefulWidget {
     */
     void loginUser(){
       _customProgressBarWidget.startProgressBar(context, StringResources.loginProgressInformationDisplay, Colors.white, Colors.black);
-      FirestoreOperations().loginUser(_emailField.getValue(), _passwordField.getValue()).then((firebaseUser)  {
+      FirestoreOperations().loginUser(_emailField.getValue().trim(), _passwordField.getValue()).then((firebaseUser)  {
         _customProgressBarWidget.stopAndEndProgressBar(context);
         AppHelper.cupertinoRouteWithPushReplacement(context, SplashScreen());
       }).catchError((error){

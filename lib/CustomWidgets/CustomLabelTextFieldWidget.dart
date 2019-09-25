@@ -12,13 +12,20 @@ class CustomLabelTextFieldWidget extends StatefulWidget {
   Color _color = Colors.white;
   Function _validation;
   bool showText;
+  bool enabled = true;
 
-  CustomLabelTextFieldWidget(String label, String value, Color color, bool showText, {Function validation}) {
+  CustomLabelTextFieldWidget(String label, String value, Color color, bool showText,{Function validation,bool enabled}) {
     _value = value;
     _label = label;
     _color = color;
     _validation = validation;
     this.showText = showText;
+    this.enabled = enabled;
+  }
+
+  void changeEnabled(bool val){
+    enabled = val;
+    _state.changeEnable(val);
   }
 
   String getValue() {
@@ -32,7 +39,7 @@ class CustomLabelTextFieldWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    _state =  _CustomLabelTextFieldWidgetState(_label, _color, _validation, _value);
+    _state =  _CustomLabelTextFieldWidgetState(_label, _color, _validation, _value, enabled);
     return _state;
   }
 
@@ -45,12 +52,20 @@ class _CustomLabelTextFieldWidgetState
   String _value = "";
   Color _color = Colors.white;
   final textcontroller = TextEditingController();
+  bool enabled;
 
-  _CustomLabelTextFieldWidgetState(String label, Color color, Function validation, value) {
+  _CustomLabelTextFieldWidgetState(String label, Color color, Function validation, value, bool enabled) {
     _label = label;
     _color = color;
     _validation = validation;
       textcontroller.text = _value = value;
+      this.enabled = enabled;
+  }
+
+  changeEnable(bool val){
+    setState(() {
+     enabled = val;
+    });
   }
 
   String getValue() {
@@ -72,6 +87,7 @@ class _CustomLabelTextFieldWidgetState
     keyboardType: TextInputType.emailAddress,
     validator: _validation,
     obscureText: widget.showText,
+    enabled: enabled == null?true:enabled,
     onSaved: (String val){
     _value = val;
     },

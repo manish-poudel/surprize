@@ -8,13 +8,13 @@ class CustomLoginCredentialRegWidget extends StatefulWidget{
   CustomLoginCredentialRegWidgetState _state;
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+
     _state =  CustomLoginCredentialRegWidgetState();
     return _state;
   }
 
   String getEmail(){
-    return _state.getEmail();
+    return _state.getEmail().trim();
   }
 
   String getPassword(){

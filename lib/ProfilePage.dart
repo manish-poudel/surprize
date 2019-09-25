@@ -49,7 +49,7 @@ class ProfilePageState extends State<ProfilePage> {
     _userBLOC = UserBLOC();
     _userBLOC.init();
     _userBLOC.playerEventSink.add("Player");
-    getRecentActivityList();
+
   }
 
   @override
@@ -315,52 +315,6 @@ class ProfilePageState extends State<ProfilePage> {
         )
       ],
     );
-  }
-
-  Map<String, Activity> _recentActivityMap = Map();
-
-  /// Get all recent activity list
-  Widget recentActivityList() {
-    if (_recentActivityMap.length == 0)
-      return Center(
-          child: Text("No recent activities",
-              style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w300,
-                  color: Colors.grey)));
-
-    List<Activity> recentActivityList = _recentActivityMap.values.toList();
-
-    /// Sort the recent activity list
-    recentActivityList.sort((Activity activity, Activity activity2) =>
-        activity2.id.compareTo(activity.id));
-
-    return Container(
-      child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: recentActivityList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomRecentActivityWidget(recentActivityList[index]),
-            );
-          }),
-    );
-  }
-
-  /// Get and listen recent activity list
-  void getRecentActivityList() {
-    UserProfile().getActivity(_player.membershipId, (Activity activity) {
-      setState(() {
-        if (_recentActivityMap.containsKey(activity.id)) {
-          _recentActivityMap.remove(activity.id);
-        }
-        _recentActivityMap.putIfAbsent(activity.id, () => activity);
-      });
-    });
   }
 
   /// Method to pick photo

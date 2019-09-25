@@ -1,3 +1,4 @@
+import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
 import 'package:Surprize/FeedbackPage.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
@@ -98,7 +99,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
-            drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0, QuizState("","",CurrentQuizState.QUIZ_IS_OFF,DateTime.now())),Icon(Icons.feedback, color: Colors.purple), "Summary"),
+            AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple), () => ShareApp().shareAppToMedia(), "Share"),
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),
               child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple), "Settings"),

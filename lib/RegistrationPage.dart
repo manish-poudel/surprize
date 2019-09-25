@@ -87,6 +87,7 @@ class RegistrationPageState extends State<RegistrationPage> with SingleTickerPro
             padding: const EdgeInsets.all(16.0),
             child: _customLoginCredentialRegWidget,
           ),
+
           Center(child: FlatButton(color:Colors.green,child:Text("Create", style: TextStyle(color:Colors.white,fontSize:18,fontFamily: 'Raleway')),onPressed: () => onPressedLoginInformationNextButton()))
         ],
       ),

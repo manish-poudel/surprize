@@ -158,15 +158,9 @@ class EditProfilePageState extends State<EditProfilePage> {
 
     UserProfile().updateProfile(_player.membershipId, _player).then((value){
       UserMemory().savePlayer(_player);
-      addActivity();
       _customRegistrationProgressBar.stopAndEndProgressBar(context);
       Navigator.pop(context);
     });
   }
 
-  /// Add to recent activity
-  void addActivity(){
-    UserProfile().addActivity(_player.membershipId, ActivityType.EDITED_PROFILE,
-        "0", DateTime.now());
-  }
 }

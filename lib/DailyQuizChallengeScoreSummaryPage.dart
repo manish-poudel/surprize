@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -242,20 +243,13 @@ class DailyQuizChallengeScoreSummaryPageState
   void initState() {
     super.initState();
     _userProfile = UserProfile();
-      addRecentActivity(ActivityType.PLAYED_QUIZ, (widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString());
       updateScoreForGamePlay();
   }
 
-  /// Add recent activity
-  void addRecentActivity(ActivityType activityType, String totalScore){
-    FirebaseAuth.instance.currentUser().then((user){
-      _userProfile.addActivity(user.uid, activityType, totalScore, DateTime.now());
-    });
-  }
 
   /// Sharing with other app
   shareWithOtherApp() async {
-   ShareApp().shareAppToMedia(0);
+   ShareApp().shareAppToMedia();
   }
 
 
@@ -288,7 +282,7 @@ class DailyQuizChallengeScoreSummaryPageState
     customProgressbarWidget.startProgressBar(context,
         "Thanks for sharing!. \n Updating your score ...", Colors.white, Colors.black);
     try {
-      LeaderboardManager().saveScoreAfterSharing((value) {
+      LeaderboardManager().saveScoreAfterSharing(ScoreSystem.getSoreFromSharingApp("Facebook"),UserMemory().getPlayer().membershipId,(value) {
         hasAllTimeScoreSaved = true;
         stopProgressBar(customProgressbarWidget);
 
