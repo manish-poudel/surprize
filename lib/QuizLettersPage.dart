@@ -83,6 +83,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
     ];
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
             appBar: CustomAppBar("Quiz letters", context),

@@ -82,10 +82,5 @@ class PushNotification {
                builder: (BuildContext context) => QuizLettersPage(null)));
        break;
 
-     default:
-       Navigator.push(
-           context,
-           MaterialPageRoute(
-               builder: (BuildContext context) => SplashScreen()));
    }}
 }

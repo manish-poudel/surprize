@@ -51,6 +51,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: new Scaffold(
         key: _scaffoldKey,
         body: Container(

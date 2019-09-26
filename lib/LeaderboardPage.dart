@@ -45,6 +45,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     _screenWidth = MediaQuery.of(context).size.width;
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
             appBar: CustomAppBar("Leaderboard",context),

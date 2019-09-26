@@ -16,6 +16,7 @@ class EntryPoint extends StatelessWidget{
     this.context = context;
     // TODO: implement build
     return new MaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
         '/loginPage': (BuildContext context) => LoginPage(),
         '/registrationPage': (BuildContext context) => RegistrationPage(),

@@ -36,6 +36,7 @@ class _NoticePageState extends State<NoticePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: Colors.purple[800]),
       home: Scaffold(
         appBar: CustomAppBar("Notice",context),
