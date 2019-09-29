@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:flutter/services.dart';
 
 import 'CustomWidgets/CustomNavigationDrawerWidget.dart';
 import 'DailyQuizChallengePage.dart';
@@ -32,6 +33,11 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.deepPurple[900],
+      //or set color with: Color(0xFF0000FF)
+    ));
     this._selfContext = context;
     return CustomNavigationDrawerWidget(drawerContent());
   }
@@ -48,7 +54,6 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget profileDisplay(){
     return Container(
       decoration: BoxDecoration(color: Colors.purple[800]),
-      height:160,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -64,7 +69,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             child: Text(_player.name, style: TextStyle(color:  Colors.white, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w300)),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:16.0),
+            padding: const EdgeInsets.only(left:16.0, bottom: 16.0),
             child: Text(_player.email, style: TextStyle(color: Colors.white, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300)),
           ),
         ],
@@ -81,7 +86,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
           profileDisplay(),
           drawerButtons(),
           Container(color: Colors.white,height: 1),
-          drawerFooter()
+          AppHelper().socialMediaWidget(_selfContext)
         ],
       ),
     );

@@ -58,38 +58,44 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
             decoration: BoxDecoration(
                 image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
             ),
-          child: SingleChildScrollView(
-            child: Column(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top:8.0),
-                child: Center(
-                  child: Image.asset(ImageResources.dailyQuizChallengeLogo, height: 220, width: 320,),
-                ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top:8.0),
+              child: Center(
+                child: Image.asset(ImageResources.dailyQuizChallengeLogo, height: MediaQuery.of(context).size.height * 0.35, width: MediaQuery.of(context).size.width,),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 32.0, right: 32.0),
-                child: Text(StringResources.noCurrentGameText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Raleway')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: CustomCountDownTimerWidget(true, countDownDuration,
-                    StringResources.countDownTimeString,
-                    180.0,
-                    180.0,
-                    Colors.white,
-                    Colors.redAccent,
-                    CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top:16.0, bottom:16.0),
-                child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => setReminderForTheGame()),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top:16.0, bottom:8.0),
-                child: CustomTextButtonWidget(StringResources.exitButtonText, Colors.red, () => AppHelper.pop(context)),
-              )
-            ],
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 32.0, right: 32.0),
+              child: Text(StringResources.noCurrentGameText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 18.0,fontFamily: 'Raleway')),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: CustomCountDownTimerWidget(true, countDownDuration,
+                  StringResources.countDownTimeString,
+                  MediaQuery.of(context).size.height * 0.30,
+                  MediaQuery.of(context).size.height * 0.30,
+                  Colors.white,
+                  Colors.redAccent,
+                  CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top:16.0, bottom:16.0),
+                  child: CustomTextButtonWidget(StringResources.exitButtonText, Colors.red, () => AppHelper.pop(context)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:16.0, bottom:16.0),
+                  child: CustomTextButtonWidget(StringResources.setReminderButtonText, Colors.blue, () => setReminderForTheGame()),
+                ),
+
+              ],
+            )
+          ],
           ),
         )
       ),

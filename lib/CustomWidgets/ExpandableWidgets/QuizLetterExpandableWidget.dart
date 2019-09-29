@@ -65,7 +65,7 @@ class _QuizLettersExpandableWidgetState
                     : GestureDetector(
                         child: Text(
                           "Reveal",
-                          style: TextStyle(fontFamily: 'Raleway', fontWeight: FontWeight.w500),
+                          style: TextStyle(fontFamily: 'Raleway', fontSize:18,fontWeight: FontWeight.w500),
                         ),
                         onTap: () {
                           setState(() {

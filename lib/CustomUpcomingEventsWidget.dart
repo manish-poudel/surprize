@@ -71,11 +71,11 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
     List<Events> eventList = _eventsList.values.toList();
 
     return Container(
-      height: 230,
       child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-          itemCount: eventList.length,
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
           shrinkWrap: true,
+          itemCount: eventList.length,
           itemBuilder: (BuildContext context, int index) {
             return CustomEventWidgetCard(eventList[index].photoUrl,
                 eventList[index].title, eventList[index].desc, eventList[index].time);

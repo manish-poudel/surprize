@@ -81,7 +81,7 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
             children: <Widget>[
               Container(
                   decoration: BoxDecoration(
-                    color: Colors.purple[800],
+                      image:DecorationImage(image: AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
                   ),
                   height: 180,
                   child: Image.asset(ImageResources.appMainLogo),

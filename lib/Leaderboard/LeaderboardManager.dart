@@ -127,13 +127,13 @@ class LeaderboardManager{
   }
 
 /// Get daily Score winner
-  Future<QuizPlay> getDailyScoreWinner(String uid) async {
-    DocumentSnapshot documentSnapshot = await FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
-        FirestoreResources.leaderboardSubCollection, FirestoreResources.leaderboardDaily).document(uid).get();
-    if(documentSnapshot.exists)
-       return QuizPlay.fromMap(documentSnapshot.data);
-    return null;
+  Future<Stream<DocumentSnapshot>> getDailyScoreWinner(String uid) async {
+    return  FirestoreOperations().getNestedCollectionReference(
+        FirestoreResources.leaderboardCollection,
+        FirestoreResources.leaderboardSubCollection,
+        FirestoreResources.leaderboardDaily).document(uid).snapshots();
   }
+
 
 /// Get player data
   Future<Player> getProfileData(String id) async {

@@ -2,7 +2,6 @@ import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 
 class NoticeReadingPage extends StatefulWidget{
 
@@ -75,8 +74,8 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
   Widget newsBody(){
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Html(
-        data: widget.notice.body
+      child: Text(
+        widget.notice.body,style: TextStyle(color: Colors.black, fontSize: 18),
       ),
     );
   }

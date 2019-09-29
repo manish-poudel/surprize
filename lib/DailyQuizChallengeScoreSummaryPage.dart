@@ -1,19 +1,13 @@
-import 'dart:io';
-
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:Surprize/AppShare/FacebookShare.dart';
+
 import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 
 import 'CustomWidgets/CustomProgressbarWidget.dart';
 import 'Leaderboard/ScoreSystem.dart';
-import 'Models/Activity.dart';
-import 'Resources/ChannelResources.dart';
 import 'UserProfileManagement/UserProfile.dart';
 
 class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {

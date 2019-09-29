@@ -7,6 +7,7 @@ import 'package:Surprize/Models/Leaderboard.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
+import 'package:intl/intl.dart';
 import 'Resources/ImageResources.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -108,8 +109,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   String _dailyQuizPlayChallengeText(){
+    print("Daily wuiz state" + _quizPlay.playState.toString());
    if(_quizPlay == null)
-     return "";
+     return "New challenge is in progress. Get ready!";
    if(_quizPlay.playState == PlayState.WON)
      return "Congratulation! You are a winner of daily quiz challenge!";
    if(_quizPlay.playState == PlayState.LOST)
@@ -160,12 +162,22 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   }
 
    checkForDailyWinner() async {
-     _quizPlay = await LeaderboardManager().getDailyScoreWinner(widget._playerId);
-    setState(() {
-      if(_quizPlay == null)
-        _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now(),"","");
-      _dailyQuizWinnerDataLoaded = true;
+    await LeaderboardManager().getDailyScoreWinner(widget._playerId).then((value){
+      value.listen((snapshot){
+        setState(() {
+          if(!snapshot.exists){
+            _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now(),"","");
+            return;
+          }
+          else {
+            _quizPlay = QuizPlay.fromMap(snapshot.data);
+          }
+          print("The state us " + _quizPlay.playState.toString());
+          _dailyQuizWinnerDataLoaded = true;
+        });
+      });
     });
+
   }
 
   /// Get all time scorer

@@ -34,7 +34,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
 
                 Container(
                     decoration: BoxDecoration(
-                      color: Colors.purple[800],
+                        image:DecorationImage(image: AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
                     ),
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: Image.asset(ImageResources.appMainLogo),

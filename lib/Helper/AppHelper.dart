@@ -228,7 +228,7 @@ class AppHelper{
       child: Text(heading,
           style: TextStyle(
               fontFamily: 'Raleway',
-              color: Colors.black54,
+              color: Colors.black,
               fontSize: 18,
               fontWeight: FontWeight.w500)),
     );
@@ -240,7 +240,7 @@ class AppHelper{
       padding: const EdgeInsets.only(top:1.0),
       child: Container(
         height: 8,
-        color: Colors.grey[200],
+        color: Colors.grey[100],
       ),
     );
   }
@@ -309,7 +309,8 @@ class AppHelper{
   }
 
   Widget socialMediaWidget(context){
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top:16.0),

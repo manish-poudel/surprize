@@ -58,7 +58,7 @@ class LoginPage extends StatefulWidget {
             children: <Widget>[
               Container(
                   decoration: BoxDecoration(
-                    color: Colors.purple[800],
+              image:DecorationImage(image: AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
                    ),
                   height: MediaQuery.of(context).size.height * 0.3,
                   child: Image.asset(ImageResources.appMainLogo),
@@ -84,7 +84,7 @@ class LoginPage extends StatefulWidget {
                     child: Center(
                       child: GestureDetector(
                         child: Text(StringResources.buttonForgotPasswordText,
-                            style: TextStyle(color:Colors.purple, fontSize: 18.0, fontFamily: 'Raleway', decoration: TextDecoration.underline)
+                            style: TextStyle(color:Colors.purple, fontSize: 18.0, fontFamily: 'Raleway', fontWeight: FontWeight.w500)
                         ),
                         onTap: (){
                           AppHelper.cupertinoRoute(context, PasswordResetPage());

@@ -52,7 +52,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   CustomQuizAnswerButtonWidget _thirdAnswer;
   CustomQuizAnswerButtonWidget _fourthAnswer;
 
-  CustomCountDownTimerWidget _customCountDownTimerWidget = CustomCountDownTimerWidget(true, new Duration(seconds: 10),
+  CustomCountDownTimerWidget _customCountDownTimerWidget = CustomCountDownTimerWidget(true, new Duration(seconds: 11),
       "", countDownTimerHeight, countDownTimerWidth,
       Colors.white,
       Colors.red[900],
@@ -123,21 +123,35 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
    */
   void initializeQuestionAndAnswer(int currentIndex){
 
-    // setting quiz question
-    _quizQuestion = CustomQuizQuestionHolderWidget(_dailyQuizChallengeQnAList[currentIndex].question);
+    try {
+      // setting quiz question
+      _quizQuestion = CustomQuizQuestionHolderWidget(
+          _dailyQuizChallengeQnAList[currentIndex].question);
 
-    // Setting answer button for the quiz
-    _firstAnswer =  CustomQuizAnswerButtonWidget(onButtonSelect, quizFirstButtonCode, _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0),
-        EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 8));
+      // Setting answer button for the quiz
+      _firstAnswer = CustomQuizAnswerButtonWidget(
+          onButtonSelect, quizFirstButtonCode,
+          _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0),
+          EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 8));
 
-    _secondAnswer = CustomQuizAnswerButtonWidget(onButtonSelect, quizSecondButtonCode,   _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1),
-        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
+      _secondAnswer = CustomQuizAnswerButtonWidget(
+          onButtonSelect, quizSecondButtonCode,
+          _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1),
+          EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
 
-    _thirdAnswer = CustomQuizAnswerButtonWidget(onButtonSelect, quizThirdButtonCode,  _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2),
-        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
+      _thirdAnswer = CustomQuizAnswerButtonWidget(
+          onButtonSelect, quizThirdButtonCode,
+          _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2),
+          EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
 
-    _fourthAnswer= CustomQuizAnswerButtonWidget(onButtonSelect, quizFourButtonCode,  _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3),
-        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8.0));
+      _fourthAnswer = CustomQuizAnswerButtonWidget(
+          onButtonSelect, quizFourButtonCode,
+          _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3),
+          EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8.0));
+    }
+    catch(error){
+
+    }
   }
 
   /*
@@ -287,7 +301,7 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
       }
 
       if(!_isGameFinished) {
-        keepTimeTrack(4);
+        keepTimeTrack(10);
       }
 
       return  SingleChildScrollView(

@@ -1,7 +1,6 @@
 import 'package:Surprize/CustomWidgets/CustomCountryPickerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
-import 'package:Surprize/Models/Activity.dart';
 import 'package:Surprize/Models/Player.dart';
 
 import 'CustomWidgets/CustomAppBar.dart';

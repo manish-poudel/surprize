@@ -39,10 +39,10 @@ class _CustomNoticeViewWidgetState extends State<CustomNoticeViewWidget> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-      Text(widget._notice.title,style: TextStyle(fontFamily: 'Raleway')),
+      Text(widget._notice.title,style: TextStyle( fontSize: 16, fontFamily:'Raleway',color: Colors.deepPurple[500], fontWeight: FontWeight.w500)),
       Padding(
         padding: const EdgeInsets.only(top:2.0),
-        child: Text(AppHelper.dateToReadableString(widget._notice.addedTime),style: TextStyle(color:Colors.grey, fontSize:12,fontFamily: 'Raleway')),
+        child: Text(AppHelper.dateToReadableString(widget._notice.addedTime),style: TextStyle(color:Colors.grey[600], fontSize:10, fontWeight:FontWeight.w500,fontFamily: 'Roboto')),
       ),
     ]);
   }

@@ -33,6 +33,8 @@ class QuizPlay{
         return PlayState.WON;
       case "LOST":
         return PlayState.LOST;
+      case "NOT_PLAYED":
+        return PlayState.NOT_PLAYED;
       default:
         return PlayState.UNKNOWN;
     }
@@ -45,6 +47,8 @@ class QuizPlay{
         return "WON";
       case PlayState.LOST:
         return "LOST";
+      case PlayState.NOT_PLAYED:
+        return "NOT_PLAYED";
       default:
         return "UNKNOWN";
     }

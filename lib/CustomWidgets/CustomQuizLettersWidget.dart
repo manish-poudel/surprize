@@ -25,13 +25,13 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+      padding: const EdgeInsets.only(left: 2.0, right: 2.0),
       child:Column(
         children: <Widget>[
           QuizLettersExpandableWidget("Server",widget._quizLetterDisplay, (bool) => onFavButtonHandleClicked(), (){
             ShareApp().shareQuizLetter(widget._quizLetterDisplay.quizLetter.quizLettersBody);
           }),
-          _playButton()
+         // _playButton()
         ],
       )
     );
@@ -61,7 +61,7 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
               TextSpan(
                   text: "Click for More",
                   style: TextStyle(
-                      color: Colors.grey, fontSize: 12, fontFamily:'Raleway',fontWeight: FontWeight.w300)),
+                      color: Colors.white, fontSize: 12, fontFamily:'Raleway',fontWeight: FontWeight.w300)),
             ])),
       ),
     );

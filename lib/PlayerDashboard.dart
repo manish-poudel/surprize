@@ -1,5 +1,4 @@
-import 'package:Surprize/AppShare/FacebookShare.dart';
-import 'package:Surprize/AppShare/ShareApp.dart';
+
 import 'package:Surprize/CustomWidgets/CustomFooterWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
@@ -7,7 +6,6 @@ import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
-import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,10 +20,8 @@ import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'Resources/FirestoreResources.dart';
 
-
 //// MAKE SURE YOU REMOVE DEPENDENCIES IN GRADLE FOR EG, FIRESTORE... AND CHECK IF IT WORK.. thEY MAY BE NOT BE REQUIRED!!!!!
 class PlayerDashboard extends StatefulWidget {
-
   PlayerDashboard();
 
   @override
@@ -37,7 +33,6 @@ class PlayerDashboard extends StatefulWidget {
 
 class PlayerDashboardState extends State<PlayerDashboard>
     with SingleTickerProviderStateMixin {
-
   DailyQuizChallengePage _dailyQuizChallengePage;
   AnimationController _animationController;
 
@@ -48,18 +43,17 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   CustomQuizLettersWidget customQuizLettersWidget;
 
-
   @override
   void initState() {
     super.initState();
-    _animationController = new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animationController =
+        new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationController.repeat();
     _dailyQuizChallengePage = new DailyQuizChallengePage(context);
     isDailyQuizAvailable();
     getQuizLetters();
     getLatestNotice();
   }
-
 
   @override
   void dispose() {
@@ -69,9 +63,10 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   /// Is daily quiz available
   isDailyQuizAvailable() async {
-    _dailyQuizChallengePage.listenForDailyQuizGameOn((QuizState quizState){
+    _dailyQuizChallengePage.listenForDailyQuizGameOn((QuizState quizState) {
       setState(() {
-        _showDailyQuizChallengeWidget = (quizState.quizState != CurrentQuizState.QUIZ_IS_OFF);
+        _showDailyQuizChallengeWidget =
+            (quizState.quizState != CurrentQuizState.QUIZ_IS_OFF);
       });
     });
   }
@@ -82,104 +77,94 @@ class PlayerDashboardState extends State<PlayerDashboard>
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-            appBar: AppBar(title: Text("Home", style: TextStyle(fontFamily: 'Raleway'))),
+            appBar: AppBar(
+                title: Text("Home", style: TextStyle(fontFamily: 'Raleway'))),
             drawer: SurprizeNavigationDrawerWidget(context),
             body: Container(
               height: MediaQuery.of(context).size.height,
-              child: SingleChildScrollView(child: Column(
+              child: SingleChildScrollView(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   dashboardBody(),
-                  Align(alignment:Alignment.bottomCenter,child: footer()),
                 ],
               )),
             )));
   }
 
   /// Dashboard body
-  Widget dashboardBody()  {
+  Widget dashboardBody() {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           //  profileInformationHolder(),
-          AppHelper.appSmallHeader("Upcoming events"),
+          quizLetterDisplay != null
+              ? GestureDetector(
+              child: quizLettersSmallContainer(),
+              onTap: () => AppHelper.cupertinoRoute(
+                  context,
+                  QuizLettersPage(
+                      quizLetterDisplay.quizLetter.quizLettersId)))
+              : Visibility(visible: false, child: Container()),
+
           Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: CustomUpcomingEventsWidget()),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: dailyQuizOnWidget(),
+          Visibility(visible: _showDailyQuizChallengeWidget,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: dailyQuizOnWidget(),
+            ),
           ),
-          Visibility(visible:quizLetterDisplay != null,child: AppHelper.appHeaderDivider()),
-          quizLetterDisplay != null?GestureDetector(child: quizLettersSmallContainer(), onTap: () =>  AppHelper.cupertinoRoute(context,QuizLettersPage(quizLetterDisplay.quizLetter.quizLettersId))
-          ):Visibility(visible: false,child: Container()),
-          Visibility(visible:notice != null,child: AppHelper.appHeaderDivider()),
+          //Visibility(visible:quizLetterDisplay != null,child: AppHelper.appHeaderDivider()),
           noticeView(),
-          AppHelper.appHeaderDivider(),
+          // Visibility(visible:notice != null,child: AppHelper.appHeaderDivider()),
+
         ],
       ),
     );
   }
 
-  Widget footer(){
+  Widget footer() {
     return CustomFooterWidget();
   }
 
-  Widget noticeView(){
-    return Container(
-      color: Colors.white10,
-      child: Visibility(visible:notice != null,child: notice != null?Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top:12.0, left:12.0),
-                child: Text("Hear from us",
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        color: Colors.black54,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top:12.0, right:12.0),
-                child: GestureDetector(
-                  onTap: () => AppHelper.cupertinoRoute(context, NoticePage()),
-                  child: Text("More", style:TextStyle(
-                      fontFamily: 'Raleway',
-                      color: Colors.grey,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400)),
-                ),
-              )
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(child: CustomNoticeViewWidget(notice)),
-          )
-        ],
-      ): Container()),
+  Widget noticeView() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: new BoxDecoration(
+            border: new Border.all(color: Colors.grey[100], width:4),
+            borderRadius: new BorderRadius.all(Radius.circular(6.0))
+        ),
+        child: Visibility(
+            visible: notice != null,
+            child: notice != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Card(child: CustomNoticeViewWidget(notice)),
+                    ],
+                  )
+                : Container()),
+      ),
     );
   }
 
-
   /// Daily quiz on widget
-  Widget dailyQuizOnWidget(){
+  Widget dailyQuizOnWidget() {
     return AnimatedOpacity(
       opacity: _showDailyQuizChallengeWidget ? 1.0 : 0.0,
       duration: Duration(seconds: 1),
       child: Column(children: <Widget>[
-        Visibility(visible: _showDailyQuizChallengeWidget , child: AppHelper.appHeaderDivider()),
-        Visibility(visible: _showDailyQuizChallengeWidget, child: playDailyQuizChallenge(context)),
+        Visibility(
+            visible: _showDailyQuizChallengeWidget,
+            child: playDailyQuizChallenge(context)),
       ]),
     );
   }
-
 
   /// Play quiz challenge short cut button widget
   Widget playDailyQuizChallenge(context) {
@@ -214,30 +199,78 @@ class PlayerDashboardState extends State<PlayerDashboard>
   }
 
   /// Quiz letter small container
-  Widget quizLettersSmallContainer(){
-
-    return Container(
-        color: Colors.white,
+  Widget quizLettersSmallContainer() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Card(
+        color: Colors.purple[600],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(top:8.0, left: 16, bottom: 4),
-              child: Text("Quiz Letters", style: TextStyle(fontFamily: 'Raleway', color: Colors.black, fontWeight: FontWeight.w500)),
+              padding: const EdgeInsets.only(top: 4.0),
+              child: CustomQuizLettersWidget(quizLetterDisplay),
             ),
-            CustomQuizLettersWidget(quizLetterDisplay),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left:12.0),
+                  child: Text("Quiz letters of a day!",
+                      style: TextStyle(
+                          fontFamily: 'Raleway',
+                          color: Colors.white,
+
+                          fontWeight: FontWeight.w500)),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: GestureDetector(
+                      onTap: () => AppHelper.cupertinoRoute(context, QuizLettersPage(quizLetterDisplay.displayId)),
+                      child: Container(
+                        padding: EdgeInsets.all(4.0),
+                        decoration: new BoxDecoration(
+                            border: new Border.all(color: Colors.white, width: 1),
+                            borderRadius: new BorderRadius.all(Radius.circular(40.0))
+                        ),
+                        child: Text("Play more", style:TextStyle(
+                            fontFamily: 'Raleway',
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   /// Quiz letters
   void getQuizLetters() {
-    Firestore.instance.collection(FirestoreResources.collectionQuizLetterName).limit(1).orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true).
-    getDocuments().then((docSnapshot){
+    Firestore.instance
+        .collection(FirestoreResources.collectionQuizLetterName)
+        .limit(1)
+        .orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true)
+        .getDocuments()
+        .then((docSnapshot) {
       setState(() {
-        QuizLetter quizLetter =  QuizLetter.fromMap(docSnapshot.documents[0].data);
-        quizLetterDisplay = QuizLetterDisplay(quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
-            false, quizLetter, true, false);
+        QuizLetter quizLetter =
+            QuizLetter.fromMap(docSnapshot.documents[0].data);
+        quizLetterDisplay = QuizLetterDisplay(
+            quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
+            false,
+            quizLetter,
+            false,
+            false);
         customQuizLettersWidget = CustomQuizLettersWidget(quizLetterDisplay);
       });
     });
@@ -245,12 +278,15 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   /// Quiz letters
   void getLatestNotice() {
-    Firestore.instance.collection(FirestoreResources.collectionNotice).limit(1).orderBy(FirestoreResources.fieldNoticeAddedDate, descending: true).
-    getDocuments().then((docSnapshot){
+    Firestore.instance
+        .collection(FirestoreResources.collectionNotice)
+        .limit(1)
+        .orderBy(FirestoreResources.fieldNoticeAddedDate, descending: true)
+        .getDocuments()
+        .then((docSnapshot) {
       setState(() {
-        notice =  Notice.fromMap(docSnapshot.documents[0].data);
+        notice = Notice.fromMap(docSnapshot.documents[0].data);
       });
     });
   }
-
 }

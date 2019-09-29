@@ -1,9 +1,6 @@
-import 'package:Surprize/DailyQuizChallengePage.dart';
+
 import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/LeaderboardPage.dart';
-import 'package:Surprize/Memory/UserMemory.dart';
-import 'package:Surprize/NoticePage.dart';
-import 'package:Surprize/QuizLettersPage.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomFooterWidget extends StatefulWidget {
@@ -18,14 +15,15 @@ class _CustomFooterWidgetState extends State<CustomFooterWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+    color: Colors.grey[100],
       child: Column(
+
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-        Text("Surprize",style:TextStyle(
+/*        Text("Surprize",style:TextStyle(
             fontFamily: 'Raleway',
             fontSize: 21,
-            color: Colors.purple[800],
+            color: Colors.white,
             fontWeight: FontWeight.w400)),
        Padding(
          padding: const EdgeInsets.only(top:8.0,bottom: 8.0),
@@ -41,8 +39,11 @@ class _CustomFooterWidgetState extends State<CustomFooterWidget> {
            ],
          ),
        ),
-            textLink("Leaderboard" ,() => AppHelper.cupertinoRoute(context, LeaderboardPage(UserMemory().getPlayer().membershipId))),
-          AppHelper().socialMediaWidget(context)
+            textLink("Leaderboard" ,() => AppHelper.cupertinoRoute(context, LeaderboardPage(UserMemory().getPlayer().membershipId))),*/
+          Padding(
+            padding: const EdgeInsets.only(bottom:8.0),
+            child: AppHelper().socialMediaWidget(context),
+          )
       ]),
     );
   }
@@ -53,7 +54,7 @@ class _CustomFooterWidgetState extends State<CustomFooterWidget> {
       onTap: onTap ,
       child: Text(name,style:TextStyle(
           fontFamily: 'Raleway',
-          color: Colors.grey,
+          color: Colors.white,
           decoration: TextDecoration.underline,
           fontSize: 16,
           fontWeight: FontWeight.w400)),
