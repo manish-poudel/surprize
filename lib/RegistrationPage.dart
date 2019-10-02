@@ -1,4 +1,13 @@
+import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
+import 'package:Surprize/Dashboard.dart';
+import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/Models/Referral.dart';
 import 'package:Surprize/ProfileSetUpPage.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
@@ -17,30 +26,39 @@ class RegistrationPage extends StatefulWidget {
   }
 }
 
-class RegistrationPageState extends State<RegistrationPage> with SingleTickerProviderStateMixin  {
+class RegistrationPageState extends State<RegistrationPage>
+    with SingleTickerProviderStateMixin {
+  CustomLabelTextFieldWidget _nameField;
+
 
   // keys
-  final GlobalKey<FormState> _formKeyForLoginInformation = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyForLoginInformation =
+  GlobalKey<FormState>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool _autoValidateForLoginInformation = false;
 
+  FirebaseUser _firebaseUser;
 
+  BuildContext _context;
 
   @override
   void initState() {
     super.initState();
-
+    _nameField = CustomLabelTextFieldWidget("Name", "", Colors.black, false,
+        validation: AppHelper.validateName);
   }
 
   // Form widgets
-  CustomLoginCredentialRegWidget _customLoginCredentialRegWidget=  CustomLoginCredentialRegWidget();
-  CustomProgressbarWidget _customLoginProgressbar = new CustomProgressbarWidget();
+  CustomLoginCredentialRegWidget _customLoginCredentialRegWidget =
+  CustomLoginCredentialRegWidget();
+  CustomProgressbarWidget _customLoginProgressbar =
+  new CustomProgressbarWidget();
 
   @override
   Widget build(BuildContext context) {
-
+    this._context = context;
     return MaterialApp(
       theme: ThemeData(primaryColor: Colors.purple[800]),
       home: Scaffold(
@@ -51,12 +69,15 @@ class RegistrationPageState extends State<RegistrationPage> with SingleTickerPro
             children: <Widget>[
               Container(
                   decoration: BoxDecoration(
-                      image:DecorationImage(image: AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.3,
+                      image: DecorationImage(
+                          image: AssetImage(ImageResources.appBackgroundImage),
+                          fit: BoxFit.cover)),
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.3,
                   child: Image.asset(ImageResources.appMainLogo),
-                  alignment: FractionalOffset.center
-              ),
+                  alignment: FractionalOffset.center),
               registrationFormLoginInformation(),
             ],
           ),
@@ -65,9 +86,8 @@ class RegistrationPageState extends State<RegistrationPage> with SingleTickerPro
     );
   }
 
-
   // Registration form login
-  registrationFormLoginInformation(){
+  registrationFormLoginInformation() {
     return Form(
       key: _formKeyForLoginInformation,
       autovalidate: _autoValidateForLoginInformation,
@@ -76,7 +96,8 @@ class RegistrationPageState extends State<RegistrationPage> with SingleTickerPro
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-            child: Text(StringResources.registrationPageLoginCredentialHeaderDisplay,
+            child: Text(
+                StringResources.registrationPageLoginCredentialHeaderDisplay,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -84,39 +105,89 @@ class RegistrationPageState extends State<RegistrationPage> with SingleTickerPro
                     fontFamily: 'Raleway')),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: _customLoginCredentialRegWidget,
+            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            child: _nameField,
           ),
+          _customLoginCredentialRegWidget,
 
-          Center(child: FlatButton(color:Colors.green,child:Text("Create", style: TextStyle(color:Colors.white,fontSize:18,fontFamily: 'Raleway')),onPressed: () => onPressedLoginInformationNextButton()))
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: Center(
+                child: FlatButton(
+                    color: Colors.green,
+                    child: Text("Create",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontFamily: 'Raleway')),
+                    onPressed: () => onPressedLoginInformationNextButton())),
+          )
         ],
       ),
     );
   }
 
-  onPressedLoginInformationNextButton(){
-    if(!_formKeyForLoginInformation.currentState.validate())
-      return;
+  onPressedLoginInformationNextButton() async {
+    if (!_formKeyForLoginInformation.currentState.validate()) return;
 
-    _customLoginProgressbar.startProgressBar(context, "Registering ...", Colors.white, Colors.black);
-    registerUser();
+    _customLoginProgressbar.startProgressBar(
+        context, "Registering...", Colors.white, Colors.black);
+    registerPlayer();
   }
 
 
   // Register user
-  void registerUser(){
-    FirestoreOperations().regUser(_customLoginCredentialRegWidget.getEmail(), _customLoginCredentialRegWidget.getPassword()).then((firebaseUser){
-      _customLoginProgressbar.stopAndEndProgressBar(context);
-      AppHelper.cupertinoRouteWithPushReplacement(context,ProfileSetUpPage(firebaseUser));
-    }).catchError((error){
+  void registerPlayer() {
+    FirestoreOperations()
+        .regUser(_customLoginCredentialRegWidget.getEmail(),
+        _customLoginCredentialRegWidget.getPassword())
+        .then((firebaseUser) {
+      _firebaseUser = firebaseUser;
+      registerProfileInformation();
+    }).catchError((error) {
       _customLoginProgressbar.stopAndEndProgressBar(context);
       AppHelper.showSnackBar(error.toString(), _scaffoldKey);
     });
     // Creating authentication
   }
 
+  /// Register profile information
+  registerProfileInformation() {
+    // Save user profile information to the database
+    Player player = Player(
+        _firebaseUser.uid,
+        // Player Id
+        _nameField.getValue(),
+        // Player Name
+        "",
+        // Player DOB
+        "",
+        // Player Address
+        "",
+        // Player country
+        "",
+        // Player Gender
+        _customLoginCredentialRegWidget.getEmail(),
+        // Player Email
+        "",
+        DateTime.now(),
+        // Player membership date
+        "" // Player profile Image URL (To be updated later)
+    );
 
+    FirestoreOperations()
+        .createData(FirestoreResources.userCollectionName, player.membershipId,
+        player.toMap())
+        .then((value) {
+      _customLoginProgressbar.stopAndEndProgressBar(context);
 
+      UserMemory().savePlayer(player);
+      UserMemory().saveFirebaseUser(_firebaseUser);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      AppHelper.cupertinoRouteWithPushReplacement(_context, ProfileSetUpPage(_firebaseUser));
+    }).catchError((error) {
+      _customLoginProgressbar.stopAndEndProgressBar(context);
+      AppHelper.showSnackBar(error.toString(), _scaffoldKey);
+    });
+  }
 }
-
-

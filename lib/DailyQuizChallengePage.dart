@@ -1,3 +1,4 @@
+import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,10 +39,7 @@ class DailyQuizChallengePage {
 
   /// Go to page
   goToPage(var page, context) {
-    Navigator.push(
-        context,
-        CupertinoPageRoute(
-            builder: (context) => page));
+    AppHelper.cupertinoRoute(context, page);
   }
 }
 

@@ -20,27 +20,16 @@ class Dashboard{
   /// Go to page
   nav(){
     UserProfile().getProfile(_firebaseUser.uid).then((DocumentSnapshot documentSnapshot) {
-      if(documentSnapshot.data != null) {
         UserMemory().savePlayer(Player.fromMap(documentSnapshot.data));
         PushNotification().configure(context);
         PushNotification().saveToken(UserMemory().getPlayer().membershipId);
         try {
-          Navigator.of(context).pop();
+          AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
         }
         catch(error){
           AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
         }
-        AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
-      }
-      else{
-        try {
-          Navigator.of(context).pop();
-        }
-        catch(error){
-          AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(_firebaseUser));
-        }
-        AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(_firebaseUser));
-      }
+
     });
   }
 

@@ -87,6 +87,7 @@ class FirestoreResources {
   static final String fieldQuizLetterQuiz = "Quiz";
   static final String fieldQuizLetterImage = "Image Url";
   static final String fieldQuizLetterAddedDate = "Added date";
+  static final String fieldQuizLetterState = "State";
 
   // Related to quiz letter
 
@@ -130,4 +131,6 @@ class FirestoreResources {
   static final String fieldReferralCode = "Code";
   static final String fieldReferralCreateDate = "Created at";
   static final String fieldReferralCreator = "Created by";
+
+  static get fieldDailyQuizState => "State";
 }

@@ -1,6 +1,5 @@
 import 'package:Surprize/BLOC/QuizLetterBLOC.dart';
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
-import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';

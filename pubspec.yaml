@@ -7,10 +7,10 @@ description: A quiz app
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -38,6 +38,7 @@ dependencies:
   firebase_messaging: 5.1.5
   flutter_local_notifications: 0.8.3
   webview_flutter: 0.3.14+1
+  intro_slider: 2.2.8
 
 dev_dependencies:
   flutter_test:
@@ -71,10 +72,18 @@ flutter:
     - assets/images/quiz_answer_background.jpg
     - assets/user_placeholder.png
     - assets/dailyQuizPlayBackgroundMusic.mp3
+    - assets/waiting_music.mp3
     - assets/image_placeholder.png
     - assets/facebook_icon.png
     - assets/instagram_icon.png
     - assets/twitter_icon.png
+    - assets/winner_banner.png
+    - assets/images/daily_quiz_challenge_button.png
+    - assets/images/DqcPlay.jpg
+    - assets/images/quiz_letter_display.jpg
+    - assets/images/opening_quiz_letter.png
+    - assets/images/opening_quiz_letter_two.png
+    - assets/images/event_help.jpg
 
   fonts:
     - family: Roboto

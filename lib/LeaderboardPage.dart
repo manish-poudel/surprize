@@ -165,6 +165,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     await LeaderboardManager().getDailyScoreWinner(widget._playerId).then((value){
       value.listen((snapshot){
         setState(() {
+          _dailyQuizWinnerDataLoaded = true;
           if(!snapshot.exists){
             _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now(),"","");
             return;
@@ -173,7 +174,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
             _quizPlay = QuizPlay.fromMap(snapshot.data);
           }
           print("The state us " + _quizPlay.playState.toString());
-          _dailyQuizWinnerDataLoaded = true;
+
         });
       });
     });
@@ -245,6 +246,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   /// Widget to populate top scorer
   Widget showTopScorers(List<Leaderboard> topScorerLeaderboardList) {
+
+    if(topScorerLeaderboardList.length == 0)
+      return Center(child: Text("Empty leaderboard", style: TextStyle(fontFamily: 'Raleway')));
     if (topScorerLeaderboardList.length > 1) {
       topScorerLeaderboardList.sort((Leaderboard lbOne, Leaderboard lbTwo) =>
           lbOne.rank.compareTo(lbTwo.rank));

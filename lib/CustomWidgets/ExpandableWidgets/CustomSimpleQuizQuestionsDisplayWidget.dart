@@ -10,6 +10,7 @@ class CustomSimpleQuizQuestionDisplay extends StatefulWidget {
     state.refreshColor();
   }
 
+
   CustomSimpleQuizQuestionDisplay(this.dailyQuizChallengeQnA);
 
   @override
@@ -44,7 +45,8 @@ class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuesti
      questionAnswerThirdColor = Colors.white;
      questionAnswerFourthColor = Colors.white;
   }
-  
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +90,7 @@ class _CustomSimpleQuizQuestionDisplayState extends State<CustomSimpleQuizQuesti
         ),
         child: Padding(padding: EdgeInsets.all(4.0),
           child: Center(
-            child: Text(answer, style: TextStyle(color: Colors.black, fontSize: 16.0,
+            child: Text(answer, textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontSize: 16.0,
                 fontFamily: 'Raleway')),
           ),
         ),

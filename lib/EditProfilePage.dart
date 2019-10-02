@@ -27,7 +27,6 @@ class EditProfilePageState extends State<EditProfilePage> {
   CustomLabelTextFieldWidget _nameField;
   CustomDropDownWidget _genderDropDownWidget;
   CustomDatePickerWidget _dobDatePickerWidget;
-  CustomCountryPickerWidget _countryPickerWidget;
   CustomPhoneNumberWidget _phoneNumberWidget;
   CustomMultiLineTextFieldWidget _multiLineAddressTextFieldWidget;
 
@@ -48,8 +47,8 @@ class EditProfilePageState extends State<EditProfilePage> {
   /// Init player widgets
   initWidgets(){
     _player = UserMemory().getPlayer();
-    _nameField = CustomLabelTextFieldWidget("Name",_player.name, Colors.black, false, validation: AppHelper.validateName);
-    _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender, "Gender", Colors.black, Colors.white);
+    _nameField = CustomLabelTextFieldWidget("Name",_player.name.isEmpty?"":_player.name, Colors.black, false, validation: AppHelper.validateName);
+    _genderDropDownWidget = CustomDropDownWidget(['Male', 'Female', 'Other'], _player.gender.isEmpty?"Male":_player.gender, "Gender", Colors.black, Colors.white);
 
     try {
       List<int> dob = AppHelper.getDateListFromString(_player.dob, "/");
@@ -60,7 +59,6 @@ class EditProfilePageState extends State<EditProfilePage> {
       _dobDatePickerWidget =
           CustomDatePickerWidget(1992, 12, 9, Colors.black);
     }
-    _countryPickerWidget = CustomCountryPickerWidget(_player.country);
     try {
       List phoneNumber = _player.phoneNumber.split(" ");
       _phoneNumberWidget = CustomPhoneNumberWidget(
@@ -70,7 +68,7 @@ class EditProfilePageState extends State<EditProfilePage> {
       _phoneNumberWidget = CustomPhoneNumberWidget(
           "+61", "", Colors.black);
     }
-    _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address, Colors.black,100);
+    _multiLineAddressTextFieldWidget = CustomMultiLineTextFieldWidget("Address", _player.address.isEmpty?"":_player.address, Colors.black,100);
     _customRegistrationProgressBar = new CustomProgressbarWidget();
   }
 
@@ -113,9 +111,6 @@ class EditProfilePageState extends State<EditProfilePage> {
                   child: _dobDatePickerWidget),
               Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: _countryPickerWidget),
-              Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
                   child: _phoneNumberWidget),
               Padding(
                   padding: const EdgeInsets.only(top: 16.0),
@@ -136,6 +131,7 @@ class EditProfilePageState extends State<EditProfilePage> {
 
   /// Validate profile and then edit
   validateAndUpdateProfile(){
+
     if(_formKey.currentState.validate()){
       _customRegistrationProgressBar.startProgressBar(context, "Updating ...", Colors.white, Colors.black);
       updateProfile();
@@ -151,8 +147,8 @@ class EditProfilePageState extends State<EditProfilePage> {
     _player.name = _nameField.getValue();
     _player.gender = _genderDropDownWidget.selectedItem();
     _player.dob = _dobDatePickerWidget.getSelectedDate();
-    _player.phoneNumber = _phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber();
-    _player.country = _countryPickerWidget.getValue();
+    _player.phoneNumber = _phoneNumberWidget.getPhoneNumber().isEmpty?"":_phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber();
+    _player.country = _phoneNumberWidget.getCountryName();
     _player.address = _multiLineAddressTextFieldWidget.getValue();
 
     UserProfile().updateProfile(_player.membershipId, _player).then((value){

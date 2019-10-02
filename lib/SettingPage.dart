@@ -2,7 +2,6 @@ import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/PoliciesPage.dart';
 import 'package:Surprize/ProfilePage.dart';
-import 'package:Surprize/WebViewPage.dart';
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatefulWidget {

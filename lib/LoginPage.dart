@@ -32,13 +32,19 @@ class LoginPage extends StatefulWidget {
    Login user
     */
     void loginUser(){
+
+      if(_emailField.getValue().isEmpty || _passwordField.getValue().isEmpty) {
+        AppHelper.showSnackBar("Empty email or password", _scaffoldKey);
+        return;
+      }
+
       _customProgressBarWidget.startProgressBar(context, StringResources.loginProgressInformationDisplay, Colors.white, Colors.black);
       FirestoreOperations().loginUser(_emailField.getValue().trim(), _passwordField.getValue()).then((firebaseUser)  {
         _customProgressBarWidget.stopAndEndProgressBar(context);
         AppHelper.cupertinoRouteWithPushReplacement(context, SplashScreen());
       }).catchError((error){
         _customProgressBarWidget.stopAndEndProgressBar(context);
-        AppHelper.showSnackBar(error.toString(), _scaffoldKey);
+        AppHelper.showSnackBar("Error connecting", _scaffoldKey);
       });
     }
 

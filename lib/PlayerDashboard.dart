@@ -43,6 +43,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   CustomQuizLettersWidget customQuizLettersWidget;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -61,13 +63,19 @@ class PlayerDashboardState extends State<PlayerDashboard>
     super.dispose();
   }
 
+  bool _dailyQuizChallengePageOpened = false;
   /// Is daily quiz available
   isDailyQuizAvailable() async {
     _dailyQuizChallengePage.listenForDailyQuizGameOn((QuizState quizState) {
       setState(() {
-        _showDailyQuizChallengeWidget =
-            (quizState.quizState != CurrentQuizState.QUIZ_IS_OFF);
+        _showDailyQuizChallengeWidget = (quizState.quizState != CurrentQuizState.QUIZ_IS_OFF);
       });
+      if(_dailyQuizChallengePageOpened)
+        return;
+      if(quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED || quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED){
+        AppHelper.cupertinoRoute(context, DailyQuizChallengeGamePlayPage());
+        _dailyQuizChallengePageOpened = true;
+      }
     });
   }
 
@@ -77,6 +85,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
+          key:_scaffoldKey,
             appBar: AppBar(
                 title: Text("Home", style: TextStyle(fontFamily: 'Raleway'))),
             drawer: SurprizeNavigationDrawerWidget(context),
@@ -100,15 +109,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           //  profileInformationHolder(),
-          quizLetterDisplay != null
-              ? GestureDetector(
-              child: quizLettersSmallContainer(),
-              onTap: () => AppHelper.cupertinoRoute(
-                  context,
-                  QuizLettersPage(
-                      quizLetterDisplay.quizLetter.quizLettersId)))
-              : Visibility(visible: false, child: Container()),
-
+          noticeView(),
           Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: CustomUpcomingEventsWidget()),
@@ -119,7 +120,15 @@ class PlayerDashboardState extends State<PlayerDashboard>
             ),
           ),
           //Visibility(visible:quizLetterDisplay != null,child: AppHelper.appHeaderDivider()),
-          noticeView(),
+
+          quizLetterDisplay != null
+              ? GestureDetector(
+              child: quizLettersSmallContainer(),
+              onTap: () => AppHelper.cupertinoRoute(
+                  context,
+                  QuizLettersPage(
+                      quizLetterDisplay.quizLetter.quizLettersId)))
+              : Visibility(visible: false, child: Container()),
           // Visibility(visible:notice != null,child: AppHelper.appHeaderDivider()),
 
         ],
@@ -133,12 +142,9 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   Widget noticeView() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Container(
-        decoration: new BoxDecoration(
-            border: new Border.all(color: Colors.grey[100], width:4),
-            borderRadius: new BorderRadius.all(Radius.circular(6.0))
-        ),
+
         child: Visibility(
             visible: notice != null,
             child: notice != null
@@ -201,7 +207,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
   /// Quiz letter small container
   Widget quizLettersSmallContainer() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0,bottom: 16.0),
       child: Card(
         color: Colors.purple[600],
         shape: RoundedRectangleBorder(
@@ -217,19 +223,28 @@ class PlayerDashboardState extends State<PlayerDashboard>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left:12.0),
-                  child: Text("Quiz letters of a day!",
-                      style: TextStyle(
-                          fontFamily: 'Raleway',
-                          color: Colors.white,
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left:12.0),
+                      child: Text("Quiz letter",
+                          style: TextStyle(
+                              fontFamily: 'Raleway',
+                              color: Colors.white,
 
-                          fontWeight: FontWeight.w500)),
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    IconButton(icon:Icon(Icons.help_outline,color: Colors.white,size: 14,),onPressed:
+                        (){
+                      print("showing snackbar");
+                      _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Quiz letter is a fun way to test your knowledge on different subjects with facts reveal. This improves your chance of winning daily quiz challenge!")));
+                     })
+                  ],
                 ),
                 Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () => AppHelper.cupertinoRoute(context, QuizLettersPage(quizLetterDisplay.displayId)),
                       child: Container(
@@ -254,6 +269,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
     );
   }
 
+
+
   /// Quiz letters
   void getQuizLetters() {
     Firestore.instance
@@ -269,7 +286,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
             quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
             false,
             quizLetter,
-            false,
+            true,
             false);
         customQuizLettersWidget = CustomQuizLettersWidget(quizLetterDisplay);
       });

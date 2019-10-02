@@ -1,4 +1,6 @@
-import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizSummaryDisplayWidget.dart';
+import 'package:Surprize/Leaderboard/ScoreSystem.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:flutter/material.dart';
 
@@ -6,15 +8,14 @@ import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 
-import 'CustomWidgets/CustomProgressbarWidget.dart';
-import 'Leaderboard/ScoreSystem.dart';
 import 'UserProfileManagement/UserProfile.dart';
 
 class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
   final int _totalScore;
 
   QuizState quizState;
-  DailyQuizChallengeScoreSummaryPage(this._totalScore, this.quizState);
+  Map<String, DQCPlay> dqcPlayList;
+  DailyQuizChallengeScoreSummaryPage(this._totalScore, this.quizState, this.dqcPlayList);
 
   @override
   State<StatefulWidget> createState() {
@@ -40,53 +41,15 @@ class DailyQuizChallengeScoreSummaryPageState
                   fit: BoxFit.fill)),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                headingText("Score Summary"),
+                widget._totalScore == ScoreSystem.getFullSoreFromQuizPlay()?Center(child: winnerDeclare()):
+               loserDeclare(),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child:
-                  totalScoreHeading((widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString()),
+                  padding: const EdgeInsets.all(8.0),
+                  child: scoreReport(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: scoreTypeHeading(
-                      "Correct answers", widget._totalScore.toString()),
-                ),
-                scoreTypeHeading("Game Play", ScoreSystem.getScoreFromGamePlay().toString()),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: totalScore((widget._totalScore + ScoreSystem.getScoreFromGamePlay()).toString()),
-                ),
-               Container(
-                 child: Column(
-                   children: <Widget>[
-                     Padding(
-                       padding: const EdgeInsets.all(4),
-                       child: Container(
-                         height: 0.1,
-                         color: Colors.white,
-                       ),
-                     ),
-                     Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: <Widget>[
-                           Icon(Icons.share, color: Colors.white),
-                           Padding(
-                             padding: const EdgeInsets.only(left:8.0),
-                             child: Text("Share and earn points !",style: TextStyle(color:Colors.white, fontSize: 18,fontFamily: 'Raleway', fontWeight: FontWeight.w500),),
-                           ),
-                         ],
-                       ),
-                     ),
-                     Padding(
-                       padding: const EdgeInsets.only(top: 4.0, bottom:8.0),
-                       child: button("Share", Colors.purple[800] ,() => shareWithOtherApp()),
-                     ),
-                   ],
-                 ),
-               )
+                _playedQuizList()
               ],
             ),
           ),
@@ -95,140 +58,175 @@ class DailyQuizChallengeScoreSummaryPageState
     );
   }
 
-  /*
-  Heading image text
-   */
-  Widget headingImage() {
+  Widget winnerDeclare(){
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: Center(
-          child: Image.asset(ImageResources.dailyQuizChallengeLogo,
-              height: 220, width: 320)),
-    );
-  }
-
-  /*
-  Heading text
-   */
-  Widget headingText(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 48.0),
-      child: Text(text,
-          style: TextStyle(
-              fontSize: 35, fontFamily: 'Raleway', color: Colors.white)),
-    );
-  }
-
-  /*
-  Widget score summary Text
-   */
-  Widget scoreSummaryText() {
-    return Container(
-        width: MediaQuery.of(context).size.width,
-        decoration:
-        BoxDecoration(color: Colors.purple[900], shape: BoxShape.circle),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-              child: Text("Score Summary",
-                  style: TextStyle(
-                      fontSize: 35,
-                      fontFamily: 'Raleway',
-                      color: Colors.white))),
-        ));
-  }
-
-  /*
-  Score type heading
-   */
-  Widget scoreTypeHeading(String text, String score) {
-    return Container(
-      width: MediaQuery.of(context).size.width - 32,
-      decoration: new BoxDecoration(
-          border: new Border.all(color: Colors.white, width: 1),
-          borderRadius: new BorderRadius.all(Radius.circular(24.0))),
-      child: Row(children: <Widget>[
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(text,
-                style: TextStyle(
-                    color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway')),
+      padding: const EdgeInsets.all(32.0),
+      child:Container(
+          decoration: BoxDecoration(
+              color: Colors.black26,
+              border: new Border.all(color: Colors.black26, width: 0),
+              shape: BoxShape.circle
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Text(score,
-              style: TextStyle(
-                  color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway')),
-        ),
-      ]),
+          child:Image.asset(ImageResources.winnerBanner,height: 160, width: 160))
     );
   }
 
-  /*
-  total score heading
-   */
-  Widget totalScoreHeading(String totalScore) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16, left: 0.0, bottom: 16),
-      child: Center(
-        child: Container(
-          height: 160,
-          width: 160,
-          decoration:
-          BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-          child: Center(
-            child: Text(
-              totalScore,
-              style: TextStyle(
-                  color: Colors.white, fontSize: 90, fontFamily: 'Raleway'),
+  Widget loserDeclare(){
+   return Padding(
+     padding: const EdgeInsets.all(48.0),
+     child: Text("Sorry! you didn't win this time!", textAlign:TextAlign.center,style: TextStyle(color: Colors.white,
+          fontSize: 24,
+          fontFamily: 'Raleway')),
+   );
+  }
+  Widget scoreReport(){
+    return Card(
+      color:Colors.grey[100],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text("Score report", style: TextStyle(fontFamily: 'Raleway', fontSize:18, fontWeight:FontWeight.w500,color: Colors.black),),
+                Padding(
+                  padding: const EdgeInsets.only(right:8.0),
+                  child: Text("Correct answers: " + (widget._totalScore/4).toInt().toString() + "/5",style: TextStyle(fontFamily: 'Raleway'),),
+                )
+              ],
             ),
           ),
-        ),
+          Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(top:8.0,left: 16.0,bottom: 8.0),
+              child: scoreSummary(),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () => shareWithOtherApp(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+              Icon(Icons.share,color: Colors.purple[800]),
+              Padding(
+                padding: const EdgeInsets.only(left:8.0),
+                child: Text("Share", style: TextStyle(fontSize:16,color: Colors.purple[800])),
+              ),
+                ],
+              ),
+            ),
+          )
+          ,
+        ],
       ),
     );
   }
 
-  Widget button(String text, Color color, Function onClick) {
-    return FlatButton(
-      child: Container(
-        decoration: new BoxDecoration(
-            color: color,
-            borderRadius: new BorderRadius.all(Radius.circular(8.0))),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(text,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontFamily: 'Raleway')),
-        ),
-      ),
-      onPressed: onClick,
-    );
-  }
+  /// Event display widget
+  Widget _playedQuizList() {
+    List<DQCPlay> quizList = widget.dqcPlayList.values.toList();
 
-  Widget totalScore(String score) {
-    double width = MediaQuery.of(context).size.width;
     return Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: width - 240),
-                    child: Text("Total Score",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 18, fontFamily: 'Raleway')),
+      child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: quizList.length,
+          itemBuilder: (BuildContext context, int index) {
+
+            Color cardBackground = Colors.red[100];
+            int selectedAnswer = quizList[index].providedAnswer;
+           if(quizList[index].dailyQuizChallengeQnA.rightAnswer == selectedAnswer){
+           cardBackground = Colors.green[100];
+           }
+           else if(selectedAnswer == -1){
+             cardBackground = Colors.grey[200];
+           }
+            return Padding(
+              padding: const EdgeInsets.only(left:8.0,right: 8.0),
+              child: Card(
+                color: cardBackground,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: new Border.all(color: Colors.purple, width: 0),
+                                shape: BoxShape.circle
+                            ),
+                            child: Text(quizList[index].dailyQuizChallengeQnA.rightAnswer == selectedAnswer?"4":"0",style: TextStyle(color: Colors.purple))),
+                      ),
+                      Container(color: Colors.white, height: 1,),
+                      CustomQuizSummaryDisplayWidget(quizList[index].dailyQuizChallengeQnA,selectedAnswer),
+                    ],
                   )),
-              Text(score,
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 18, fontFamily: 'Raleway'))
+            );
+          }),
+    );
+  }
+
+  Widget scoreSummary(){
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        scoreSummaryText("Score from correct answers", widget._totalScore.toString()),
+        Padding(
+          padding: const EdgeInsets.only(top:4.0),
+          child: scoreSummaryText("Score from Game play", 15.toString()),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top:16.0,left: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("Total",style: TextStyle(color: Colors.purple,fontFamily: 'Raleway', fontSize: 16,fontWeight: FontWeight.w700)),
+              Padding(
+                padding: const EdgeInsets.only(right:8.0),
+                child: Text((15 + widget._totalScore).toString(),style: TextStyle(color: Colors.purple,fontFamily: 'Raleway', fontSize: 16,fontWeight: FontWeight.w700)),
+              )
             ],
           ),
-        ));
+        ),
+      ],
+    );
+  }
+
+
+  Widget scoreSummaryText(String heading, String val){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Container(
+            padding: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+                color: Colors.purple,
+                boxShadow: [
+                  BoxShadow(
+                      color:Colors.black12,
+                      offset: Offset(1.0, 5.0),
+                      blurRadius: 25.0
+                  ),
+                ],
+                border: new Border.all(color: Colors.white54, width: 0),
+                borderRadius:  new BorderRadius.all(Radius.circular(16.0))
+            ),
+            child: Text(heading,style: TextStyle(color: Colors.white,fontFamily: 'Raleway', fontSize:16,fontWeight: FontWeight.w700))),
+        Padding(
+          padding: const EdgeInsets.only(right:8.0),
+          child: Text(val,style: TextStyle(color: Colors.purple,fontFamily: 'Raleway', fontSize: 16,fontWeight: FontWeight.w700)),
+        ),
+      ],
+    );
   }
 
 
@@ -238,6 +236,7 @@ class DailyQuizChallengeScoreSummaryPageState
     super.initState();
     _userProfile = UserProfile();
       updateScoreForGamePlay();
+
   }
 
 
@@ -269,26 +268,6 @@ class DailyQuizChallengeScoreSummaryPageState
         });
   }
 
-
-  /// Update score for sharing
-  void updateScoreForSharing(){
-    CustomProgressbarWidget customProgressbarWidget = new CustomProgressbarWidget();
-    customProgressbarWidget.startProgressBar(context,
-        "Thanks for sharing!. \n Updating your score ...", Colors.white, Colors.black);
-    try {
-      LeaderboardManager().saveScoreAfterSharing(ScoreSystem.getSoreFromSharingApp("Facebook"),UserMemory().getPlayer().membershipId,(value) {
-        hasAllTimeScoreSaved = true;
-        stopProgressBar(customProgressbarWidget);
-
-      }, (value) {
-        hasWeeklyScoreSaved = true;
-        stopProgressBar(customProgressbarWidget);
-      });
-    }
-    catch(error){
-      customProgressbarWidget.stopAndEndProgressBar(context);
-    }
-  }
 
   /// Stop progressbar
   stopProgressBar(customProgressbarWidget){

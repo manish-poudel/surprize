@@ -36,36 +36,15 @@ class ProfileSetUpPage extends StatefulWidget {
 class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
 
 
-  final GlobalKey<FormState> _formKeyForPersonalInformation = GlobalKey<FormState>();
-  bool _autoValidateForPersonalInformation = false;
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  CustomLabelTextFieldWidget _nameField;
-  CustomLabelTextFieldWidget _emailField;
-  CustomDropDownWidget _genderDropDownWidget;
-  CustomDatePickerWidget _dobDatePickerWidget;
-  bool _isReferralCodeChecked;
   CustomLabelTextFieldWidget _customReferralLabelTextField;
-
-  CustomCountryPickerWidget _countryPickerWidget;
-  CustomPhoneNumberWidget _phoneNumberWidget;
-
-  CustomProgressbarWidget _customRegistrationProgressBar = new CustomProgressbarWidget();
-
 
   @override
   void initState() {
     super.initState();
-    _nameField = CustomLabelTextFieldWidget("Name", widget._firebaseUser.displayName != null?widget._firebaseUser.displayName:"",Colors.black, false,validation: AppHelper.validateName);
-    _emailField = CustomLabelTextFieldWidget("Email", "",Colors.black, false,validation: AppHelper.validateEmail);
-    _genderDropDownWidget=  CustomDropDownWidget(['Male', 'Female', 'Other'], "Male", "Gender",Colors.black, Colors.white);
-    _dobDatePickerWidget = CustomDatePickerWidget(0,0,0, Colors.black);
-    _countryPickerWidget = CustomCountryPickerWidget("Australia");
-    _phoneNumberWidget = CustomPhoneNumberWidget("+61", "", Colors.black, validation: AppHelper.validatePhone);
 
-    _isReferralCodeChecked = false;
-    _customReferralLabelTextField = CustomLabelTextFieldWidget("Referral code","",Colors.black, false, enabled: _isReferralCodeChecked);
+    _customReferralLabelTextField = CustomLabelTextFieldWidget("Referral code","",Colors.black, false, enabled: true);
   }
 
   @override
@@ -75,7 +54,7 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
       theme: ThemeData(primaryColor: Colors.purple[800]),
       home: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(title: Text("Profile set up", style:TextStyle(fontFamily: 'Raleway'))),
+        appBar: AppBar(title: Text("Referral code", style:TextStyle(fontFamily: 'Raleway'))),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -96,191 +75,58 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
   }
 
   registrationFormPersonalInformation(){
-    return Form(
-      key: _formKeyForPersonalInformation,
-      autovalidate: _autoValidateForPersonalInformation,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-            child: Text(StringResources.registrationPagePersonalInformationHeaderDisplay,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Raleway')),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _nameField,
-                  Visibility(visible:widget._firebaseUser.email == null, child: Padding(
-                    padding: const EdgeInsets.only(top:16.0),
-                    child: _emailField,
-                  )),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 1.0, top: 16.0,right: 1.0),
-                    child: SizedBox(
-                        width: double.infinity,
-                        height: 48.0,
-                        child: _genderDropDownWidget
-                    ),
-                  ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
+          child: Text(StringResources.referralCodeText,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Raleway')),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top:32.0, left:16.0,right:16.0),
+          child: _customReferralLabelTextField,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 1.0, top: 32.0, right: 1.0),
+          child: Center(child: FlatButton(color:Colors.green,child:Text(StringResources.buttonCreateAccountText,style: TextStyle(color:Colors.white, fontSize: 18,fontFamily: 'Raleway')),onPressed: () => enterReferralCode(),)),
+        ),
 
-                  Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: _dobDatePickerWidget
-                  ),
-
-                  Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Container(
-                          width:MediaQuery.of(context).size.width,
-                          child: _countryPickerWidget)
-                  ),
-                Visibility(
-                  visible: widget._firebaseUser.phoneNumber == null,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top:8.0),
-                    child: _phoneNumberWidget,
-                  ),
-                ),
-                  Padding(
-                    padding: const EdgeInsets.only(top:16.0),
-                    child: referralCode(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 1.0, top: 32.0, right: 1.0),
-                    child: Center(child: FlatButton(color:Colors.green,child:Text(StringResources.buttonCreateAccountText,style: TextStyle(color:Colors.white, fontSize: 18,fontFamily: 'Raleway')),onPressed: () => validateAndRegisterPlayer(),)),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(left: 1.0,top:4.0, right: 1.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 48.0,
-                      child: FlatButton(child:Text("Log out",style: TextStyle(color:Colors.black, fontFamily: 'Raleway')),onPressed: (){
-                          FirebaseAuth.instance.signOut().then((_){
-                              AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
-                          });
-                      }),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+        Padding(
+          padding: const EdgeInsets.only(left: 1.0, top: 32.0, right: 1.0),
+          child: Center(child: FlatButton(child:Text("Skip",style: TextStyle(color:Colors.grey, fontSize: 18,fontFamily: 'Raleway')),onPressed: () => skip())),
+        ),
+              ],
+            );
   }
 
-
-  validateDate(){
-  return( _dobDatePickerWidget.m !=0 && _dobDatePickerWidget.d !=0 && _dobDatePickerWidget.y != 0);
-  }
-  /*
-  Validate inputs
-   */
-  Future validateAndRegisterPlayer() async {
-
-  if(!validateDate()){
-    _dobDatePickerWidget.isProperlyValidated();
-  }
-
-  if(_isReferralCodeChecked){
-    if(_customReferralLabelTextField.getValue().isEmpty){
-      AppHelper.showSnackBar("Empty referral code. Try again with valid code or uncheck to continue!", _scaffoldKey);
-      return;
-    }
-  }
-
-  if(_formKeyForPersonalInformation.currentState.validate() && validateDate()) {
-
-
-      if(!_isReferralCodeChecked) {
-        registerPlayer();
+  enterReferralCode() async {
+    if(_customReferralLabelTextField.getValue().isNotEmpty){
+      if(await checkForReferralCode()) {
+        deleteReferralCode();
+        AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
       }
-
       else{
-        bool isReferralCodeAvailable = await checkForReferralCode();
-        if(!isReferralCodeAvailable){
-          AppHelper.showSnackBar("No such referral code exist! Please try again or uncheck referral code and continue! ",
-              _scaffoldKey);
-          return;
-        }
-        else{
-          _customRegistrationProgressBar.startProgressBar(context, "Setting up profile ...", Colors.white, Colors.black);
-          deleteReferralCode();
-          registerPlayer();
-        }
+        AppHelper.showSnackBar("Referral code not found! Check uppercase and lowercase letters!", _scaffoldKey);
       }
-
+    }
+    else{
+        AppHelper.showSnackBar("Empty referral code", _scaffoldKey);
     }
   }
 
-
-  // Register player
-  registerPlayer(){
-    // Save user profile information to the database
-    Player player = Player(
-        widget._firebaseUser.uid, // Player Id
-        _nameField.getValue(), // Player Name
-        _dobDatePickerWidget.getSelectedDate(), // Player DOB
-        "", // Player Address
-        _countryPickerWidget.getValue(), // Player country
-        _genderDropDownWidget.selectedItem(), // Player Gender
-        widget._firebaseUser.email != null? widget._firebaseUser.email:_emailField.getValue().trim(), // Player Email
-        widget._firebaseUser.phoneNumber != null?widget._firebaseUser.phoneNumber:_phoneNumberWidget.getCountryCode() + " " + _phoneNumberWidget.getPhoneNumber(), // Player phone number
-        DateTime.now(), // Player membership date
-        widget._firebaseUser.photoUrl != null?widget._firebaseUser.displayName:""// Player profile Image URL (To be updated later)
-    );
-
-
-    FirestoreOperations().createData(FirestoreResources.userCollectionName, player.membershipId, player.toMap()).then((value){
-      _customRegistrationProgressBar.stopAndEndProgressBar(context);
-      UserMemory().savePlayer(player);
-      Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) =>
-              PlayerDashboard()));
-
-    }).catchError((error){
-      _customRegistrationProgressBar.stopAndEndProgressBar(context);
-      AppHelper.showSnackBar(error.toString(), _scaffoldKey);
-    });
+  skip(){
+    AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
   }
-
 
   Future<bool> checkForReferralCode() async {
    QuerySnapshot querySnapshot =  await Firestore.instance.collection(FirestoreResources.fieldReferralCollection).where(FirestoreResources.fieldReferralCode, isEqualTo:_customReferralLabelTextField.getValue())
         .getDocuments();
    return querySnapshot.documents.isNotEmpty;
-
-  }
-
-  // Place to add referal code
-  Widget referralCode(){
-    return Column(
-      children: <Widget>[
-        Container(
-          child: CheckboxListTile(
-            title: _customReferralLabelTextField,
-            value: _isReferralCodeChecked,
-            onChanged: (val){
-              setState(() {
-                _isReferralCodeChecked = val;
-                _customReferralLabelTextField.changeEnabled(val);
-              });
-            },
-          ),
-        ),
-      ],
-    );
   }
 
   /// Delete Referral code
@@ -300,6 +146,5 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
     LeaderboardManager().saveScoreAfterSharing(5, widget._firebaseUser.uid, (){}, (){});
     LeaderboardManager().saveScoreAfterSharing(10, id, (){}, (){});
   }
-
 
 }

@@ -1,6 +1,9 @@
 
 import 'dart:async';
 
+import 'package:Surprize/DailyQuizChallengeGamePlayPage.dart';
+import 'package:Surprize/DailyQuizChallengeNotAvailablePage.dart';
+import 'package:Surprize/DailyQuizChallengePage.dart';
 import 'package:Surprize/FeedbackPage.dart';
 import 'package:Surprize/FirebaseMessaging/PushNotification/LocalNotification.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
@@ -80,6 +83,13 @@ class PushNotification {
            context,
            MaterialPageRoute(
                builder: (BuildContext context) => QuizLettersPage(null)));
+       break;
+
+       case "DAILY_QUIZ_CHALLENGE":
+       Navigator.push(
+           context,
+           MaterialPageRoute(
+               builder: (BuildContext context) => DailyQuizChallengePage(context).openPage()));
        break;
 
    }}

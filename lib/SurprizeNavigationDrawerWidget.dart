@@ -1,3 +1,4 @@
+import 'package:Surprize/AppIntroPage.dart';
 import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
 import 'package:Surprize/FeedbackPage.dart';
@@ -64,13 +65,19 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             CachedNetworkImageProvider( _player.profileImageURL)
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left:16.0),
-            child: Text(_player.name, style: TextStyle(color:  Colors.white, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w300)),
+          Visibility(
+            visible: _player.name.isNotEmpty,
+            child: Padding(
+              padding: _player.email.isNotEmpty?const EdgeInsets.only(left:16.0):const EdgeInsets.only(left:16.0,bottom: 16.0),
+              child: Text(_player.name, style: TextStyle(color:  Colors.white, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w300)),
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left:16.0, bottom: 16.0),
-            child: Text(_player.email, style: TextStyle(color: Colors.white, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300)),
+          Visibility(
+            visible: _player.email.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(left:16.0, bottom: 16.0),
+              child: Text(_player.email, style: TextStyle(color: Colors.white, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300)),
+            ),
           ),
         ],
       ),
@@ -104,6 +111,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
+            drawerButtonNavigationWithPadding(AppIntroPage(),Icon(Icons.live_help, color: Colors.purple), "Help"),
             AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple), () => ShareApp().shareAppToMedia(), "Share"),
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),

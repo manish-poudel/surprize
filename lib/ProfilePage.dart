@@ -10,9 +10,7 @@ import 'package:Surprize/EditProfilePage.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Player.dart';
 
-import 'CustomWidgets/CustomRecentActiviyWidget.dart';
 import 'Helper/AppHelper.dart';
-import 'Models/Activity.dart';
 import 'Models/PopUpMenus/ProfileMenu.dart';
 import 'Resources/ImageResources.dart';
 import 'package:Surprize/BLOC/UserBLOC.dart';
@@ -33,8 +31,8 @@ class ProfilePageState extends State<ProfilePage> {
   bool _isImageLoading = false;
   UserBLOC _userBLOC;
 
-  CustomLabelTextFieldWidget _phoneField = CustomLabelTextFieldWidget("Add phone","", Colors.black, false,validation: AppHelper.validatePhone);
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Add email","", Colors.black, false,validation: AppHelper.validateEmail);
+  final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
 
   List<ProfileMenu> _popUpMenuChoice = [
     ProfileMenu(
@@ -133,7 +131,7 @@ class ProfilePageState extends State<ProfilePage> {
           personalInformationHolder(),
           //AppHelper.appSmallHeader("Recent Activity"),
           //Container(child: recentActivityList()),
-          Visibility(visible:_player.phoneNumber.isEmpty, child: phoneForm()),
+          Visibility(visible:_player.email.isEmpty, child: _emailForm()),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Center(child: FlatButton(color:Colors.purple[400], onPressed: () => AppHelper.cupertinoRoute(context, EditProfilePage()),
@@ -158,7 +156,7 @@ class ProfilePageState extends State<ProfilePage> {
           /// Photo of player
           circularPhotoContainer(),
           Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: _player.email.isNotEmpty?const EdgeInsets.only(top: 16.0):const EdgeInsets.only(top: 16.0, bottom: 8.0),
             child: Text(
               _player.name,
               textAlign: TextAlign.center,
@@ -169,37 +167,21 @@ class ProfilePageState extends State<ProfilePage> {
                   color: Colors.white),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom:8.0),
-            child: Text(
-              _player.email,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Raleway',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white),
-            ),
-          ),
-          /*      Visibility(visible: !UserMemory().firebaseUser.isEmailVerified,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "Your email is not verified. Verify so we can communicate via email if needed!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Raleway',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white),
-                  ),
-                  RaisedButton(color: Colors.green, child: Text("Send verification link", style: TextStyle(color:Colors.white,fontFamily: 'Raleway')))
-                ],
+         Visibility(
+           visible:_player.email.isNotEmpty,
+           child: Padding(
+              padding:const EdgeInsets.only(bottom:8.0),
+              child: Text(
+                _player.email,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Raleway',
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white),
               ),
             ),
-          ),*/
+         )
         ],
       ),
     );
@@ -249,9 +231,12 @@ class ProfilePageState extends State<ProfilePage> {
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: textWithIcon(Icons.place, _player.country, Colors.purple),
+        Visibility(
+          visible: _player.country.isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: textWithIcon(Icons.place, _player.country, Colors.purple),
+          ),
         ),
         Visibility(
           visible: _player.address.isNotEmpty,
@@ -261,15 +246,21 @@ class ProfilePageState extends State<ProfilePage> {
                 Icons.location_city, _player.address, Colors.purple),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child:
-          textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
+        Visibility(
+          visible: _player.dob.isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child:
+            textWithIcon(Icons.calendar_today, _player.dob, Colors.purple),
+          ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child:
-          textWithIcon(Icons.person, _player.gender, Colors.purple),
+        Visibility(
+          visible: _player.gender.isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child:
+            textWithIcon(Icons.person, _player.gender, Colors.purple),
+          ),
         ),
         Visibility(
           visible: _player.phoneNumber.isNotEmpty,
@@ -367,17 +358,17 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
 
-  Widget phoneForm(){
+  Widget _emailForm(){
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Center(
         child: Form(
-          key: _formKey,
+          key: _emailFormKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Container(width: MediaQuery.of(context).size.width * 0.8, child: _phoneField),
-              FlatButton(color:Colors.green, child: Text("Save", style: TextStyle(fontFamily:'Raleway',color: Colors.white)), onPressed: () => editProfile())
+              Container(width: MediaQuery.of(context).size.width * 0.8, child: _emailField),
+              FlatButton(color:Colors.green, child: Text("Save", style: TextStyle(fontFamily:'Raleway',color: Colors.white)), onPressed: () => editEmail())
             ],
           ),
         ),
@@ -385,11 +376,12 @@ class ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  editProfile() {
-    if(!_formKey.currentState.validate())
+
+  editEmail() {
+    if(!_emailFormKey.currentState.validate())
       return;
 
-    _player.phoneNumber = _phoneField.getValue();
+    _player.email = _emailField.getValue();
     UserMemory().savePlayer(_player);
     UserProfile().updateProfile(_player.membershipId, _player).then((_){
       setState(() {
@@ -397,4 +389,6 @@ class ProfilePageState extends State<ProfilePage> {
       });
     });
   }
+
+
 }

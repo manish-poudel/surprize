@@ -16,9 +16,9 @@ class StringResources{
   static final String snackBarRegistrationSuccessMessage = "Registration Completed";
   static final String registrationProgressInformationDisplayMessage = "Saving your data...";
   static final String registrationPageCreateAccountTitleDisplay = "Create Account";
-  static final String registrationPageLoginCredentialHeaderDisplay = "Let's start with login information!";
-  static final String registrationPagePersonalInformationHeaderDisplay = "Let's us get to know you bit!";
-  static final String buttonCreateAccountText = "Set up";
+  static final String registrationPageLoginCredentialHeaderDisplay = "Setting up your information!";
+  static final String referralCodeText = "Enter referral code, if any!";
+  static final String buttonCreateAccountText = "Enter";
   static final String elaText = "By creating account or signing up, you agree to our";
   static final String elaTextButtonTermsAndCondition = "Terms and Conditions";
   static final String elaTextButtonPrivacyAndPolicy = "Privacy and policy";

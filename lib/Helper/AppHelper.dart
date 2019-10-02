@@ -248,10 +248,8 @@ class AppHelper{
   logoutUser(context) {
     FirebaseAuth.instance.signOut().then((value) {
       try {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LoginPage()));
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
       } catch (error) {
         print(error);
       }

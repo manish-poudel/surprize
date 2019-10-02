@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:Surprize/CountDownTimerTypeEnum.dart';
 import 'package:Surprize/CustomWidgets/CalendarEventManagement.dart';
@@ -45,9 +46,10 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
     super.initState();
     DateTime currentDateTime = DateTime.now();
     countDownDuration = widget._dateTime.difference(currentDateTime);
+
   }
 
-  @override
+        @override
   Widget build(BuildContext context) {
 
     return MaterialApp(

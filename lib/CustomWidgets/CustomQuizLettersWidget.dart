@@ -48,26 +48,6 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
         : SQLiteManager().insertFavouriteQuote(widget._quizLetterDisplay);
   }
 
-
-  Widget _playButton(){
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: RichText(
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-            softWrap: true,
-            text: TextSpan(children: <TextSpan>[
-              TextSpan(
-                  text: "Click for More",
-                  style: TextStyle(
-                      color: Colors.white, fontSize: 12, fontFamily:'Raleway',fontWeight: FontWeight.w300)),
-            ])),
-      ),
-    );
-  }
-
-
   Future getLikedValue() async {
     List list = await SQLiteManager().getQuotes(widget._quizLetterDisplay.displayId);
     if(list.length == 0)

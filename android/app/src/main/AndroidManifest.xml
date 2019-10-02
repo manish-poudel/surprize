@@ -19,7 +19,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Surprize"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/app_icon">
 
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>

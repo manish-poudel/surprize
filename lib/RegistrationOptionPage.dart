@@ -1,9 +1,14 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
 import 'package:Surprize/CustomWidgets/RegistrationPage/CustomELAWidget.dart';
+import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/ProfileSetUpPage.dart';
 import 'package:Surprize/RegistrationPage.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
-import 'package:Surprize/SplashScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +23,15 @@ class RegistrationOptionPage extends StatefulWidget {
 class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
 
   CustomELAWidget _customELAWidget = new CustomELAWidget();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  CustomProgressbarWidget _customRegistrationProgressBar = new CustomProgressbarWidget();
 
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home:Scaffold(
+          key: _scaffoldKey,
           resizeToAvoidBottomPadding:false,
           appBar: CustomAppBar("Registration", context),
           backgroundColor: Colors.white,
@@ -53,13 +61,13 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                 Padding(
                   padding: const EdgeInsets.only(top:32.0),
                   child: Center(
-                    child: FlatButton(color:Colors.green,onPressed:()=> AppHelper.cupertinoRouteWithPushReplacement(context, RegistrationPage()),
-                        child: Text("Create account",
+                    child: FlatButton(color:Colors.green,onPressed:()=> AppHelper.cupertinoRoute(context, RegistrationPage()),
+                        child: Text("Sign up",
                             style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300))),
                   )),
 
                 Center(
-                  child: Text("or sign up using",
+                  child: Text("or login using",
                       style: TextStyle(color:Colors.black,fontSize: 18.0, fontWeight: FontWeight.w400,fontFamily: 'Raleway' )
                   ),
                 ),
@@ -95,6 +103,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
   // Sign in using facebook
   signInWithFacebook() async {
     try {
+      _customRegistrationProgressBar.startProgressBar(context, "Registering...", Colors.white, Colors.black);
       var facebookLogin = new FacebookLogin();
       var result = await facebookLogin.logInWithReadPermissions(
           ['email', 'public_profile']);
@@ -104,13 +113,14 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
               accessToken: result.accessToken.token);
           FirebaseAuth.instance.signInWithCredential(credential).then((
               authResult) {
-            AppHelper.cupertinoRouteWithPushReplacement(
-                context, SplashScreen());
+            registerProfileInformation(authResult.user);
           });
           break;
         case FacebookLoginStatus.cancelledByUser:
+          _customRegistrationProgressBar.stopAndEndProgressBar(context);
           break;
         case FacebookLoginStatus.error:
+          _customRegistrationProgressBar.stopAndEndProgressBar(context);
           break;
       }
     }catch(error){
@@ -124,18 +134,58 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
        scopes: ['email']
      );
      try{
+       _customRegistrationProgressBar.startProgressBar(context, "Registering...", Colors.white, Colors.black);
        GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
        GoogleSignInAuthentication authentication = await googleSignInAccount.authentication;
        AuthCredential authCredential = GoogleAuthProvider.getCredential(idToken: authentication.idToken, accessToken: authentication.accessToken);
 
       FirebaseAuth.instance.signInWithCredential(authCredential).then((authResult){
-
-        AppHelper.cupertinoRouteWithPushReplacement(
-            context, SplashScreen());
+        registerProfileInformation(authResult.user);
       });
       
      }catch(error){
+       _customRegistrationProgressBar.stopAndEndProgressBar(context);
         print(error.toString());
      }
+  }
+
+  /// Register profile information
+  registerProfileInformation(FirebaseUser user) {
+    // Save user profile information to the database
+    Player player = Player(
+        user.uid,
+        // Player Id
+        user.displayName == null?"":user.displayName,
+        // Player Name
+        "",
+        // Player DOB
+        "",
+        // Player Address
+        "",
+        // Player country
+        "",
+        // Player Gender
+        user.email == null?"":user.email,
+        // Player Email
+        user.phoneNumber == null?"":user.phoneNumber,
+        DateTime.now(),
+        // Player membership date
+        user.photoUrl == null?"":user.photoUrl // Player profile Image URL (To be updated later)
+    );
+
+    FirestoreOperations()
+        .createData(FirestoreResources.userCollectionName, player.membershipId,
+        player.toMap())
+        .then((value) {
+
+      UserMemory().savePlayer(player);
+      UserMemory().saveFirebaseUser(user);
+
+      _customRegistrationProgressBar.stopAndEndProgressBar(context);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(user));
+    }).catchError((error) {
+      AppHelper.showSnackBar(error.toString(), _scaffoldKey);
+    });
   }
 }

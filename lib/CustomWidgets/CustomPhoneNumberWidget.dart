@@ -25,6 +25,10 @@ class CustomPhoneNumberWidget extends StatefulWidget {
   String getPhoneNumber() {
     return _state.getPhoneNumber();
   }
+
+  String getCountryName(){
+    return _state.getCountryName();
+  }
 }
 
 class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
@@ -57,6 +61,10 @@ class CustomPhoneNumberWidgetState extends State<CustomPhoneNumberWidget> {
   String getPhoneNumber() {
     String getPhoneNumber = controller.text;
     return getPhoneNumber;
+  }
+
+  String getCountryName(){
+    return selectedItem.countryName;
   }
 
   @override
