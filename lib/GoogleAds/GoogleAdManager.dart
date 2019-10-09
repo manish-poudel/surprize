@@ -1,7 +1,6 @@
 import 'package:Surprize/GoogleAds/GoogleAdFormats.dart';
 import 'package:Surprize/GoogleAds/GoogleBannerAds.dart';
 import 'package:Surprize/GoogleAds/GoogleInterstitialAds.dart';
-import 'package:Surprize/GoogleAds/GoogleRewardedVideoAds.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 /// Handles all operation related to different google advertisement display mechanism.

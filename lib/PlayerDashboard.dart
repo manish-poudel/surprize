@@ -21,6 +21,7 @@ import 'package:Surprize/SurprizeNavigationDrawerWidget.dart';
 import 'CustomUpcomingEventsWidget.dart';
 import 'CustomWidgets/CustomRoundedEdgeButton.dart';
 import 'DailyQuizChallengeGamePlayPage.dart';
+import 'GoogleAds/GoogleAdManager.dart';
 import 'Helper/AppHelper.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
@@ -51,12 +52,21 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  AdmobBanner _admobBanner;
   bool _showAd = false;
+  bool _adLoaded = false;
 
 
   @override
   void initState() {
     super.initState();
+    Admob.initialize(GoogleAdManager.appId);
+    _admobBanner = AdmobBanner(adUnitId: BannerAd.testAdUnitId, adSize: AdmobBannerSize.BANNER,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args){
+        handleBannerAdEvent(event, args);
+      },
+    );
+    displayAd();
     _animationController = new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationController.repeat();
     _dailyQuizChallengePage = new DailyQuizChallengePage(context);
@@ -65,16 +75,30 @@ class PlayerDashboardState extends State<PlayerDashboard>
     getLatestNotice();
     checkNetworkConnection();
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => displayAd());
+
+  }
+
+
+  /// Banner events
+  handleBannerAdEvent(AdmobAdEvent event, Map<String, dynamic> args) {
+    switch(event){
+      case AdmobAdEvent.loaded:
+        setState(() {
+          _adLoaded = true;
+        });
+        break;
+      default:
+
+    }
   }
 
   /// Check to display ad
   displayAd(){
     int rand = AppHelper.getRandomNumberInBetweenValues(1, 10);
-    if([1,3,5,6,8,10].contains(rand)){
+    print("Random " + rand.toString());
+    if([1,2,4,6,9,10].contains(rand)){
       setState(() {
-          _showAd = true;
+        _showAd = true;
       });
     }
   }
@@ -85,7 +109,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
     if (state == AppLifecycleState.resumed) {
     }
   }
-
 
   /// Check for network connection
   checkNetworkConnection(){
@@ -100,6 +123,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
   void dispose() {
     _animationController.dispose();
     WidgetsBinding.instance.removeObserver(this);
+    _adLoaded = false;
     super.dispose();
   }
 
@@ -118,7 +142,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
       }
     });
   }
-
 
 
   @override
@@ -140,7 +163,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   dashboardBody()
-                  //dashboardBody(),
                 ],
               )),
             )));
@@ -194,16 +216,23 @@ class PlayerDashboardState extends State<PlayerDashboard>
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left:8.0),
-                    child: Text("Advertisement", style: TextStyle(color: Colors.deepOrange)),
+                  Visibility(
+                    visible: _adLoaded,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:4.0),
+                      child: Container(
+                          decoration: new BoxDecoration(
+                              color: Colors.amber,
+                              border: new Border.all(color: Colors.amber, width: 1),
+                              borderRadius: new BorderRadius.all(Radius.circular(1.0))
+                          ),
+                          child: Text("Ad", style: TextStyle(color: Colors.white))),
+                    ),
                   ),
                   Center(
-                    child: AdmobBanner(
-                      adUnitId: BannerAd.testAdUnitId,
-                      adSize: AdmobBannerSize.BANNER,
-                    ),
+                    child: _admobBanner,
                   ),
                 ],
               ),

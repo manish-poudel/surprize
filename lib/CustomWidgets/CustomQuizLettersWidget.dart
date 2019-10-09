@@ -1,6 +1,5 @@
 import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
-import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
 import 'package:Surprize/Resources/TableResources.dart';
 import 'package:Surprize/SqliteDb/SQLiteManager.dart';

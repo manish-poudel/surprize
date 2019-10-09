@@ -1,0 +1,6 @@
+class ErrorResources {
+  static final String invalidEmailError = "The email address is badly formatted.Please try again!";
+  static final String noEmailError = "The email address doesn't exist. Please make sure you have typed it correctly.";
+  static final String wrongPasswordError = "Wrong password";
+  static final String defaultError = "Couldn't login. error code: ";
+}

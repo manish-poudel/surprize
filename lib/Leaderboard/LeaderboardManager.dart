@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

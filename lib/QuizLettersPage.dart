@@ -75,7 +75,6 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
     super.initState();
 
     GoogleAdManager().showInterstitialAd(0.0, AnchorType.top);
-    Admob.initialize(GoogleAdManager.appId);
     SQLiteManager().initAppDatabase();
     this._openedQuizId = (widget._openedQuizId != null?widget._openedQuizId:"0");
     getQuizLetters();
@@ -264,7 +263,19 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
                           padding: showAdAtIndex == 0? const EdgeInsets.only(top:48, bottom:48, left: 16, right: 16): const EdgeInsets.all(16),
                           child: Column(
                             children: <Widget>[
-                              Text("Advertisement", style: TextStyle(color: Colors.deepOrange,)),
+                              Align(
+                                alignment:Alignment.topLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:4.0),
+                                  child: Container(
+                                      decoration: new BoxDecoration(
+                                          color: Colors.amber,
+                                          border: new Border.all(color: Colors.amber, width: 1),
+                                          borderRadius: new BorderRadius.all(Radius.circular(1.0))
+                                      ),
+                                      child: Text("Ad", style: TextStyle(color: Colors.white))),
+                                ),
+                              ),
                               AdmobBanner(
                                 adUnitId: BannerAd.testAdUnitId,
                                 adSize: AdmobBannerSize.BANNER,
