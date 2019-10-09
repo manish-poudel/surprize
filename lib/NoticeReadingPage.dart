@@ -75,7 +75,7 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Text(
-        widget.notice.body,style: TextStyle(color: Colors.black, fontSize: 18),
+        widget.notice.body,style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Raleway'),
       ),
     );
   }

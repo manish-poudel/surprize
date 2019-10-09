@@ -97,7 +97,7 @@ class Dashboard{
           context, PlayerDashboard());
 
     }).catchError((error) {
-      
+
     });
   }
 
