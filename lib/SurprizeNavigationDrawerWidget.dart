@@ -1,9 +1,8 @@
 import 'package:Surprize/AppIntroPage.dart';
 import 'package:Surprize/AppShare/ShareApp.dart';
-import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
+
 import 'package:Surprize/FeedbackPage.dart';
-import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
-import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
+
 import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:Surprize/SettingPage.dart';
@@ -18,7 +17,7 @@ import 'CustomWidgets/CustomNavigationDrawerWidget.dart';
 import 'DailyQuizChallengePage.dart';
 import 'LeaderboardPage.dart';
 import 'Models/Player.dart';
-import 'ProfilePage.dart';
+
 import 'Resources/ImageResources.dart';
 
 

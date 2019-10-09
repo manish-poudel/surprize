@@ -5,8 +5,6 @@ import 'package:Surprize/BLOC/QuizLetterBLOC.dart';
 import 'package:Surprize/CustomWidgets/CustomAppBarWithAction.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
 import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
-import 'package:Surprize/GoogleAds/GoogleAdManager.dart' as prefix0;
-import 'package:Surprize/GoogleAds/GoogleBannerAds.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizDataState.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';

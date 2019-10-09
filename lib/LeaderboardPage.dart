@@ -9,7 +9,6 @@ import 'package:Surprize/Models/Leaderboard.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
-import 'package:intl/intl.dart';
 import 'Resources/ImageResources.dart';
 
 class LeaderboardPage extends StatefulWidget {

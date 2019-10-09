@@ -1,5 +1,4 @@
 import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizSummaryDisplayWidget.dart';
-import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Leaderboard/ScoreSystem.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
@@ -7,7 +6,6 @@ import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:Surprize/SurveyFrom.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Surprize/AppShare/ShareApp.dart';

@@ -4,12 +4,10 @@ import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Player.dart';
 import 'package:Surprize/PlayerDashboard.dart';
 import 'package:Surprize/UserProfileManagement/UserProfile.dart';
-import 'package:Surprize/UserProfileManagement/UserProfile.dart' as prefix0;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
-import 'ProfileSetUpPage.dart';
 
 class Dashboard{
 

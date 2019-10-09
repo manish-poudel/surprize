@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
-import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/UserPresenceState.dart';
