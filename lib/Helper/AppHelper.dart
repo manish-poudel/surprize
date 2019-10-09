@@ -270,8 +270,7 @@ class AppHelper{
   static Future<File> cropImage(File imageFile, maxH, maxW) async {
     File croppedFile = await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-      ratioX: 1.0,
-      ratioY: 1.0,
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
       maxWidth: maxW,
       maxHeight: maxH,
     );

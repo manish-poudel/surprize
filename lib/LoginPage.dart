@@ -43,6 +43,7 @@ class LoginPage extends StatefulWidget {
         _customProgressBarWidget.stopAndEndProgressBar(context);
         AppHelper.cupertinoRouteWithPushReplacement(context, SplashScreen());
       }).catchError((error){
+        print(error.toString());
         _customProgressBarWidget.stopAndEndProgressBar(context);
         AppHelper.showSnackBar("Error connecting.", _scaffoldKey);
       });

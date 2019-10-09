@@ -63,10 +63,10 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   }
 
   /// If pop up menu item is selected
-  void _onPopUpMenuItemSelected(String value) {
-    setState(() {
-      _showQuizLetterType = value;
-    });
+  void _onPopUpMenuItemSelected(String value) {;
+  setState(() {
+    _showQuizLetterType = value;
+  });
   }
 
 
@@ -128,8 +128,8 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
 
   @override
   void dispose() {
-/*    GoogleAdManager().disposeQuizLetterBannerAd();
-    GoogleAdManager().disposeQuizLetterInterstitialAd();*/
+    GoogleAdManager().disposeQuizLetterBannerAd();
+    GoogleAdManager().disposeQuizLetterInterstitialAd();
     quizLetterBLOC.dispose();
     super.dispose();
   }
@@ -142,6 +142,10 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
       _quizLetterDisplay(noQuizMessage, _quizLetterDisplayList),
       _favouriteQuizLetter()
     ];
+
+    _showQuizLetterType == "Game mode"?
+    GoogleAdManager().showBannerForQuizLetter(68, AnchorType.bottom):
+    GoogleAdManager().disposeQuizLetterBannerAd();
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -175,8 +179,8 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   /// Event display widget
   Widget _quizLetterDisplay(
       noQuizLetterMsg, Map<String, QuizLetterDisplay> quizLetterDisplayList) {
-   return  _showQuizLetterType == "Game mode"?_quizLetterDisplayAtGameMode(noQuizLetterMsg, quizLetterDisplayList):
-   _quizLetterDisplayAtListMode(noQuizLetterMsg, quizLetterDisplayList);
+    return  _showQuizLetterType == "Game mode"?_quizLetterDisplayAtGameMode(noQuizLetterMsg, quizLetterDisplayList):
+    _quizLetterDisplayAtListMode(noQuizLetterMsg, quizLetterDisplayList);
 
   }
 
@@ -190,46 +194,43 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
           Text(noQuizLetterMsg, style: TextStyle(fontFamily: 'Raleway')));
     }
 
-   QuizLetterDisplay quizLetterDisplay = quizLetterDisplayList.values.toList()[currentQuizIndex];
-   quizLetterDisplay.initiallyExpanded = true;
+    QuizLetterDisplay quizLetterDisplay = quizLetterDisplayList.values.toList()[currentQuizIndex];
+    quizLetterDisplay.initiallyExpanded = true;
 
 
-   navigate_before_color = currentQuizIndex == 0?Colors.grey:Colors.black;
-   navigate_after_color = currentQuizIndex == quizLetterDisplayList.length - 1?Colors.grey:Colors.black;
+    navigate_before_color = currentQuizIndex == 0?Colors.grey:Colors.black;
+    navigate_after_color = currentQuizIndex == quizLetterDisplayList.length - 1?Colors.grey:Colors.black;
 
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Padding(
-            padding:  EdgeInsets.only(top:32),
-            child: AdmobBanner(
-              adUnitId: BannerAd.testAdUnitId,
-              adSize: AdmobBannerSize.BANNER,
-            ),
-          ),
-        QuizLettersExpandableWidget("Server",quizLetterDisplay,
-                (bool) => onFavButtonHandleClickForQuizLetter(quizLetterDisplay, bool),
-                () => onShareButtonHandle(quizLetterDisplay),showButton: true),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
           children: <Widget>[
-            IconButton(icon:Icon(Icons.navigate_before,color: navigate_before_color,),onPressed: (){
-              if(currentQuizIndex != 0)
-                setState(() {
-                  currentQuizIndex--;
-                });
-            }),
-            Text((currentQuizIndex + 1).toString()),
-            IconButton(icon:Icon(Icons.navigate_next, color: navigate_after_color,) ,onPressed: (){
-              if(currentQuizIndex != quizLetterDisplayList.length-1)
-                setState(() {
-                  currentQuizIndex++;
-                });
-            }),
+            QuizLettersExpandableWidget("Server",quizLetterDisplay,
+                    (bool) => onFavButtonHandleClickForQuizLetter(quizLetterDisplay, bool),
+                    () => onShareButtonHandle(quizLetterDisplay),showButton: true),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                IconButton(icon:Icon(Icons.navigate_before,color: navigate_before_color,),onPressed: (){
+                  if(currentQuizIndex != 0)
+                    setState(() {
+                      currentQuizIndex--;
+                    });
+                }),
+                Text((currentQuizIndex + 1).toString()),
+                IconButton(icon:Icon(Icons.navigate_next, color: navigate_after_color,) ,onPressed: (){
+                  if(currentQuizIndex != quizLetterDisplayList.length-1)
+                    setState(() {
+                      currentQuizIndex++;
+                    });
+                }),
+              ],
+            ),
+            Container(height: 100)
           ],
-        )
-    ]);
+        ),
+      ),
+    );
 
   }
 
@@ -244,42 +245,42 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
     List<QuizLetterDisplay> quizLetterList = quizLetterDisplayList.values.toList();
 
     return Column(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: quizLetterList.length,
-                shrinkWrap: true,
-                itemBuilder: (BuildContext context, int index) {
-                  int showAdAtIndex = quizLetterDisplayList.length > 1?1:0;
-                  return (index == showAdAtIndex)?
-                  Column(
-                    children: <Widget>[
-                      QuizLettersExpandableWidget("Server",quizLetterList[index],
-                              (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
-                              () => onShareButtonHandle(quizLetterList[index]),showButton: true),
-                      Padding(
-                        padding: showAdAtIndex == 0? const EdgeInsets.only(top:48, bottom:48, left: 16, right: 16): const EdgeInsets.all(16),
-                        child: Column(
-                          children: <Widget>[
-                            Text("Advertisement", style: TextStyle(color: Colors.deepOrange,)),
-                            AdmobBanner(
-                              adUnitId: BannerAd.testAdUnitId,
-                              adSize: AdmobBannerSize.BANNER,
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ):
-                   QuizLettersExpandableWidget("Server",quizLetterList[index],
-                          (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
-                          () => onShareButtonHandle(quizLetterList[index]),showButton: true);
-                }),
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              child: ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: quizLetterList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    int showAdAtIndex = quizLetterDisplayList.length > 1?1:0;
+                    return (index == showAdAtIndex)?
+                    Column(
+                      children: <Widget>[
+                        QuizLettersExpandableWidget("Server",quizLetterList[index],
+                                (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
+                                () => onShareButtonHandle(quizLetterList[index]),showButton: true),
+                        Padding(
+                          padding: showAdAtIndex == 0? const EdgeInsets.only(top:48, bottom:48, left: 16, right: 16): const EdgeInsets.all(16),
+                          child: Column(
+                            children: <Widget>[
+                              Text("Advertisement", style: TextStyle(color: Colors.deepOrange,)),
+                              AdmobBanner(
+                                adUnitId: BannerAd.testAdUnitId,
+                                adSize: AdmobBannerSize.BANNER,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ):
+                    QuizLettersExpandableWidget("Server",quizLetterList[index],
+                            (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
+                            () => onShareButtonHandle(quizLetterList[index]),showButton: true);
+                  }),
+            ),
           ),
-        ),
-      ]
+        ]
     );
   }
 

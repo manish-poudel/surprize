@@ -22,7 +22,7 @@ class GoogleAdManager {
 
   GoogleAdFormats _googleBannerAdForQuizLetters;
   GoogleAdFormats _googleBannerAdForNotice;
-  
+
   GoogleAdFormats _googleRewardedVideoAd;
 
   bool _hasInitialized = false;
@@ -47,6 +47,8 @@ class GoogleAdManager {
 
 
   showBannerForNotice(double offset, AnchorType anchorType){
+    if(_googleBannerAdForNotice != null)
+      return;
     try{
       init();
       _googleBannerAdForNotice = GoogleBannerAds(AdSize.smartBanner);
@@ -60,6 +62,8 @@ class GoogleAdManager {
   }
 
   showBannerForQuizLetter(double offset, AnchorType anchorType){
+    if(_googleBannerAdForQuizLetters != null)
+      return;
     try{
       init();
       _googleBannerAdForQuizLetters = GoogleBannerAds(AdSize.smartBanner);
@@ -78,8 +82,10 @@ class GoogleAdManager {
   }
 
   disposeQuizLetterBannerAd(){
+    if(_googleBannerAdForQuizLetters != null) {
       _googleBannerAdForQuizLetters.dispose();
-      _googleBannerAdForQuizLetters = null;
+    }
+    _googleBannerAdForQuizLetters = null;
 
   }
 

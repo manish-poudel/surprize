@@ -59,28 +59,20 @@ class _QuizLettersExpandableWidgetState
               Container(height: 0.5, color: Colors.grey[200]),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 30,
-                      child: widget._quizLetterDisplay.revealBody == true
-                          ? Text(widget._quizLetterDisplay.quizLetter.quizLettersBody,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 16, fontFamily: 'Raleway'))
-                          : GestureDetector(
-                              child: Text(
-                                "Reveal",
-                                style: TextStyle(fontFamily: 'Raleway', fontSize:16,fontWeight: FontWeight.w500),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  widget._quizLetterDisplay.revealBody = true;
-                                });
-                              }),
+                child: widget._quizLetterDisplay.revealBody == true
+                    ? Text(widget._quizLetterDisplay.quizLetter.quizLettersBody,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, fontFamily: 'Raleway'))
+                    : GestureDetector(
+                    child: Text(
+                      "Reveal",
+                      style: TextStyle(fontFamily: 'Raleway', fontSize:16,fontWeight: FontWeight.w500),
                     ),
-                  ),
-                ),
+                    onTap: () {
+                      setState(() {
+                        widget._quizLetterDisplay.revealBody = true;
+                      });
+                    }),
               ),
             ],
           ),
@@ -97,17 +89,17 @@ class _QuizLettersExpandableWidgetState
     // if it is from server
     return widget.source == "Server"?widget._quizLetterDisplay.quizLetter.quizLettersUrl.isEmpty
         ? Image.asset(ImageResources.emptyUserProfilePlaceholderImage,
-            height: 100, width: 80, fit: BoxFit.fill)
+        height: 100, width: 80, fit: BoxFit.fill)
         : FadeInImage.assetNetwork(
-            image: widget._quizLetterDisplay.quizLetter.quizLettersUrl,
-            placeholder: ImageResources.emptyImageLoadingUrlPlaceholder, height: 100, width:80,fit: BoxFit.fill):
+        image: widget._quizLetterDisplay.quizLetter.quizLettersUrl,
+        placeholder: ImageResources.emptyImageLoadingUrlPlaceholder, height: 100, width:80,fit: BoxFit.fill):
 
-        // if it is from sqlite
+    // if it is from sqlite
     widget._quizLetterDisplay.quizLetter.quizLettersUrl.isEmpty
-    ? Image.asset(ImageResources.emptyUserProfilePlaceholderImage,
-    height: 100, width: 80, fit: BoxFit.fill)
+        ? Image.asset(ImageResources.emptyUserProfilePlaceholderImage,
+        height: 100, width: 80, fit: BoxFit.fill)
         : CachedNetworkImage(imageUrl: widget._quizLetterDisplay.quizLetter.quizLettersUrl,height: 100, width:80,fit: BoxFit.fill,
-        placeholder: (context, url) => Image.asset(ImageResources.emptyImageLoadingUrlPlaceholder,height: 100, width:80,fit: BoxFit.fill),
+      placeholder: (context, url) => Image.asset(ImageResources.emptyImageLoadingUrlPlaceholder,height: 100, width:80,fit: BoxFit.fill),
     );
   }
 
