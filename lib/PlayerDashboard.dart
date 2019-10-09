@@ -1,13 +1,19 @@
-
 import 'package:Surprize/CustomWidgets/CustomFooterWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
+
 import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/NoNetwork.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
+import 'package:Surprize/NoInternetConnectionPage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
+import 'package:admob_flutter/admob_flutter.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/DailyQuizChallengePage.dart';
@@ -20,7 +26,6 @@ import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'Resources/FirestoreResources.dart';
 
-//// MAKE SURE YOU REMOVE DEPENDENCIES IN GRADLE FOR EG, FIRESTORE... AND CHECK IF IT WORK.. thEY MAY BE NOT BE REQUIRED!!!!!
 class PlayerDashboard extends StatefulWidget {
   PlayerDashboard();
 
@@ -32,11 +37,12 @@ class PlayerDashboard extends StatefulWidget {
 }
 
 class PlayerDashboardState extends State<PlayerDashboard>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   DailyQuizChallengePage _dailyQuizChallengePage;
   AnimationController _animationController;
 
   bool _showDailyQuizChallengeWidget = false;
+  var subscription;
 
   QuizLetterDisplay quizLetterDisplay;
   Notice notice;
@@ -45,21 +51,55 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool _showAd = false;
+
+
   @override
   void initState() {
     super.initState();
-    _animationController =
-        new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animationController = new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationController.repeat();
     _dailyQuizChallengePage = new DailyQuizChallengePage(context);
     isDailyQuizAvailable();
     getQuizLetters();
     getLatestNotice();
+    checkNetworkConnection();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => displayAd());
+  }
+
+  /// Check to display ad
+  displayAd(){
+    int rand = AppHelper.getRandomNumberInBetweenValues(1, 10);
+    if([1,3,5,6,8,10].contains(rand)){
+      setState(() {
+          _showAd = true;
+      });
+    }
+  }
+
+  /// Detect the change in app lifecycle state
+  @override
+  Future didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+    }
+  }
+
+
+  /// Check for network connection
+  checkNetworkConnection(){
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if(result == ConnectivityResult.none){
+        AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.PLAYER_DASHBOARD));
+      }
+    });
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -79,8 +119,11 @@ class PlayerDashboardState extends State<PlayerDashboard>
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
@@ -96,7 +139,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  dashboardBody(),
+                  dashboardBody()
+                  //dashboardBody(),
                 ],
               )),
             )));
@@ -113,6 +157,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
           Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: CustomUpcomingEventsWidget()),
+          advertisement(),
           Visibility(visible: _showDailyQuizChallengeWidget,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -136,6 +181,38 @@ class PlayerDashboardState extends State<PlayerDashboard>
     );
   }
 
+  Widget advertisement(){
+    return  Visibility(
+      visible: _showAd,
+      child: Padding(
+        padding: const EdgeInsets.only(top:16.0,bottom:16.0),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(shape: BoxShape.rectangle,
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left:8.0),
+                    child: Text("Advertisement", style: TextStyle(color: Colors.deepOrange)),
+                  ),
+                  Center(
+                    child: AdmobBanner(
+                      adUnitId: BannerAd.testAdUnitId,
+                      adSize: AdmobBannerSize.BANNER,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   Widget footer() {
     return CustomFooterWidget();
   }
@@ -234,9 +311,9 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
                               fontWeight: FontWeight.w500)),
                     ),
-                    IconButton(icon:Icon(Icons.help_outline,color: Colors.white,size: 14,),onPressed:
+                    IconButton(tooltip:"Quiz letter is a fun way to test your knowledge on different subjects with facts reveal. This improves your chance of winning daily quiz challenge!",icon:Icon(Icons.help_outline,color: Colors.white,size: 14)
+                        ,onPressed:
                         (){
-                      print("showing snackbar");
                       _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text("Quiz letter is a fun way to test your knowledge on different subjects with facts reveal. This improves your chance of winning daily quiz challenge!")));
                      })
                   ],
@@ -273,12 +350,12 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   /// Quiz letters
   void getQuizLetters() {
-    Firestore.instance
+     Firestore.instance
         .collection(FirestoreResources.collectionQuizLetterName)
         .limit(1)
         .orderBy(FirestoreResources.fieldQuizLetterAddedDate, descending: true)
-        .getDocuments()
-        .then((docSnapshot) {
+        .snapshots()
+        .listen((docSnapshot) {
       setState(() {
         QuizLetter quizLetter =
             QuizLetter.fromMap(docSnapshot.documents[0].data);
@@ -299,8 +376,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
         .collection(FirestoreResources.collectionNotice)
         .limit(1)
         .orderBy(FirestoreResources.fieldNoticeAddedDate, descending: true)
-        .getDocuments()
-        .then((docSnapshot) {
+        .snapshots()
+        .listen((docSnapshot) {
       setState(() {
         notice = Notice.fromMap(docSnapshot.documents[0].data);
       });

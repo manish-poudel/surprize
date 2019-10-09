@@ -14,8 +14,9 @@ class QuizLettersExpandableWidget extends StatefulWidget {
   Function onPressedFavWidget;
   Function onPressedShareButton;
   String source;
+  bool showButton;
 
-  QuizLettersExpandableWidget(this.source, this._quizLetterDisplay, this.onPressedFavWidget, this.onPressedShareButton);
+  QuizLettersExpandableWidget(this.source, this._quizLetterDisplay, this.onPressedFavWidget, this.onPressedShareButton,{this.showButton});
 
   @override
   _QuizLettersExpandableWidgetState createState() =>
@@ -58,20 +59,28 @@ class _QuizLettersExpandableWidgetState
               Container(height: 0.5, color: Colors.grey[200]),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: widget._quizLetterDisplay.revealBody == true
-                    ? Text(widget._quizLetterDisplay.quizLetter.quizLettersBody,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16, fontFamily: 'Raleway'))
-                    : GestureDetector(
-                        child: Text(
-                          "Reveal",
-                          style: TextStyle(fontFamily: 'Raleway', fontSize:16,fontWeight: FontWeight.w500),
-                        ),
-                        onTap: () {
-                          setState(() {
-                            widget._quizLetterDisplay.revealBody = true;
-                          });
-                        }),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 30,
+                      child: widget._quizLetterDisplay.revealBody == true
+                          ? Text(widget._quizLetterDisplay.quizLetter.quizLettersBody,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 16, fontFamily: 'Raleway'))
+                          : GestureDetector(
+                              child: Text(
+                                "Reveal",
+                                style: TextStyle(fontFamily: 'Raleway', fontSize:16,fontWeight: FontWeight.w500),
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  widget._quizLetterDisplay.revealBody = true;
+                                });
+                              }),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -113,7 +122,7 @@ class _QuizLettersExpandableWidgetState
                   fontFamily: 'Raleway',
                   fontWeight: FontWeight.w500,
                   fontSize: 18)),
-          _iconButtons()
+          Visibility(visible: widget.showButton, child: _iconButtons())
         ],
       ),
     );

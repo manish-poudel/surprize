@@ -111,7 +111,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
-            drawerButtonNavigationWithPadding(AppIntroPage(),Icon(Icons.live_help, color: Colors.purple), "Help"),
+            drawerButtonNavigationWithPadding(AppIntroPage("HELP"),Icon(Icons.live_help, color: Colors.purple), "Help"),
             AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple), () => ShareApp().shareAppToMedia(), "Share"),
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),

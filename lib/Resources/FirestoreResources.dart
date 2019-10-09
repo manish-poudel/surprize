@@ -133,4 +133,13 @@ class FirestoreResources {
   static final String fieldReferralCreator = "Created by";
 
   static get fieldDailyQuizState => "State";
+
+  /// Related to survey
+  static final String fieldSurveyCollection = "/Survey";
+  static final String fieldSurveyId = "id";
+  static final String fieldSurveyRatingField = "rating";
+  static final String fieldSurveyIssueYesNoField = "Had Issue?";
+  static final String fieldSurveyIssueDesc = "Issue Desc";
+  static final String fieldSurveyNoOfQuizQuestion ="Total Question faced";
+  static final String fieldSurveyQuizKeywords = "Keywords";
 }

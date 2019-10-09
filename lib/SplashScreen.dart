@@ -2,6 +2,10 @@ import 'package:Surprize/Dashboard.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/LoginPage.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/NoNetwork.dart';
+import 'package:Surprize/NoInternetConnectionPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:Surprize/Resources/ImageResources.dart';
@@ -18,11 +22,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   Image logoImage;
+  var subscription;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     logoImage = Image.asset(ImageResources.appMainLogo);
+    Firestore.instance.settings(persistenceEnabled: false);
     checkIfUserLoggedIn(context);
   }
 
@@ -33,12 +39,21 @@ class _SplashScreenState extends State<SplashScreen> {
       if(user == null) {
         AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
       } else{
-        UserMemory().saveFirebaseUser(user);
-        Dashboard(context,user).nav();
+          UserMemory().firebaseUser = user;
+          checkNetworkConnection(user);
       }
     });
   }
 
+
+  @override
+  void dispose() {
+    if(subscription != null){
+      subscription.cancel();
+      subscription= null;
+    }
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -50,6 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: Container(
             decoration: BoxDecoration(
@@ -65,5 +81,23 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           )),
     );
+  }
+
+  /// Check for network connection
+  checkNetworkConnection(FirebaseUser user){
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if(result == ConnectivityResult.none){
+        AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.SPLASH_SCREEN));
+      }
+      else if(result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
+        AppHelper.checkInternetConnection().then((val){
+          if(val){
+            Dashboard(context).nav();
+          }
+          else{
+            AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.SPLASH_SCREEN));
+          }
+        });
+      }});
   }
 }

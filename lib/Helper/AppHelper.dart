@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/WebViewPage.dart';
@@ -354,7 +355,22 @@ class AppHelper{
     );
   }
 
-  openUrl(String url){
+  /// Check for internet connection
+  static Future<bool> checkInternetConnection() async {
+   try {
+     final result = await InternetAddress.lookup('google.com');
+     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      return true;
+     }
+   } on SocketException catch (_) {
+     return false;
+   }
+   return null;
+ }
 
+  /// Get random number between min and max value
+  static int getRandomNumberInBetweenValues(min, max){
+    Random rnd = new Random();
+    return min + rnd.nextInt(max - min);
   }
 }

@@ -30,7 +30,7 @@ class _CustomQuizLettersWidgetState extends State<CustomQuizLettersWidget> {
         children: <Widget>[
           QuizLettersExpandableWidget("Server",widget._quizLetterDisplay, (bool) => onFavButtonHandleClicked(), (){
             ShareApp().shareQuizLetter(widget._quizLetterDisplay.quizLetter.quizLettersBody);
-          }),
+          },showButton: true,),
          // _playButton()
         ],
       )

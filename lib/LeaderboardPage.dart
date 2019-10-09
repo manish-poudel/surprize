@@ -1,6 +1,8 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Models/Leaderboard.dart';
@@ -37,6 +39,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   int _selectedIndex = 0;
 
   List<Widget> _leaderboardOptions;
+
+  Leaderboard _playerWeeklyScore;
+  Leaderboard _playerAllTimeScore;
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +128,9 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   /// Weekly score body for leaderboard page
    _weeklyScoreBody() {
-   return !_weeklyScorerLeaderboardLoaded? Center(child: CircularProgressIndicator()):
-     Column(
+     if(!_weeklyScorerLeaderboardLoaded) return Center(child: CircularProgressIndicator());
+
+     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         myScore(_weeklyScorerMap[widget._playerId]),
@@ -132,15 +138,16 @@ class LeaderboardPageState extends State<LeaderboardPage> {
           padding: const EdgeInsets.only(top: 24.0),
           child: leaderboardHeading("Top Weekly scorers"),
         ),
-        Expanded(child: showTopScorers(_weeklyScorerMap.values.toList())),
+        Expanded(child: _allTimeScorerMap.length == 0?Center(child: Text("Empty leaderboard",style: TextStyle(fontFamily:'Raleway'))):showTopScorers(_weeklyScorerMap.values.toList())),
       ],
     );
   }
 
   /// All time score body for leaderboard page
    _allTimeScoreBody() {
-    return !_allTimeScorerLeaderboardLoaded? Center(child: CircularProgressIndicator()):
-     Column(
+   if(!_allTimeScorerLeaderboardLoaded) return Center(child: CircularProgressIndicator());
+
+     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         myScore(_allTimeScorerMap[widget._playerId]),
@@ -148,7 +155,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
           padding: const EdgeInsets.only(top: 24.0),
           child: leaderboardHeading("Top all time scorers"),
         ),
-        Expanded(child: showTopScorers(_allTimeScorerMap.values.toList())),
+        Expanded(child: _allTimeScorerMap.length == 0?Center(child: Text("Empty leaderboard",style: TextStyle(fontFamily:'Raleway'))):showTopScorers(_allTimeScorerMap.values.toList())),
       ],
     );
   }
@@ -159,23 +166,26 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     checkForDailyWinner();
     getAllTimeScorer();
     getWeeklyScorer();
+    GoogleAdManager().showLeaderboardInterstitialAd(0.0, AnchorType.bottom);
   }
 
    checkForDailyWinner() async {
     await LeaderboardManager().getDailyScoreWinner(widget._playerId).then((value){
       value.listen((snapshot){
-        setState(() {
-          _dailyQuizWinnerDataLoaded = true;
-          if(!snapshot.exists){
-            _quizPlay = QuizPlay(PlayState.NOT_PLAYED, DateTime.now(),"","");
-            return;
-          }
-          else {
-            _quizPlay = QuizPlay.fromMap(snapshot.data);
-          }
-          print("The state us " + _quizPlay.playState.toString());
+        if(mounted) {
+          setState(() {
+            _dailyQuizWinnerDataLoaded = true;
+            if (!snapshot.exists) {
+              _quizPlay =
+                  QuizPlay(PlayState.NOT_PLAYED, DateTime.now(), "", "");
+              return;
+            }
+            else {
+              _quizPlay = QuizPlay.fromMap(snapshot.data);
+            }
 
-        });
+          });
+        }
       });
     });
 
@@ -186,9 +196,12 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     LeaderboardManager().getScorer(FirestoreResources.leaderboardAllTime,
         FirestoreResources.fieldLeaderBoardScore, (Leaderboard leaderboard) {
       setState(() {
-        _allTimeScorerMap.putIfAbsent(
-            leaderboard.player.membershipId, () => leaderboard);
         _allTimeScorerLeaderboardLoaded = true;
+        if(leaderboard != null) {
+          _allTimeScorerMap.putIfAbsent(
+              leaderboard.player.membershipId, () => leaderboard);
+        }
+
       });
     });
   }
@@ -198,12 +211,15 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     LeaderboardManager().getScorer(FirestoreResources.leaderboardWeekly,
         FirestoreResources.fieldLeaderBoardScore, (leaderboard) {
       setState(() {
-        _weeklyScorerMap.putIfAbsent(
-            leaderboard.player.membershipId, () => leaderboard);
+        if(leaderboard != null) {
+          _weeklyScorerMap.putIfAbsent(
+              leaderboard.player.membershipId, () => leaderboard);
+        }
         _weeklyScorerLeaderboardLoaded = true;
       });
     });
   }
+
 
   /// Widget to show the player score
   Widget myScore(Leaderboard leaderboard) {

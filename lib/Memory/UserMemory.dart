@@ -8,7 +8,8 @@ class UserMemory {
 
   Player _player;
   FirebaseUser firebaseUser;
-
+  bool gamePlayed = false;
+  bool adShown = false;
 
   factory UserMemory() {
     return _userMemory;

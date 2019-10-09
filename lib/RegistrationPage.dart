@@ -1,12 +1,13 @@
 import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
-import 'package:Surprize/Dashboard.dart';
-import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
+
+import 'package:Surprize/FirebaseMessaging/PushNotification/PushNotification.dart';
+
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Player.dart';
-import 'package:Surprize/Models/Referral.dart';
+
 import 'package:Surprize/ProfileSetUpPage.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
@@ -183,6 +184,10 @@ class RegistrationPageState extends State<RegistrationPage>
 
       UserMemory().savePlayer(player);
       UserMemory().saveFirebaseUser(_firebaseUser);
+
+      PushNotification().configure(context);
+      PushNotification().saveToken(UserMemory().getPlayer().membershipId);
+
       Navigator.of(context).popUntil((route) => route.isFirst);
       AppHelper.cupertinoRouteWithPushReplacement(_context, ProfileSetUpPage(_firebaseUser));
     }).catchError((error) {

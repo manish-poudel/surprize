@@ -113,7 +113,7 @@ class SQLiteManager {
   getAllQuotes() async {
     SQLiteDb sqLiteDatabase = await getSQLiteDatabaseInstance();
     List<Map> list = await sqLiteDatabase
-        .getDataByCondition(SQLiteDatabaseResources.tableQuizFavourite, SQLiteDatabaseResources.fieldQuizLetterUserId + " =?", [UserMemory().getPlayer().membershipId]);
+        .getDataByCondition(SQLiteDatabaseResources.tableQuizFavourite, SQLiteDatabaseResources.fieldQuizLetterUserId + " =?", [UserMemory().firebaseUser.uid]);
     print(list.toString());
     return list;
   }
@@ -123,7 +123,7 @@ class SQLiteManager {
     SQLiteDb sqLiteDatabase = await getSQLiteDatabaseInstance();
     List<Map> list = await sqLiteDatabase
         .getDataByCondition(SQLiteDatabaseResources.tableQuizFavourite, SQLiteDatabaseResources.fieldQuizLetterUserId + " =? AND "
-        + SQLiteDatabaseResources.fieldQuizLetterDisplayId + " =?", [UserMemory().getPlayer().membershipId, id]);
+        + SQLiteDatabaseResources.fieldQuizLetterDisplayId + " =?", [UserMemory().firebaseUser.uid, id]);
     return list;
   }
 

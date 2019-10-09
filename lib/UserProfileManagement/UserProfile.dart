@@ -15,7 +15,8 @@ class UserProfile{
 
   /// Get profile from server
   Future<DocumentSnapshot> getProfile(String userId) async {
-    return Firestore.instance.collection(FirestoreResources.userCollectionName).document(userId).get();
+    DocumentSnapshot documentSnapshot = await Firestore.instance.collection(FirestoreResources.userCollectionName).document(userId).get();
+    return documentSnapshot;
   }
 
   /// Update user

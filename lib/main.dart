@@ -30,4 +30,5 @@ class EntryPoint extends StatelessWidget{
       ),
     );
   }
+
 }

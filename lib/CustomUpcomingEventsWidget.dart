@@ -45,6 +45,9 @@ class CustomUpcomingEventsWidgetState extends State<CustomUpcomingEventsWidget>{
        querySnapshot.documentChanges.toList().forEach((documentSnapshot){
           setState(() {
             Events event = Events.fromMap(documentSnapshot.document.data);
+            if(_eventsList.containsKey(event.id)){
+              _eventsList[event.id] = event;
+            }
              _eventsList.putIfAbsent(event.id, () => event);
           });
       });

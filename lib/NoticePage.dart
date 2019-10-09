@@ -1,8 +1,10 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
 class NoticePage extends StatefulWidget {
@@ -19,6 +21,13 @@ class _NoticePageState extends State<NoticePage> {
   void initState() {
     super.initState();
     getNoticeFromServer();
+    GoogleAdManager().showBannerForNotice(0.0, AnchorType.bottom);
+  }
+
+  @override
+  void dispose() {
+    GoogleAdManager().disposeNoticeBannerAd();
+    super.dispose();
   }
 
   /// Get quiz letter list from server

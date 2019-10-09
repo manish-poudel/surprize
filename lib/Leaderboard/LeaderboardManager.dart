@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,10 +28,10 @@ class LeaderboardManager{
       _userId = firebaseUser.uid;
       _totalScore = scoreFromQuizPlay + ScoreSystem.getScoreFromGamePlay();
 
-      saveForAllTimeScore((value){
+      saveForAllTimeScore(_userId,_totalScore, (value){
         allTimeScoredSaved(value);
       });
-      saveForWeeklyScore((value){
+      saveForWeeklyScore(_userId, _totalScore,(value){
         weeklyScoredSaved(value);
       });
       _saveForDailyQuizWinner(scoreFromQuizPlay ,playedQuizId, playedQuizName, (value){
@@ -40,35 +41,22 @@ class LeaderboardManager{
   }
 
 
-  ///Save score after sharing
-  saveScoreAfterSharing(int score,String id,Function allTimeScoredSaved, Function weeklyScoredSaved){
-    this._userId = id;
-    _totalScore = score;
-    print("About to save score" + _totalScore.toString());
-    saveForAllTimeScore((value){
-      allTimeScoredSaved(value);
-    });
-    saveForWeeklyScore((value){
-      weeklyScoredSaved(value);
-    });
-  }
-
   /// Save score for all time
-  void saveForAllTimeScore(Function allTimeScoreSaved){
-   _saveToFirestore(FirestoreResources.leaderboardAllTime, (value){
+  void saveForAllTimeScore(String id, int score, Function allTimeScoreSaved){
+   _saveToFirestore(id, score, FirestoreResources.leaderboardAllTime, (value){
      allTimeScoreSaved(value);
    });
   }
 
   /// Save score for weekly
-  void saveForWeeklyScore(Function weeklyScoredSaved){
-    _saveToFirestore(FirestoreResources.leaderboardWeekly, (value){
+  void saveForWeeklyScore(String id, int score, Function weeklyScoredSaved){
+    _saveToFirestore(id, score, FirestoreResources.leaderboardWeekly, (value){
       weeklyScoredSaved(value);
     });
   }
 
   /// Save for daily quiz winner
-  void _saveForDailyQuizWinner(int scoreFromQuiz,String playedQuizId, String quizName, Function dailyQuizWinnerSaved){
+  void _saveForDailyQuizWinner(int scoreFromQuiz, String playedQuizId, String quizName, Function dailyQuizWinnerSaved){
 
     _isDailyQuizWinner = (scoreFromQuiz == ScoreSystem.getFullSoreFromQuizPlay());
 
@@ -83,26 +71,26 @@ class LeaderboardManager{
 
 
   /// Save score to the database
-  void _saveToFirestore(String leaderboardType, Function scoredSaved){
+  void _saveToFirestore(String id, int totalScore, String leaderboardType, Function scoredSaved){
       DocumentReference leaderboardDocRef =   FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
-        FirestoreResources.leaderboardSubCollection, leaderboardType).document(_userId);
+        FirestoreResources.leaderboardSubCollection, leaderboardType).document(id);
 
       /// For saving score weekly and all time basis
       if(leaderboardType == FirestoreResources.leaderboardAllTime || leaderboardType == FirestoreResources.leaderboardWeekly){
-        _saveScore(leaderboardDocRef, (value){
+        _saveScore(totalScore, leaderboardDocRef, (value){
           scoredSaved(value);
         });
       }
   }
 
   /// Save score to the firestore
-  void _saveScore(DocumentReference documentReference, Function scoreSaved){
+  void _saveScore(int totalScore, DocumentReference documentReference, Function scoreSaved){
     int oldScore;
     documentReference.get().then((documentSnapshot){
       (!documentSnapshot.exists) ? oldScore = 0: oldScore =  documentSnapshot.data[FirestoreResources.fieldLeaderBoardScore];
 
       documentReference.setData({
-        FirestoreResources.fieldLeaderBoardScore: (oldScore + _totalScore)
+        FirestoreResources.fieldLeaderBoardScore: (oldScore + totalScore)
       }).catchError((error){
         scoreSaved(false);
       }).then((value){
@@ -119,6 +107,10 @@ class LeaderboardManager{
         FirestoreResources.leaderboardSubCollection, leaderboardType).orderBy(fieldValue, descending: true).getDocuments();
 
    List<DocumentSnapshot> docSnapshot = querySnapshot.documents.toList();
+   if(docSnapshot.length == 0){
+     getScorer(null);
+     return;
+   }
    /// Add to leaderboard list
     docSnapshot.forEach((documentSnapshot)  async {
       Player player = await getProfileData(documentSnapshot.documentID);
@@ -135,6 +127,10 @@ class LeaderboardManager{
   }
 
 
+  /// GET SCORE BY iD
+
+
+
 /// Get player data
   Future<Player> getProfileData(String id) async {
     DocumentSnapshot documentSnapshot = await FirestoreOperations().getDocumentSnapshot(FirestoreResources.userCollectionName
@@ -142,8 +138,6 @@ class LeaderboardManager{
     Player player = Player.fromMap(documentSnapshot.data);
     return player;
   }
-
-
 
 
 }

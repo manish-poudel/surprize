@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
+import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/UserPresenceState.dart';
@@ -25,7 +28,6 @@ import 'package:Surprize/Resources/StringResources.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 
 class DailyQuizChallengeGamePlayPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -33,16 +35,16 @@ class DailyQuizChallengeGamePlayPage extends StatefulWidget {
   }
 }
 
-class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePlayPage> with WidgetsBindingObserver{
-
+class DailyQuizChallengeGamePlayPageState
+    extends State<DailyQuizChallengeGamePlayPage> with WidgetsBindingObserver {
   static double countDownTimerHeight = 120.0;
   static double countDownTimerWidth = 200.0;
 
- // init button code value
- static final int quizFirstButtonCode = 1;
- static final int quizSecondButtonCode = 2;
- static final int quizThirdButtonCode = 3;
- static final int quizFourButtonCode = 4;
+  // init button code value
+  static final int quizFirstButtonCode = 1;
+  static final int quizSecondButtonCode = 2;
+  static final int quizThirdButtonCode = 3;
+  static final int quizFourButtonCode = 4;
 
   QuizState _quizState;
 
@@ -54,11 +56,18 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   CustomQuizAnswerButtonWidget _thirdAnswer;
   CustomQuizAnswerButtonWidget _fourthAnswer;
 
-  CustomCountDownTimerWidget _customCountDownTimerWidget = CustomCountDownTimerWidget(true, new Duration(seconds: 11),
-      "", countDownTimerHeight, countDownTimerWidth,
-      Colors.white,
-      Colors.red[900],
-      CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY);
+  CustomCountDownTimerWidget _customCountDownTimerWidget =
+      CustomCountDownTimerWidget(
+          true,
+          32,
+          true,
+          new Duration(seconds: 11),
+          "",
+          countDownTimerHeight,
+          countDownTimerWidth,
+          Colors.white,
+          Colors.red[900],
+          CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY);
 
   bool _clickableButton = true;
   bool _disableButtonPermanently = false;
@@ -68,73 +77,80 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   bool _isGameFinished = false;
   bool _hasMusicStarted = false;
 
-
   int currentIndex = 0;
 
- SoundHelper _soundHelper;
+  SoundHelper _soundHelper;
 
- int _totalScore = 0;
+  int _totalScore = 0;
 
- UserProfile _userProfile;
+  UserProfile _userProfile;
 
-  Map<String,DQCPlay> quizPlayList = new Map();
- GlobalKey<ScaffoldState> _scaffoldKey;
+  Map<String, DQCPlay> quizPlayList = new Map();
+  GlobalKey<ScaffoldState> _scaffoldKey;
 
+  bool _isQuestionFromCache = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initQuizQuestion();
-     listenForQuizState();
+    listenForQuizState();
     _userProfile = UserProfile();
-    _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
-   _soundHelper = SoundHelper();
+    _userProfile.setUserPresence(
+        UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
+    _soundHelper = SoundHelper();
     _scaffoldKey = GlobalKey<ScaffoldState>();
-
   }
 
   @override
   void dispose() {
-    if(!_isGameFinished)
-      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.END_GAME_ABRUPTLY);
+    if (!_isGameFinished)
+      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId,
+          UserPresenceState.END_GAME_ABRUPTLY);
     WidgetsBinding.instance.removeObserver(this);
-    if(_soundHelper != null) {
+    if (_soundHelper != null) {
       _soundHelper.stopSound();
     }
+    _quizState = null;
     super.dispose();
-
   }
 
   /// Detect the change in app lifecycle state
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(state == AppLifecycleState.inactive || state == AppLifecycleState.paused){
-      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.END_GAME_ABRUPTLY);
-      if(_soundHelper != null) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId,
+          UserPresenceState.END_GAME_ABRUPTLY);
+      if (_soundHelper != null) {
         _soundHelper.stopSound();
       }
     }
-    if(state == AppLifecycleState.resumed){
-      _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
+    if (state == AppLifecycleState.resumed) {
+      _userProfile.setUserPresence(
+          UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
       _soundHelper.stopSound();
-    /*  _quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED?
-      _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeWaitingBackgroundMusic.split('/')[1],
-          SoundResources.dailyQuizChallengeWaitingBackgroundMusic): _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
-          SoundResources.dailyQuizChallengeBackgroundMusic);*/
+      _quizState.quizState ==
+              CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED
+          ? _soundHelper.playBackgroundSound(
+              SoundResources.dailyQuizChallengeWaitingBackgroundMusic
+                  .split('/')[1],
+              SoundResources.dailyQuizChallengeWaitingBackgroundMusic)
+          : _soundHelper.playBackgroundSound(
+              SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
+              SoundResources.dailyQuizChallengeBackgroundMusic);
     }
   }
 
-
-  void setButtonClickable(bool clickable){
+  void setButtonClickable(bool clickable) {
     _clickableButton = clickable;
   }
 
   /*
   Initialize question and answer for the first time
    */
-  void initializeQuestionAndAnswer(int currentIndex){
-
+  void initializeQuestionAndAnswer(int currentIndex) {
     try {
       // setting quiz question
       _quizQuestion = CustomQuizQuestionHolderWidget(
@@ -142,87 +158,111 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
 
       // Setting answer button for the quiz
       _firstAnswer = CustomQuizAnswerButtonWidget(
-          onButtonSelect, quizFirstButtonCode,
+          onButtonSelect,
+          quizFirstButtonCode,
           _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0),
           EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 8));
 
       _secondAnswer = CustomQuizAnswerButtonWidget(
-          onButtonSelect, quizSecondButtonCode,
+          onButtonSelect,
+          quizSecondButtonCode,
           _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1),
           EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
 
       _thirdAnswer = CustomQuizAnswerButtonWidget(
-          onButtonSelect, quizThirdButtonCode,
+          onButtonSelect,
+          quizThirdButtonCode,
           _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2),
           EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8));
 
       _fourthAnswer = CustomQuizAnswerButtonWidget(
-          onButtonSelect, quizFourButtonCode,
+          onButtonSelect,
+          quizFourButtonCode,
           _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3),
           EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 8.0));
-    }
-    catch(error){
-
-    }
+    } catch (error) {}
   }
 
   /*
   Check if given answer is correct answer
    */
-  bool isRightAnswer(value){
+  bool isRightAnswer(value) {
     return value == _dailyQuizChallengeQnAList[currentIndex].rightAnswer;
   }
 
+  bool retry = false;
+  StreamSubscription<QuerySnapshot> subscription;
   /*
   Init quiz
    */
   void initQuizQuestion() {
+    if (retry) {
+      subscription.cancel();
+      subscription = null;
+    }
+
     // Listen for the quiz question and answers.
-    FirestoreOperations().getNestedCollectionReference(
-        FirestoreResources.collectionQuizName,
-        FirestoreResources.collectionQuestionAndAnswersList,
-        FirestoreResources.fieldQuizDocumentName).snapshots().listen((querySnapshot) {
+    subscription = FirestoreOperations()
+        .getNestedCollectionReference(
+            FirestoreResources.collectionQuizName,
+            FirestoreResources.collectionQuestionAndAnswersList,
+            FirestoreResources.fieldQuizDocumentName)
+        .snapshots()
+        .listen((querySnapshot) {
 
-      setState(() {
-        try {
-          _dailyQuizChallengeQnAList =
-              querySnapshot.documents.map((documentSnapshot) =>
-                  DailyQuizChallengeQnA.fromMap(documentSnapshot.data)).
-              where((val) => val.state == QuizDataState.ACTIVE).toList();
-        }
-        catch(error){
-          _dailyQuizChallengeQnAList =
-              querySnapshot.documents.map((documentSnapshot) =>
-                  DailyQuizChallengeQnA.fromMap(documentSnapshot.data)).
-              toList();
-        }
+      if (mounted) {
+        setState(() {
+          try {
+            _dailyQuizChallengeQnAList = querySnapshot.documents
+                .map((documentSnapshot) =>
+                    DailyQuizChallengeQnA.fromMap(documentSnapshot.data))
+                .where((val) => val.state == QuizDataState.ACTIVE)
+                .toList();
+          } catch (error) {
+            if (!retry) {
+              initQuizQuestion();
+            }
+            retry = true;
+            return;
+          }
+          _isQuestionFromCache = false;
+        });
+      }
 
-         });
+      quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[0].id,
+          () => DQCPlay(_dailyQuizChallengeQnAList[0], -1));
+      quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[1].id,
+          () => DQCPlay(_dailyQuizChallengeQnAList[1], -1));
+      quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[2].id,
+          () => DQCPlay(_dailyQuizChallengeQnAList[2], -1));
+      quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[3].id,
+          () => DQCPlay(_dailyQuizChallengeQnAList[3], -1));
+      quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[4].id,
+          () => DQCPlay(_dailyQuizChallengeQnAList[4], -1));
+      initializeQuestionAndAnswer(currentIndex);
 
-         quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[0].id, () => DQCPlay(_dailyQuizChallengeQnAList[0], -1));
-         quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[1].id, () => DQCPlay(_dailyQuizChallengeQnAList[1], -1));
-         quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[2].id, () => DQCPlay(_dailyQuizChallengeQnAList[2], -1));
-         quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[3].id, () => DQCPlay(_dailyQuizChallengeQnAList[3], -1));
-         quizPlayList.putIfAbsent(_dailyQuizChallengeQnAList[4].id, () => DQCPlay(_dailyQuizChallengeQnAList[4], -1));
-         initializeQuestionAndAnswer(currentIndex);
-        _hasQuizListBeenRetrieved = true;
-         setButtonClickable(true);
-      });
+      _hasQuizListBeenRetrieved = true;
+      setButtonClickable(true);
+    });
   }
 
   /*
   Update question and answer
    */
-  void updateQuestionAndAnswer(){
-
+  void updateQuestionAndAnswer() {
     // Update answer
-    _quizQuestion.updateQuestion(_dailyQuizChallengeQnAList[currentIndex].question);
+    _quizQuestion
+        .updateQuestion(_dailyQuizChallengeQnAList[currentIndex].question);
 
     // Update question
-    _firstAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0));
-    _secondAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1));
-    _thirdAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2));
-    _fourthAnswer.setQuizAnswer(_dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3));
+    _firstAnswer.setQuizAnswer(
+        _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(0));
+    _secondAnswer.setQuizAnswer(
+        _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(1));
+    _thirdAnswer.setQuizAnswer(
+        _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(2));
+    _fourthAnswer.setQuizAnswer(
+        _dailyQuizChallengeQnAList[currentIndex].answers.elementAt(3));
   }
 
   /**
@@ -230,25 +270,26 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
    */
   void listenForQuizState() {
     // Listen for the quiz state
-    FirestoreOperations().getSnapshotStream(
-        FirestoreResources.collectionQuizName, FirestoreResources.fieldQuizDocumentName)
+    FirestoreOperations()
+        .getSnapshotStream(FirestoreResources.collectionQuizName,
+            FirestoreResources.fieldQuizDocumentName)
         .listen((snapshot) {
-      setState(() {
-        _quizState = QuizState.fromMap(snapshot.data);
-        if (_quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED) {
-          _readyToShowQuestion = true;
-          // Get current quiz value
-          _dailyQuizChallengeQnAList.forEach((dailyQuizChallengeQnA){
-          });
-
-        }
-        if (_quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED) {
-          _readyToShowQuestion = false;
-        }
-        if (_quizState.quizState == CurrentQuizState.QUIZ_IS_OFF) {
-         Navigator.of(context).pop();
-        }
-      });
+      if (mounted) {
+        setState(() {
+          _quizState = QuizState.fromMap(snapshot.data);
+          if (_quizState.quizState ==
+              CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED) {
+            _readyToShowQuestion = true;
+          }
+          if (_quizState.quizState ==
+              CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED) {
+            _readyToShowQuestion = false;
+          }
+          if (_quizState.quizState == CurrentQuizState.QUIZ_IS_OFF) {
+            Navigator.of(context).pop();
+          }
+        });
+      }
     });
   }
 
@@ -256,29 +297,32 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   Handle button click event
    */
   void onButtonSelect(value, CustomQuizAnswerButtonWidget button) {
-    if(_clickableButton && !_disableButtonPermanently) {
-      quizPlayList[_dailyQuizChallengeQnAList[currentIndex].id].providedAnswer = value;
+    if (_clickableButton && !_disableButtonPermanently) {
+      quizPlayList[_dailyQuizChallengeQnAList[currentIndex].id].providedAnswer =
+          value;
       if (isRightAnswer(value)) {
         _totalScore = _totalScore + ScoreSystem.getScoreFromQuizCorrectAnswer();
       }
-        setButtonClickable(false);
-        button.changeColor(value);
+      setButtonClickable(false);
+      button.changeColor(value);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         key: _scaffoldKey,
         body: Container(
           height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-                image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage),fit: BoxFit.fill)
-            ),
-          child: (_hasQuizListBeenRetrieved && _readyToShowQuestion ? ifAllQuizValueHasBeenSet() : ifQuizValueIsInRetrievedMode()),
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: new AssetImage(ImageResources.appBackgroundImage),
+                  fit: BoxFit.fill)),
+          child: (_hasQuizListBeenRetrieved && _readyToShowQuestion
+              ? ifAllQuizValueHasBeenSet()
+              : ifQuizValueIsInRetrievedMode()),
         ),
       ),
     );
@@ -288,25 +332,27 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   Keep time track
    */
   void keepTimeTrack(int second) async {
-    Future.delayed(Duration(seconds: second), (){
-      setState(() {
-        if((currentIndex + 1) != _dailyQuizChallengeQnAList.length) {
-          currentIndex = currentIndex + 1;
-          updateQuestionAndAnswer();
-          resetButtonColor();
-          setButtonClickable(true);
-          _customCountDownTimerWidget.resetCountdown();
-          _customCountDownTimerWidget.startCountdown();
-        }
-        else{
-          _customCountDownTimerWidget.stopCountdown();
-          _isGameFinished = true;
-          setButtonClickable(false);
-          _userProfile.setUserPresence(UserMemory().getPlayer().membershipId, UserPresenceState.PLAYED_GAME_AND_EXITED);
-          goToScoreSummaryPage();
-        }
-      });
-    }).catchError((error){
+    Future.delayed(Duration(seconds: second), () {
+      if (mounted) {
+        setState(() {
+          if ((currentIndex + 1) != _dailyQuizChallengeQnAList.length) {
+            currentIndex = currentIndex + 1;
+            updateQuestionAndAnswer();
+            resetButtonColor();
+            setButtonClickable(true);
+            _customCountDownTimerWidget.resetCountdown();
+            _customCountDownTimerWidget.startCountdown();
+          } else {
+            _customCountDownTimerWidget.stopCountdown();
+            _isGameFinished = true;
+            setButtonClickable(false);
+            _userProfile.setUserPresence(UserMemory().getPlayer().membershipId,
+                UserPresenceState.PLAYED_GAME_AND_EXITED);
+            goToScoreSummaryPage();
+          }
+        });
+      }
+    }).catchError((error) {
       print(error);
     });
   }
@@ -314,139 +360,186 @@ class DailyQuizChallengeGamePlayPageState extends State<DailyQuizChallengeGamePl
   /*
   Reset button color;
    */
-  void resetButtonColor(){
+  void resetButtonColor() {
     _firstAnswer.resetColor();
     _secondAnswer.resetColor();
     _thirdAnswer.resetColor();
     _fourthAnswer.resetColor();
   }
 
-
   /*
   Widget for quiz play
    */
-    Widget ifAllQuizValueHasBeenSet(){
+  Widget ifAllQuizValueHasBeenSet() {
+    if (!_hasMusicStarted) {
+      _soundHelper.stopSound();
+      _soundHelper.playBackgroundSound(
+          SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
+          SoundResources.dailyQuizChallengeBackgroundMusic);
+      _hasMusicStarted = true;
+    }
 
-      if(!_hasMusicStarted) {
-        _soundHelper.stopSound();
-        _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeBackgroundMusic.split('/')[1],
-            SoundResources.dailyQuizChallengeBackgroundMusic);
-        _hasMusicStarted = true;
-      }
+    if (!_isGameFinished) {
+      keepTimeTrack(3);
+    }
 
-      if(!_isGameFinished) {
-        keepTimeTrack(10);
-      }
-
-      return  SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top:32.0),
-          child: Center(
-          child: Text(
-            StringResources.headingText,
-            style: TextStyle(color: Colors.white, fontSize:21, fontFamily: 'Raleway', fontWeight: FontWeight.w300),
-          ),
-          ),
-        ),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: _customCountDownTimerWidget,
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 32.0),
+            child: Center(
+              child: Text(
+                StringResources.headingText,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 21,
+                    fontFamily: 'Raleway',
+                    fontWeight: FontWeight.w300),
+              ),
             ),
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-                  child: Center(
-                    child: Text(
-                      (currentIndex + 1).toString(),
-                      style: TextStyle(color: Colors.white, fontFamily: 'Raleway',fontSize:24, fontWeight: FontWeight.w500),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: _customCountDownTimerWidget,
+          ),
+          Stack(
+            children: <Widget>[
+              Container(
+                height: 50,
+                width: 50,
+                decoration:
+                    BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
+                child: Center(
+                  child: Text(
+                    (currentIndex + 1).toString(),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Raleway',
+                        fontSize: 24,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 18, right: 18, top: 32.0),
+                child: SizedBox(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black26,
+                              offset: Offset(1.0, 3.0),
+                              blurRadius: 21.0),
+                        ],
+                        border: new Border.all(color: Colors.white10, width: 0),
+                        borderRadius:
+                            new BorderRadius.all(Radius.circular(21.0))),
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 4.0, right: 4.0, top: 4.0),
+                          child: _quizQuestion,
+                        ),
+                        _firstAnswer,
+                        _secondAnswer,
+                        _thirdAnswer,
+                        _fourthAnswer,
+                      ],
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left:18, right:18, top:32.0),
-                  child: SizedBox(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color:Colors.black26,
-                                offset: Offset(1.0, 3.0),
-                                blurRadius: 21.0
-                            ),
-                          ],
-                          border: new Border.all(color: Colors.white10, width: 0),
-                          borderRadius:  new BorderRadius.all(Radius.circular(21.0))
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left:4.0, right: 4.0, top: 4.0),
-                            child: _quizQuestion,
-                          ),
-
-                          _firstAnswer,
-                          _secondAnswer,
-                          _thirdAnswer,
-                          _fourthAnswer,
-
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            )],
-        ),
-      );
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 
+  bool soundOn = true;
+  bool _waitingMusicPlayed = false;
   // Widget if value is in retrieved mode
-  Widget ifQuizValueIsInRetrievedMode(){
-      _soundHelper.playBackgroundSound(SoundResources.dailyQuizChallengeWaitingBackgroundMusic.split('/')[1],
-          SoundResources.dailyQuizChallengeWaitingBackgroundMusic);
+  Widget ifQuizValueIsInRetrievedMode() {
+    if (_quizState == null ||
+        _quizState.quizState ==
+            CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED ||
+        _isQuestionFromCache) {
+      if (soundOn) {
+        if (!_waitingMusicPlayed) {
+          _soundHelper.playBackgroundSound(
+              SoundResources.dailyQuizChallengeWaitingBackgroundMusic
+                  .split('/')[1],
+              SoundResources.dailyQuizChallengeWaitingBackgroundMusic);
+          _waitingMusicPlayed = true;
+        }
+      } else {
+        _soundHelper.stopSound();
+        _waitingMusicPlayed = false;
+      }
+    }
 
     return Padding(
-      padding: const EdgeInsets.only(top:240.0),
+      padding: const EdgeInsets.only(top: 240.0),
       child: Center(
-        child: Column(
-            children: <Widget>[
-          CircularProgressIndicator(backgroundColor: Colors.redAccent,),
+        child: Column(children: <Widget>[
+          CircularProgressIndicator(
+            backgroundColor: Colors.redAccent,
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(StringResources.getReadyForQuizText, textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontFamily: 'Raleway', fontSize: 21)),
-          )
+            child: Text(
+                _isQuestionFromCache
+                    ? "We are unable to load new quiz questions. Make sure your internet is working!"
+                    : StringResources.getReadyForQuizText,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white, fontFamily: 'Raleway', fontSize: 21)),
+          ),
+          IconButton(
+              icon: Icon(soundOn ? Icons.pause : Icons.play_arrow),
+              color: Colors.white,
+              onPressed: () {
+                if (mounted) {
+                  setState(() {
+                    soundOn = !soundOn;
+                  });
+                }
+              }),
         ]),
       ),
     );
-}
+  }
 
 /*
 Go to summary page after game is finished.
  */
-void goToScoreSummaryPage(){
-  Navigator.pushReplacement(context, MaterialPageRoute(
-    builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalScore,_quizState,quizPlayList),
-  ));
-}
+  void goToScoreSummaryPage() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DailyQuizChallengeScoreSummaryPage(
+              _totalScore, _quizState, quizPlayList),
+        ));
+  }
 
-/// Listen of quiz state change
-listenForQuizStateChange(){
-  Firestore.instance.collection(FirestoreResources.collectionQuizName).document(FirestoreResources.fieldQuizDocumentName).snapshots()
-      .listen((snapshot){
-        QuizState quizState = QuizState.fromMap(snapshot.data);
-        if(quizState.quizState == CurrentQuizState.QUIZ_IS_OFF){
+  /// Listen of quiz state change
+  listenForQuizStateChange() {
+    Firestore.instance
+        .collection(FirestoreResources.collectionQuizName)
+        .document(FirestoreResources.fieldQuizDocumentName)
+        .snapshots()
+        .listen((snapshot) {
+      QuizState quizState = QuizState.fromMap(snapshot.data);
+      if (quizState.quizState == CurrentQuizState.QUIZ_IS_OFF) {
+        if(mounted) {
           setState(() {
             _disableButtonPermanently = true;
           });
-
         }
-  });
-}
-
+      }
+    });
+  }
 }

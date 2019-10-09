@@ -25,9 +25,7 @@ class ShareApp{
   }
 
 
-  /*
-  Create referral code
-   */
+ /// Create referral code
   String createReferralCode(){
     referralId = Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document().documentID;
     String month = DateTime.now().month.toString();
@@ -39,7 +37,7 @@ class ShareApp{
   }
 
 
-  // Save referral code
+  /// Save referral code
   saveReferralCode(){
     Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document(referralId).setData(
       Referral(referralId, referralCode, DateTime.now(), UserMemory().getPlayer().membershipId).toMap()

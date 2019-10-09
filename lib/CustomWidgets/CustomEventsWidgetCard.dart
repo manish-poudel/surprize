@@ -1,4 +1,7 @@
+import 'package:Surprize/CountDownTimerTypeEnum.dart';
+import 'package:Surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CustomWidgets/CalendarEventManagement.dart';
@@ -27,7 +30,7 @@ class CustomEventWidgetCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Stack(
-              alignment: Alignment.center,
+              alignment: Alignment.topLeft,
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -37,28 +40,62 @@ class CustomEventWidgetCard extends StatelessWidget {
                           image: _photoUrl,  width: double.infinity, height: MediaQuery.of(context).size.height * 0.4,
                         fit: BoxFit.cover,)),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.black26,
-                        shape: BoxShape.circle
-                    ),
+                GestureDetector(
+                  onTap: (){
+                    CalendarEventManagement()
+                        .addEventToCalendar(_title, _desc, _time, _time)
+                        .then((value) {})
+                        .catchError((error) {
+                      print(error);
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      width: 170,
+                      padding: EdgeInsets.only(top:2, bottom: 2, left: 1),
+                      decoration: new BoxDecoration(
+                          color: Colors.black54,
+                          border: new Border.all(color: Colors.black26, width: 0),
+                          borderRadius: new BorderRadius.all(Radius.circular(8.0))
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            height: 32,
+                            decoration: BoxDecoration(
+                                color: Colors.black54,
+                                shape: BoxShape.circle
+                            ),
 
-                    child: IconButton(
-                        icon: Icon(Icons.alarm_add, color: Colors.white),
-                        onPressed: () {
-                          CalendarEventManagement()
-                              .addEventToCalendar(_title, _desc, _time, _time)
-                              .then((value) {})
-                              .catchError((error) {
-                            print(error);
-                          });
-                        }),
+                            child: IconButton(
+                                icon: Icon(Icons.add_alarm, size: 16, color: Colors.white),
+                                onPressed: () {
+                                  CalendarEventManagement()
+                                      .addEventToCalendar(_title, _desc, _time, _time)
+                                      .then((value) {})
+                                      .catchError((error) {
+                                    print(error);
+                                  });
+                                }),
+
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left:2.0),
+                            child: CustomCountDownTimerWidget(false,18,true, _time.difference(DateTime.now()),
+                                StringResources.countDownTimeString,
+                                64,
+                                250,
+                                Colors.white,
+                                Colors.redAccent,
+                                CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
+
               ],
             ),
             Column(
@@ -101,6 +138,7 @@ class CustomEventWidgetCard extends StatelessWidget {
                 ),
               ],
             ),
+
           ],
         ),
       ),

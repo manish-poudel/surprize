@@ -1,19 +1,23 @@
-import 'dart:async';
 
 import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/BLOC/QuizLetterBLOC.dart';
-import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+
 import 'package:Surprize/CustomWidgets/CustomAppBarWithAction.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart' as prefix0;
+import 'package:Surprize/GoogleAds/GoogleBannerAds.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizDataState.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
 import 'package:Surprize/SqliteDb/SQLiteManager.dart';
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:intl/intl.dart';
+
 
 import 'Resources/FirestoreResources.dart';
 
@@ -69,10 +73,14 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   @override
   void initState() {
     super.initState();
+
+    GoogleAdManager().showInterstitialAd(0.0, AnchorType.top);
+    Admob.initialize(GoogleAdManager.appId);
     SQLiteManager().initAppDatabase();
     this._openedQuizId = (widget._openedQuizId != null?widget._openedQuizId:"0");
     getQuizLetters();
   }
+
 
   /// Quiz letters
   void getQuizLetters() {
@@ -92,7 +100,6 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
                 docSnapshot.document.data);
             if (quizLetter.quizDataState == QuizDataState.DELETED) {
               setState(() {
-                print("Deleting...");
                 _quizLetterDisplayList.remove(
                     quizLetter.quizLettersId + UserMemory()
                         .getPlayer()
@@ -121,8 +128,10 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
 
   @override
   void dispose() {
-    super.dispose();
+/*    GoogleAdManager().disposeQuizLetterBannerAd();
+    GoogleAdManager().disposeQuizLetterInterstitialAd();*/
     quizLetterBLOC.dispose();
+    super.dispose();
   }
 
 
@@ -175,9 +184,11 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   Color navigate_before_color;
   Color navigate_after_color;
   Widget _quizLetterDisplayAtGameMode(noQuizLetterMsg, Map<String, QuizLetterDisplay> quizLetterDisplayList){
-
-    if (quizLetterDisplayList.length == 0)
-      return Center(child: Text("Empty quiz letters"));
+    if (quizLetterDisplayList.length == 0) {
+      return Center(
+          child:
+          Text(noQuizLetterMsg, style: TextStyle(fontFamily: 'Raleway')));
+    }
 
    QuizLetterDisplay quizLetterDisplay = quizLetterDisplayList.values.toList()[currentQuizIndex];
    quizLetterDisplay.initiallyExpanded = true;
@@ -186,58 +197,89 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
    navigate_before_color = currentQuizIndex == 0?Colors.grey:Colors.black;
    navigate_after_color = currentQuizIndex == quizLetterDisplayList.length - 1?Colors.grey:Colors.black;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          QuizLettersExpandableWidget("Server",quizLetterDisplay,
-                  (bool) => onFavButtonHandleClickForQuizLetter(quizLetterDisplay, bool),
-                  () => onShareButtonHandle(quizLetterDisplay)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              IconButton(icon:Icon(Icons.navigate_before,color: navigate_before_color,),onPressed: (){
-                if(currentQuizIndex != 0)
-                  setState(() {
-                    currentQuizIndex--;
-                  });
-              }),
-              Text((currentQuizIndex + 1).toString()),
-              IconButton(icon:Icon(Icons.navigate_next, color: navigate_after_color,) ,onPressed: (){
-                if(currentQuizIndex != quizLetterDisplayList.length-1)
-                  setState(() {
-                    currentQuizIndex++;
-                  });
-              }),
-            ],
+          Padding(
+            padding:  EdgeInsets.only(top:32),
+            child: AdmobBanner(
+              adUnitId: BannerAd.testAdUnitId,
+              adSize: AdmobBannerSize.BANNER,
+            ),
           ),
-        ],
-      ),
-    );
+        QuizLettersExpandableWidget("Server",quizLetterDisplay,
+                (bool) => onFavButtonHandleClickForQuizLetter(quizLetterDisplay, bool),
+                () => onShareButtonHandle(quizLetterDisplay),showButton: true),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            IconButton(icon:Icon(Icons.navigate_before,color: navigate_before_color,),onPressed: (){
+              if(currentQuizIndex != 0)
+                setState(() {
+                  currentQuizIndex--;
+                });
+            }),
+            Text((currentQuizIndex + 1).toString()),
+            IconButton(icon:Icon(Icons.navigate_next, color: navigate_after_color,) ,onPressed: (){
+              if(currentQuizIndex != quizLetterDisplayList.length-1)
+                setState(() {
+                  currentQuizIndex++;
+                });
+            }),
+          ],
+        )
+    ]);
 
   }
 
   Widget _quizLetterDisplayAtListMode(noQuizLetterMsg, Map<String, QuizLetterDisplay> quizLetterDisplayList){
-    if (quizLetterDisplayList.length == 0)
+
+    if (quizLetterDisplayList.length == 0) {
       return Center(
           child:
           Text(noQuizLetterMsg, style: TextStyle(fontFamily: 'Raleway')));
+    }
 
-    List<QuizLetterDisplay> quizLetterList =
-    quizLetterDisplayList.values.toList();
+    List<QuizLetterDisplay> quizLetterList = quizLetterDisplayList.values.toList();
 
-    return Container(
-      child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: quizLetterList.length,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index) {
-            return QuizLettersExpandableWidget("Server",quizLetterList[index],
-                    (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
-                    () => onShareButtonHandle(quizLetterList[index]));
-          }),
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Container(
+            child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: quizLetterList.length,
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  int showAdAtIndex = quizLetterDisplayList.length > 1?1:0;
+                  return (index == showAdAtIndex)?
+                  Column(
+                    children: <Widget>[
+                      QuizLettersExpandableWidget("Server",quizLetterList[index],
+                              (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
+                              () => onShareButtonHandle(quizLetterList[index]),showButton: true),
+                      Padding(
+                        padding: showAdAtIndex == 0? const EdgeInsets.only(top:48, bottom:48, left: 16, right: 16): const EdgeInsets.all(16),
+                        child: Column(
+                          children: <Widget>[
+                            Text("Advertisement", style: TextStyle(color: Colors.deepOrange,)),
+                            AdmobBanner(
+                              adUnitId: BannerAd.testAdUnitId,
+                              adSize: AdmobBannerSize.BANNER,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ):
+                   QuizLettersExpandableWidget("Server",quizLetterList[index],
+                          (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
+                          () => onShareButtonHandle(quizLetterList[index]),showButton: true);
+                }),
+          ),
+        ),
+      ]
     );
   }
 
@@ -286,8 +328,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
         ],
       );
 
-    List<QuizLetterDisplay> quizLetterList =
-    quizLetterDisplayList.values.toList();
+    List<QuizLetterDisplay> quizLetterList = quizLetterDisplayList.values.toList();
 
     return Container(
       child: ListView.builder(
@@ -297,7 +338,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
           itemBuilder: (BuildContext context, int index) {
             return QuizLettersExpandableWidget("Sqlite",quizLetterList[index], (bool) =>onFavButtonHandleClickedForFavouriteQuizLetter(quizLetterList[index], bool), (){
               ShareApp().shareQuizLetter(quizLetterList[index].quizLetter.quizLettersBody);
-            });
+            },showButton: true);
           }),
     );
   }

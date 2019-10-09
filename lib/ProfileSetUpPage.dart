@@ -1,27 +1,21 @@
 import 'dart:async';
 
-import 'package:Surprize/CustomWidgets/CustomCountryPickerWidget.dart';
-import 'package:Surprize/CustomWidgets/CustomDatePickerWidget.dart';
-import 'package:Surprize/CustomWidgets/CustomDropDownWidget.dart';
+import 'package:Surprize/AppIntroPage.dart';
+
 import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
-import 'package:Surprize/CustomWidgets/CustomPhoneNumberWidget.dart';
-import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
-import 'package:Surprize/Firestore/FirestoreOperations.dart';
+
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
-import 'package:Surprize/LoginPage.dart';
-import 'package:Surprize/Memory/UserMemory.dart';
-import 'package:Surprize/Models/Leaderboard.dart';
-import 'package:Surprize/Models/Player.dart';
+
 import 'package:Surprize/Models/Referral.dart';
-import 'package:Surprize/PlayerDashboard.dart';
+
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/Resources/StringResources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 
 class ProfileSetUpPage extends StatefulWidget {
 
@@ -108,7 +102,7 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
     if(_customReferralLabelTextField.getValue().isNotEmpty){
       if(await checkForReferralCode()) {
         deleteReferralCode();
-        AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
+        AppHelper.cupertinoRouteWithPushReplacement(context, AppIntroPage("FIRST_TIME_USER"));
       }
       else{
         AppHelper.showSnackBar("Referral code not found! Check uppercase and lowercase letters!", _scaffoldKey);
@@ -120,7 +114,7 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
   }
 
   skip(){
-    AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
+    AppHelper.cupertinoRouteWithPushReplacement(context, AppIntroPage("FIRST_TIME_USER"));
   }
 
   Future<bool> checkForReferralCode() async {
@@ -143,8 +137,19 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
 
   /// Update score
   void updateScore(String id) {
-    LeaderboardManager().saveScoreAfterSharing(5, widget._firebaseUser.uid, (){}, (){});
-    LeaderboardManager().saveScoreAfterSharing(10, id, (){}, (){});
+      LeaderboardManager().saveForAllTimeScore(id, 10, (value){
+
+      });
+      LeaderboardManager().saveForWeeklyScore(id, 10, (value){
+
+      });
+      LeaderboardManager().saveForAllTimeScore(widget._firebaseUser.uid, 5, (value){
+
+      });
+      LeaderboardManager().saveForWeeklyScore(widget._firebaseUser.uid,5, (value){
+
+      });
+
   }
 
 }

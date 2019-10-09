@@ -75,7 +75,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: CustomCountDownTimerWidget(true, countDownDuration,
+              child: CustomCountDownTimerWidget(true,32,true, countDownDuration,
                   StringResources.countDownTimeString,
                   MediaQuery.of(context).size.height * 0.30,
                   MediaQuery.of(context).size.height * 0.30,

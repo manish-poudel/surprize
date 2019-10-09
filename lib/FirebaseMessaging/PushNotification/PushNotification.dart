@@ -55,10 +55,13 @@ class PushNotification {
 
   /// Save token to database
   saveToken(String id) async {
+    print("Save token");
     String token = await getDeviceTokenId();
-    Firestore.instance.collection("/Device token").document(id).setData({
-      "DeviceId":token
-    });
+    if(token != null) {
+      Firestore.instance.collection("/Device token").document(id).setData({
+        "DeviceId": token
+      });
+    }
   }
 
   /// Handle click action
@@ -84,13 +87,5 @@ class PushNotification {
            MaterialPageRoute(
                builder: (BuildContext context) => QuizLettersPage(null)));
        break;
-
-       case "DAILY_QUIZ_CHALLENGE":
-       Navigator.push(
-           context,
-           MaterialPageRoute(
-               builder: (BuildContext context) => DailyQuizChallengePage(context).openPage()));
-       break;
-
    }}
 }

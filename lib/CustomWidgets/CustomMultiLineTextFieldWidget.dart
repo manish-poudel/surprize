@@ -11,8 +11,9 @@ class CustomMultiLineTextFieldWidget extends StatefulWidget{
   Color _color = Colors.white;
   String value;
   double height;
+  bool enabled = true;
 
-  CustomMultiLineTextFieldWidget(String label, this.value, Color color, this.height){
+  CustomMultiLineTextFieldWidget(String label, this.value, Color color, this.height, {this.enabled}){
     _label = label;
     _color = color;
   }
@@ -23,7 +24,7 @@ class CustomMultiLineTextFieldWidget extends StatefulWidget{
   }
 
   State<StatefulWidget> createState(){
-    _state = new CustomMultiLineTextFieldWidgetState(_label, _color,value);
+    _state = new CustomMultiLineTextFieldWidgetState(_label, _color, value, enabled: enabled);
     return _state;
   }
 }
@@ -32,10 +33,11 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
 {
   String _label = "";
   String _value ="";
+  bool enabled;
   Color _color = Colors.white;
   final textFldcontroller = TextEditingController();
 
-  CustomMultiLineTextFieldWidgetState(String label, Color color,String value){
+  CustomMultiLineTextFieldWidgetState(String label, Color color,String value ,{this.enabled}){
     _label = label;
     _color = color;
     textFldcontroller.text  = _value = value;
@@ -58,6 +60,7 @@ class CustomMultiLineTextFieldWidgetState extends State <CustomMultiLineTextFiel
             children:<Widget>[
               Flexible(child:
               TextField(
+                enabled: enabled,
                 style: TextStyle(fontFamily: 'Raleway',color: _color),
                 controller: textFldcontroller,   decoration: InputDecoration.collapsed(
                 hintText: _label,

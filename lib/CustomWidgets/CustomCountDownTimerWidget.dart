@@ -13,6 +13,8 @@ class CustomCountDownTimerWidget extends StatefulWidget{
   CountDownTimeTypeEnum _countDownTimeTypeEnum;
   CustomCountDownTimerWidgetState _state;
   bool _startCountDownImmediately;
+  bool _showCircle;
+  double _fontSize;
 
   /*
   Start countdown
@@ -38,12 +40,12 @@ class CustomCountDownTimerWidget extends StatefulWidget{
     _state._repeatController();
   }
 
-  CustomCountDownTimerWidget(this._startCountDownImmediately,this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
+  CustomCountDownTimerWidget(this._showCircle, this._fontSize,this._startCountDownImmediately,this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    _state =  CustomCountDownTimerWidgetState( _duration,_countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
+    _state =  CustomCountDownTimerWidgetState(_showCircle, _fontSize,_duration,_countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
     return _state;
   }
 
@@ -58,8 +60,11 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
   Color _textColor;
   Color _circleColor;
   CountDownTimeTypeEnum _countDownTimeTypeEnum;
+  bool _showCircle;
+  double _fontSize;
 
-  CustomCountDownTimerWidgetState(this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
+
+  CustomCountDownTimerWidgetState(this._showCircle, this._fontSize,this._duration, this._countDownString, this._height, this._width, this._textColor, this._circleColor, this._countDownTimeTypeEnum);
   AnimationController controller;
 
 
@@ -90,8 +95,8 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
          animation: controller,
          builder: (BuildContext context, Widget child){
            return new Text(
-               timerString,
-               style: TextStyle(color: _textColor, fontSize: 32.0, fontFamily: 'Raleway')
+              timerString,
+               style: TextStyle(color: _textColor, fontSize: _fontSize, fontFamily: 'Raleway')
            );
          });
     if(_countDownTimeTypeEnum == CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_GAME_PLAY){
@@ -100,7 +105,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
       ];
     }
     return [
-      Text(_countDownString, style: TextStyle(color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway', fontWeight: FontWeight.w400)),
+      Visibility(visible:_showCircle,child: Text(_countDownString, style: TextStyle(color: Colors.white, fontSize: 18.0, fontFamily: 'Raleway', fontWeight: FontWeight.w400))),
         builder
     ];
 
@@ -169,7 +174,7 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  Container(
+    return _showCircle? Container(
       height: _height,
       width: _width,
       child: Padding(padding: EdgeInsets.all(8.0),
@@ -208,6 +213,8 @@ class CustomCountDownTimerWidgetState extends State<CustomCountDownTimerWidget> 
         ],),
 
       ),
+    ):Column(
+      children: getValue()
     );
   }
 

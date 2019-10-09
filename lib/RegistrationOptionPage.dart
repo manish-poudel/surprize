@@ -5,15 +5,19 @@ import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/PlayerDashboard.dart';
 import 'package:Surprize/ProfileSetUpPage.dart';
 import 'package:Surprize/RegistrationPage.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'FirebaseMessaging/PushNotification/PushNotification.dart';
 
 class RegistrationOptionPage extends StatefulWidget {
   @override
@@ -113,7 +117,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
               accessToken: result.accessToken.token);
           FirebaseAuth.instance.signInWithCredential(credential).then((
               authResult) {
-            registerProfileInformation(authResult.user);
+            checkIfUserExists(authResult.user);
           });
           break;
         case FacebookLoginStatus.cancelledByUser:
@@ -140,7 +144,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
        AuthCredential authCredential = GoogleAuthProvider.getCredential(idToken: authentication.idToken, accessToken: authentication.accessToken);
 
       FirebaseAuth.instance.signInWithCredential(authCredential).then((authResult){
-        registerProfileInformation(authResult.user);
+        checkIfUserExists(authResult.user);
       });
       
      }catch(error){
@@ -151,6 +155,8 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
 
   /// Register profile information
   registerProfileInformation(FirebaseUser user) {
+
+
     // Save user profile information to the database
     Player player = Player(
         user.uid,
@@ -178,14 +184,41 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
         player.toMap())
         .then((value) {
 
-      UserMemory().savePlayer(player);
-      UserMemory().saveFirebaseUser(user);
+          saveUserToMemoryAndProceed(player, user);
 
-      _customRegistrationProgressBar.stopAndEndProgressBar(context);
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(user));
+          PushNotification().configure(context);
+          PushNotification().saveToken(UserMemory().getPlayer().membershipId);
+
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(user));
+
     }).catchError((error) {
       AppHelper.showSnackBar(error.toString(), _scaffoldKey);
     });
+  }
+
+
+
+  /// Check if user already exists
+  checkIfUserExists(FirebaseUser user) async {
+     Firestore.instance.collection(FirestoreResources.userCollectionName).document(user.uid).get().then((documentSnapshot){
+       if(documentSnapshot.exists){
+         Player player = Player.fromMap(documentSnapshot.data);
+         saveUserToMemoryAndProceed(player, user);
+         Navigator.of(context).popUntil((route) => route.isFirst);
+         AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
+       }
+       else{
+         registerProfileInformation(user);
+       }
+     });
+  }
+
+  /// Save user to memory and proceed.
+  saveUserToMemoryAndProceed(Player player,FirebaseUser user){
+    UserMemory().savePlayer(player);
+    UserMemory().saveFirebaseUser(user);
+
+    _customRegistrationProgressBar.stopAndEndProgressBar(context);
   }
 }

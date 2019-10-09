@@ -1,7 +1,13 @@
 import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizSummaryDisplayWidget.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Leaderboard/ScoreSystem.dart';
+import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
+import 'package:Surprize/SurveyFrom.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Surprize/AppShare/ShareApp.dart';
@@ -27,11 +33,16 @@ class DailyQuizChallengeScoreSummaryPage extends StatefulWidget {
 class DailyQuizChallengeScoreSummaryPageState
     extends State<DailyQuizChallengeScoreSummaryPage> {
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool _surveyFormShown  = false;
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
+        key: _scaffoldKey,
         body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -231,11 +242,62 @@ class DailyQuizChallengeScoreSummaryPageState
 
 
   UserProfile _userProfile;
+  bool rewardedForVideoAd = false;
+
+  showForm(){
+    if(!_surveyFormShown) {
+      Future.delayed(Duration.zero, () {
+        showDialog(context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              _surveyFormShown = true;
+              return SurveyForm(_scaffoldKey);
+            });
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _userProfile = UserProfile();
       updateScoreForGamePlay();
+      UserMemory().gamePlayed = true;
+      showVideoAd();
+
+  }
+
+  
+  showVideoAd() async {
+    MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(childDirected: false);
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) async {
+      if (event == RewardedVideoAdEvent.rewarded) {
+        AppHelper.showSnackBar("Rewarded 10 points", _scaffoldKey);
+          Future.delayed(Duration(seconds: 3), () => showForm());
+        LeaderboardManager().saveForAllTimeScore(UserMemory().getPlayer().membershipId, 10, (value){
+
+        });
+        LeaderboardManager().saveForWeeklyScore(UserMemory().getPlayer().membershipId,10, (value){
+
+        });
+      }
+      if(event == RewardedVideoAdEvent.loaded){
+        await RewardedVideoAd.instance.show();
+      }
+
+      if(event == RewardedVideoAdEvent.failedToLoad){
+        showForm();
+      }
+
+      if(event == RewardedVideoAdEvent.closed){
+        Future.delayed(Duration(seconds: 3), () => showForm());
+      }
+    };
+   await RewardedVideoAd.instance.load(adUnitId: RewardedVideoAd.testAdUnitId, targetingInfo: targetingInfo);
+  }
+
+  void saveScoreForWatchingVideo(){
 
   }
 
@@ -274,5 +336,6 @@ class DailyQuizChallengeScoreSummaryPageState
     if(hasAllTimeScoreSaved && hasWeeklyScoreSaved)
       customProgressbarWidget.stopAndEndProgressBar(context);
   }
+
 
 }
