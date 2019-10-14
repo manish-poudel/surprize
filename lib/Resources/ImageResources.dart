@@ -17,5 +17,7 @@ class ImageResources{
   static final String helpQuizLetterOpeningTwo = 'assets/images/opening_quiz_letter_two.png';
   static final String helpEvent = 'assets/images/event_help.png';
   static final String helpQuickTour = 'assets/images/quick_tour.png';
+  static final String googlebutton = 'assets/images/googlebutton.png';
+  static final String appIcon1024 = 'assets/images/icon1024.png';
 
 }

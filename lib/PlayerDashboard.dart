@@ -1,6 +1,7 @@
 import 'package:Surprize/CustomWidgets/CustomFooterWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
+import 'package:Surprize/GoogleAds/CurrentAdDisplayPage.dart';
 
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/NoNetwork.dart';
@@ -61,7 +62,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
   void initState() {
     super.initState();
     Admob.initialize(GoogleAdManager.appId);
-    _admobBanner = AdmobBanner(adUnitId: BannerAd.testAdUnitId, adSize: AdmobBannerSize.BANNER,
+    _admobBanner = AdmobBanner(adUnitId:BannerAd.testAdUnitId, adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args){
         handleBannerAdEvent(event, args);
       },
@@ -75,7 +76,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
     getLatestNotice();
     checkNetworkConnection();
     WidgetsBinding.instance.addObserver(this);
-
   }
 
 
@@ -87,6 +87,12 @@ class PlayerDashboardState extends State<PlayerDashboard>
           _adLoaded = true;
         });
         break;
+      case AdmobAdEvent.failedToLoad:
+        setState(() {
+          _showAd = false;
+          _adLoaded = false;
+        });
+        break;
       default:
 
     }
@@ -95,7 +101,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
   /// Check to display ad
   displayAd(){
     int rand = AppHelper.getRandomNumberInBetweenValues(1, 10);
-    print("Random " + rand.toString());
     if([1,2,4,6,9,10].contains(rand)){
       setState(() {
         _showAd = true;
@@ -103,12 +108,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
     }
   }
 
-  /// Detect the change in app lifecycle state
-  @override
-  Future didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-    }
-  }
 
   /// Check for network connection
   checkNetworkConnection(){

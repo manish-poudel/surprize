@@ -131,6 +131,7 @@ class FirestoreResources {
   static final String fieldReferralCode = "Code";
   static final String fieldReferralCreateDate = "Created at";
   static final String fieldReferralCreator = "Created by";
+  static final String fieldReferralState = "State";
 
   static get fieldDailyQuizState => "State";
 
@@ -142,4 +143,9 @@ class FirestoreResources {
   static final String fieldSurveyIssueDesc = "Issue Desc";
   static final String fieldSurveyNoOfQuizQuestion ="Total Question faced";
   static final String fieldSurveyQuizKeywords = "Keywords";
+
+  /// Related to version
+  static final String fieldAppVersionCollection = "/App version";
+  static final String fieldAppLatestVersionDocument = "latest version";
+  static final String fieldVersion = "version";
 }

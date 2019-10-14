@@ -10,6 +10,7 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
+import 'package:Surprize/SettingPage.dart';
 import 'package:Surprize/SplashScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -81,11 +82,19 @@ class PushNotification {
                builder: (BuildContext context) => NoticePage()));
        break;
 
+     case "SETTINGS":
+       Navigator.push(
+           context,
+           MaterialPageRoute(
+               builder: (BuildContext context) => SettingPage()));
+       break;
+
      case "QUIZ_LETTERS":
        Navigator.push(
            context,
            MaterialPageRoute(
                builder: (BuildContext context) => QuizLettersPage(null)));
        break;
+
    }}
 }

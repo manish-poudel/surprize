@@ -1,6 +1,7 @@
 
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/Referral.dart';
+import 'package:Surprize/Models/ReferralState.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -10,11 +11,18 @@ class ShareApp{
   String referralId;
   String referralCode;
 
+  /// Share app
    shareAppToMedia() async {
     String code = createReferralCode();
     String body = "Referral code: " + code + "\n" + "Use this code while registration to earn points! \n \n" + "A chance to win cash prize and many more. Download app by clicking on the link: \n https://play.google.com/store/apps/details?id=com.siliconguy.surprize";
     Share.text("Surprize", body, 'text/plain');
     saveReferralCode();
+  }
+
+  /// Share code only
+  shareCode(String code){
+    String body = "Referral code: " + code + "\n" + "Use this code while registration to earn points! \n \n" + "A chance to win cash prize and many more. Download app by clicking on the link: \n https://play.google.com/store/apps/details?id=com.siliconguy.surprize";
+    Share.text("Surprize", body, 'text/plain');
   }
 
   shareQuizLetter(String body) async {
@@ -40,7 +48,7 @@ class ShareApp{
   /// Save referral code
   saveReferralCode(){
     Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document(referralId).setData(
-      Referral(referralId, referralCode, DateTime.now(), UserMemory().getPlayer().membershipId).toMap()
+      Referral(referralId, referralCode, DateTime.now(), UserMemory().getPlayer().membershipId, ReferralState.ACTIVE).toMap()
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:Surprize/BLOC/QuizLetterBLOC.dart';
 
 import 'package:Surprize/CustomWidgets/CustomAppBarWithAction.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
+import 'package:Surprize/GoogleAds/CurrentAdDisplayPage.dart';
 import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizDataState.dart';
@@ -42,6 +43,10 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
 
   String _showQuizLetterType = "Game mode";
 
+  AdmobBanner _admobBanner;
+  bool _showAd = true;
+  bool _adLoaded = false;
+
   /// App bar actions
   List<Widget> appBarActions() {
     return [
@@ -71,11 +76,36 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   @override
   void initState() {
     super.initState();
-
-    GoogleAdManager().showInterstitialAd(0.0, AnchorType.top);
+    GoogleAdManager().currentPage = CurrentPage.QUIZ_LETTER;
+    GoogleAdManager().showQuizLetterInterstitialAd(0.0, AnchorType.top);
     SQLiteManager().initAppDatabase();
     this._openedQuizId = (widget._openedQuizId != null?widget._openedQuizId:"0");
     getQuizLetters();
+    _admobBanner = AdmobBanner(adUnitId: BannerAd.testAdUnitId, adSize: AdmobBannerSize.BANNER,
+      listener: (AdmobAdEvent event, Map<String, dynamic> args){
+        handleBannerAdEvent(event, args);
+      },
+    );
+  }
+
+
+  /// Banner events
+  handleBannerAdEvent(AdmobAdEvent event, Map<String, dynamic> args) {
+    switch(event){
+      case AdmobAdEvent.loaded:
+        setState(() {
+          _adLoaded = true;
+        });
+        break;
+      case AdmobAdEvent.failedToLoad:
+        setState(() {
+          _showAd = false;
+          _adLoaded = false;
+        });
+        break;
+      default:
+
+    }
   }
 
 
@@ -125,12 +155,21 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
 
   @override
   void dispose() {
+    GoogleAdManager().currentPage = CurrentPage.UNKNOWN;
     GoogleAdManager().disposeQuizLetterBannerAd();
     GoogleAdManager().disposeQuizLetterInterstitialAd();
     quizLetterBLOC.dispose();
     super.dispose();
   }
 
+  /// If back button is pressed
+  Future<bool> _willPopCallback() async {
+    Future.delayed(Duration(seconds: 3), (){
+      if(GoogleAdManager().quizLetterBannerLoaded == true && GoogleAdManager().currentPage != CurrentPage.QUIZ_LETTER){
+        GoogleAdManager().disposeQuizLetterBannerAd();
+      }
+    }); return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,10 +183,9 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
     GoogleAdManager().showBannerForQuizLetter(68, AnchorType.bottom):
     GoogleAdManager().disposeQuizLetterBannerAd();
 
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(primaryColor: Colors.purple[800]),
-        home: Scaffold(
+    return WillPopScope(
+      onWillPop: _willPopCallback ,
+        child: Scaffold(
             appBar: CustomAppBarWithAction("Quiz Letters", context, appBarActions()),
             bottomNavigationBar: BottomNavigationBar(
                 items: const <BottomNavigationBarItem>[
@@ -257,28 +295,31 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
                         QuizLettersExpandableWidget("Server",quizLetterList[index],
                                 (bool) => onFavButtonHandleClickForQuizLetter(quizLetterList[index], bool),
                                 () => onShareButtonHandle(quizLetterList[index]),showButton: true),
-                        Padding(
-                          padding: showAdAtIndex == 0? const EdgeInsets.only(top:48, bottom:48, left: 16, right: 16): const EdgeInsets.all(16),
-                          child: Column(
-                            children: <Widget>[
-                              Align(
-                                alignment:Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left:4.0),
-                                  child: Container(
-                                      decoration: new BoxDecoration(
-                                          color: Colors.amber,
-                                          border: new Border.all(color: Colors.amber, width: 1),
-                                          borderRadius: new BorderRadius.all(Radius.circular(1.0))
-                                      ),
-                                      child: Text("Ad", style: TextStyle(color: Colors.white))),
+                        Visibility(
+                          visible: _showAd,
+                          child: Padding(
+                            padding: showAdAtIndex == 0? const EdgeInsets.only(top:48, bottom:48, left: 16, right: 16): const EdgeInsets.all(16),
+                            child: Column(
+                              children: <Widget>[
+                                Visibility(
+                                  visible:_adLoaded,
+                                  child: Align(
+                                    alignment:Alignment.topLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left:4.0),
+                                      child: Container(
+                                          decoration: new BoxDecoration(
+                                              color: Colors.amber,
+                                              border: new Border.all(color: Colors.amber, width: 1),
+                                              borderRadius: new BorderRadius.all(Radius.circular(1.0))
+                                          ),
+                                          child: Text("Ad", style: TextStyle(color: Colors.white))),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              AdmobBanner(
-                                adUnitId: BannerAd.testAdUnitId,
-                                adSize: AdmobBannerSize.BANNER,
-                              ),
-                            ],
+                              _admobBanner,
+                              ],
+                            ),
                           ),
                         )
                       ],

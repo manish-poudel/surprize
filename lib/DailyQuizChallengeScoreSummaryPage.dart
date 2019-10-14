@@ -58,6 +58,7 @@ class DailyQuizChallengeScoreSummaryPageState
                   padding: const EdgeInsets.all(8.0),
                   child: scoreReport(),
                 ),
+                Center(child: watchVideoButton()),
                 _playedQuizList()
               ],
             ),
@@ -137,6 +138,21 @@ class DailyQuizChallengeScoreSummaryPageState
     );
   }
 
+  /// Play video ad button
+  Widget watchVideoButton(){
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.star,color: Colors.yellow,size: 24),
+            Text("View ad to get extra 10 points", textAlign: TextAlign.center, style: TextStyle(color: Colors.white,fontFamily: 'Raleway',fontSize: 18,fontWeight: FontWeight.w700)),
+          ],
+        ),
+        FlatButton(color: Colors.green, child: Text("View", style: TextStyle(color: Colors.white,fontFamily: 'Raleway',fontWeight: FontWeight.w600),), onPressed: () => showVideoAd())
+      ],
+    );
+  }
   /// Event display widget
   Widget _playedQuizList() {
     List<DQCPlay> quizList = widget.dqcPlayList.values.toList();
@@ -259,10 +275,9 @@ class DailyQuizChallengeScoreSummaryPageState
   void initState() {
     super.initState();
     _userProfile = UserProfile();
-      updateScoreForGamePlay();
+     updateScoreForGamePlay();
       UserMemory().gamePlayed = true;
-      showVideoAd();
-
+     Future.delayed(Duration(seconds: 3), () => showForm());
   }
 
   
@@ -272,7 +287,6 @@ class DailyQuizChallengeScoreSummaryPageState
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) async {
       if (event == RewardedVideoAdEvent.rewarded) {
         AppHelper.showSnackBar("Rewarded 10 points", _scaffoldKey);
-          Future.delayed(Duration(seconds: 3), () => showForm());
         LeaderboardManager().saveForAllTimeScore(UserMemory().getPlayer().membershipId, 10, (value){
 
         });
@@ -285,18 +299,12 @@ class DailyQuizChallengeScoreSummaryPageState
       }
 
       if(event == RewardedVideoAdEvent.failedToLoad){
-        showForm();
       }
 
       if(event == RewardedVideoAdEvent.closed){
-        Future.delayed(Duration(seconds: 3), () => showForm());
       }
     };
    await RewardedVideoAd.instance.load(adUnitId: RewardedVideoAd.testAdUnitId, targetingInfo: targetingInfo);
-  }
-
-  void saveScoreForWatchingVideo(){
-
   }
 
 

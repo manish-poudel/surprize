@@ -12,6 +12,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:Surprize/LoginPage.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info/package_info.dart';
 
 class AppHelper{
   /*
@@ -106,6 +107,11 @@ class AppHelper{
       return null;
   }
 
+  /// Package info
+  static Future<String> getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version + "+" + packageInfo.buildNumber;
+  }
   /*
   validate name
    */

@@ -82,10 +82,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        FlatButton(color:Colors.blueAccent,onPressed:()=>  signInWithFacebook(),
-                            child: Text("facebook",
-                                style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300))),
-                        FlatButton(color:Colors.red,onPressed:()=> signInWithGoogle(),
+                        FlatButton(color:const Color(0xFFD44638),onPressed:()=> signInWithGoogle(),
                             child: Text("Gmail",
                                 style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300)))
                       ],
@@ -93,8 +90,11 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                   ),
                 ),
 
-                Center(
-                  child: _customELAWidget,
+                Padding(
+                  padding: const EdgeInsets.only(top:32.0),
+                  child: Center(
+                    child: _customELAWidget,
+                  ),
                 ),
 
               ],
@@ -110,13 +110,18 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
       _customRegistrationProgressBar.startProgressBar(context, "Registering...", Colors.white, Colors.black);
       var facebookLogin = new FacebookLogin();
       var result = await facebookLogin.logInWithReadPermissions(
-          ['email', 'public_profile']);
+          ['email']);
+
+
       switch (result.status) {
+
         case FacebookLoginStatus.loggedIn:
           AuthCredential credential = FacebookAuthProvider.getCredential(
               accessToken: result.accessToken.token);
+          print("The credential" + credential.toString());
           FirebaseAuth.instance.signInWithCredential(credential).then((
               authResult) {
+            print("User " + authResult.toString());
             checkIfUserExists(authResult.user);
           });
           break;
@@ -125,6 +130,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
           break;
         case FacebookLoginStatus.error:
           _customRegistrationProgressBar.stopAndEndProgressBar(context);
+          AppHelper.showSnackBar("Could not login using facebook", _scaffoldKey);
           break;
       }
     }catch(error){
@@ -149,7 +155,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
       
      }catch(error){
        _customRegistrationProgressBar.stopAndEndProgressBar(context);
-        print(error.toString());
+        AppHelper.showSnackBar("Could not login using google", _scaffoldKey);
      }
   }
 
@@ -161,7 +167,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
     Player player = Player(
         user.uid,
         // Player Id
-        user.displayName == null?"":user.displayName,
+        user.displayName == null?"Anonymous":user.displayName,
         // Player Name
         "",
         // Player DOB

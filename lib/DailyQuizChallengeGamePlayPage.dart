@@ -377,7 +377,7 @@ class DailyQuizChallengeGamePlayPageState
     }
 
     if (!_isGameFinished) {
-      keepTimeTrack(3);
+      keepTimeTrack(1);
     }
 
     return SingleChildScrollView(

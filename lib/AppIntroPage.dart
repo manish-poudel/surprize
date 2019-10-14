@@ -41,14 +41,14 @@ class _AppIntroPageState extends State<AppIntroPage> {
         pathImage: ImageResources.helpQuickTour,
         title: "Welcome to Surprize! \n \n",
         description: "Before launching app, let us give you a quick tour!",
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
 
     Slide helpIntroSlide = Slide(
         maxLineTitle: 2,
         title: "A quick guide to using application \n \n",
         description: "Swipe or click next to start",
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
 
     Slide slideDailyQuizChallenge = Slide(
@@ -58,9 +58,10 @@ class _AppIntroPageState extends State<AppIntroPage> {
             "1. You can select answer only once \n "
             "2. You will get 10 seconds for each question \n "
             "3. Don't click back button or exit the game until the game is completed \n "
-            "4. Once game is completed, you will be able to see your score report ",
+            "4. Once game is completed, you will be able to see your score report \n"
+            "5. Watching video ad at the end can earn you extra 10 points ",
         pathImage: ImageResources.helpDQC,
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
 
     Slide slideDailyQuizChallengeNavigate = Slide(
@@ -69,7 +70,7 @@ class _AppIntroPageState extends State<AppIntroPage> {
       description: "During game time, it should start automatically when you open app. However, button will pop up at dashboard "
           "if you wish to navigate by yourself.",
         pathImage: ImageResources.helpDQCButton,
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
 
     Slide slideQuizLetters = Slide(
@@ -78,14 +79,14 @@ class _AppIntroPageState extends State<AppIntroPage> {
             "\n \n You will be provided new quiz letter each day which can increase your chance of winning daily quiz challenge."
             ,
         pathImage: ImageResources.helpQuizLetter,
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
     Slide slideQuizLettersOpening = Slide(
         title: "Opening Quiz Letters",
         description: "You will get latest quiz letter on your dashboard. To open it, simply click play more. \n \n You can also open quiz letters from drawer menu by clicking on Quiz Letters."
         ,
         pathImage: ImageResources.helpQuizLetterOpening,
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
 
     Slide slideEventHelp = Slide(
@@ -94,7 +95,7 @@ class _AppIntroPageState extends State<AppIntroPage> {
             "set alarm for the events by clicking on a circular alarm icon as shown in the image."
         ,
         pathImage: ImageResources.helpEvent,
-        backgroundColor: Colors.purple[900]
+        backgroundColor: Colors.purple[800]
     );
 
     slides.add(widget.source =="FIRST_TIME_USER"?helpIntroSlideFirstTime:helpIntroSlide);

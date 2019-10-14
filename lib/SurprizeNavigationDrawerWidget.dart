@@ -4,6 +4,7 @@ import 'package:Surprize/AppShare/ShareApp.dart';
 import 'package:Surprize/FeedbackPage.dart';
 
 import 'package:Surprize/NoticePage.dart';
+
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:Surprize/SettingPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
-import 'package:flutter/services.dart';
 
 import 'CustomWidgets/CustomNavigationDrawerWidget.dart';
 import 'DailyQuizChallengePage.dart';
@@ -33,11 +33,6 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-      statusBarColor: Colors.deepPurple[900],
-      //or set color with: Color(0xFF0000FF)
-    ));
     this._selfContext = context;
     return CustomNavigationDrawerWidget(drawerContent());
   }
@@ -112,6 +107,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
             drawerButtonNavigationWithPadding(AppIntroPage("HELP"),Icon(Icons.live_help, color: Colors.purple), "Help"),
             AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple), () => ShareApp().shareAppToMedia(), "Share"),
+
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),
               child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple), "Settings"),
@@ -122,19 +118,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  /// Footer widget
-  Widget drawerFooter(){
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text("Entertained by Omek", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w300)),
-          Text("copyright@2019", style: TextStyle(color:  Colors.black, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w300)),
-        ],
-      ),
-    );
-  }
+
   /// Drawer navigation with no padding
   Widget drawerButtonNavigation(var navTo, Icon icon,  String buttonName){
     return AppHelper().flatButtonWithRoute(icon,

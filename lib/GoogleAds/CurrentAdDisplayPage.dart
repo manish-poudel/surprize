@@ -1,0 +1,6 @@
+enum CurrentPage{
+  QUIZ_LETTER,
+  NOTICE,
+  DASHBOARD,
+  UNKNOWN
+}

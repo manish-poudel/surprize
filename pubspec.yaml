@@ -7,7 +7,7 @@ description: A quiz app
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.1.0+3
+version: 1.2.1+8
 
 environment:
   sdk: ">=2.2.0 <3.0.0"
@@ -42,6 +42,8 @@ dependencies:
   connectivity: 0.4.4
   firebase_admob: 0.9.0+6
   admob_flutter: ^0.3.3
+  package_info: 0.4.0+6
+  url_launcher: 5.1.6
 
 dev_dependencies:
   flutter_test:
@@ -85,8 +87,10 @@ flutter:
     - assets/images/quiz_letter_display.jpg
     - assets/images/opening_quiz_letter.png
     - assets/images/opening_quiz_letter_two.png
+    - assets/images/googlebutton.png
     - assets/images/event_help.png
     - assets/images/quick_tour.png
+    - assets/images/icon1024.png
 
   fonts:
     - family: Raleway

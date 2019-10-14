@@ -36,7 +36,7 @@ class CustomEventWidgetCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                      // color: Colors.purple[700],
-                      child: FadeInImage.assetNetwork(placeholder: ImageResources.emptyImageLoadingUrlPlaceholder,
+                      child: FadeInImage.assetNetwork(placeholder: ImageResources.appIcon1024,
                           image: _photoUrl,  width: double.infinity, height: MediaQuery.of(context).size.height * 0.4,
                         fit: BoxFit.cover,)),
                 ),

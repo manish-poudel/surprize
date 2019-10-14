@@ -67,7 +67,7 @@ class Dashboard{
     Player player = Player(
         user.uid,
         // Player Id
-        user.displayName == null?"":user.displayName,
+        user.displayName == null|| user.displayName.isEmpty?"Anonymous":user.displayName,
         // Player Name
         "",
         // Player DOB

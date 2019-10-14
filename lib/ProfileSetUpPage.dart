@@ -8,6 +8,7 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 
 import 'package:Surprize/Models/Referral.dart';
+import 'package:Surprize/Models/ReferralState.dart';
 
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
@@ -74,15 +75,22 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0),
-          child: Text(StringResources.referralCodeText,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Raleway')),
+          child: Row(
+            children: <Widget>[
+              Text(StringResources.referralCodeText,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Raleway')),
+              IconButton(icon: Icon(Icons.help_outline,color: Colors.black,size: 18),tooltip: StringResources.referralCodeHelpText ,
+               onPressed: () => AppHelper.showSnackBar(StringResources.referralCodeHelpText, _scaffoldKey) ,
+              )
+            ],
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top:32.0, left:16.0,right:16.0),
+          padding: const EdgeInsets.only(top:8.0, left:16.0,right:16.0),
           child: _customReferralLabelTextField,
         ),
         Padding(
@@ -100,12 +108,13 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
 
   enterReferralCode() async {
     if(_customReferralLabelTextField.getValue().isNotEmpty){
+
       if(await checkForReferralCode()) {
-        deleteReferralCode();
+        updateReferralCode();
         AppHelper.cupertinoRouteWithPushReplacement(context, AppIntroPage("FIRST_TIME_USER"));
       }
       else{
-        AppHelper.showSnackBar("Referral code not found! Check uppercase and lowercase letters!", _scaffoldKey);
+        AppHelper.showSnackBar("Referral code not found or has been already used!", _scaffoldKey);
       }
     }
     else{
@@ -118,19 +127,20 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
   }
 
   Future<bool> checkForReferralCode() async {
-   QuerySnapshot querySnapshot =  await Firestore.instance.collection(FirestoreResources.fieldReferralCollection).where(FirestoreResources.fieldReferralCode, isEqualTo:_customReferralLabelTextField.getValue())
+   QuerySnapshot querySnapshot =  await Firestore.instance.collection(FirestoreResources.fieldReferralCollection).where(FirestoreResources.fieldReferralCode, isEqualTo:_customReferralLabelTextField.getValue().trim().toUpperCase()).where(FirestoreResources.fieldReferralState, isEqualTo: "ACTIVE")
         .getDocuments();
    return querySnapshot.documents.isNotEmpty;
   }
 
   /// Delete Referral code
-  void deleteReferralCode() {
+  void updateReferralCode() {
     Firestore.instance.collection(FirestoreResources.fieldReferralCollection).where(FirestoreResources.fieldReferralCode
-    , isEqualTo: _customReferralLabelTextField.getValue()).getDocuments().then((snapshot){
+    , isEqualTo: _customReferralLabelTextField.getValue().trim().toUpperCase()).getDocuments().then((snapshot){
       snapshot.documents.forEach((docSnapshot){
         Referral referral = Referral.fromMap(docSnapshot.data);
         updateScore(referral.createdBy);
-        Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document(docSnapshot.documentID).delete();
+        referral.referralState = ReferralState.COMPLETED;
+        Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document(docSnapshot.documentID).updateData(referral.toMap());
       });
     });
   }

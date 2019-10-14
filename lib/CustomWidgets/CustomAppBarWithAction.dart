@@ -11,6 +11,7 @@ class CustomAppBarWithAction extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return AppBar(
+      backgroundColor: Colors.purple[800],
       actions: actions,
       leading: GestureDetector(
         child: Icon(Icons.arrow_back, color: Colors.white),
