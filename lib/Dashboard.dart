@@ -19,18 +19,20 @@ class Dashboard{
 
   Dashboard(this.context);
 
-  bool retry = false;
   /// Go to page
   nav(){
     try {
-      if(retry)
-        return;
-
-      UserProfile().getProfile(UserMemory().firebaseUser.uid).then((
+      FirebaseUser firebaseUser = UserMemory().firebaseUser;
+      firebaseUser.reload();
+      UserProfile().getProfile(firebaseUser.uid).then((
           DocumentSnapshot documentSnapshot) {
 
         if(documentSnapshot.exists) {
-          savePlayer(Player.fromMap(documentSnapshot.data));
+          Player player = Player.fromMap(documentSnapshot.data);
+          player.accountVerified = firebaseUser.isEmailVerified;
+          savePlayer(player);
+          updateEmailVerification(player);
+
           try {
             AppHelper.cupertinoRouteWithPushReplacement(
                 context, PlayerDashboard());
@@ -46,9 +48,13 @@ class Dashboard{
       });
     }
     catch(error){
-      nav();
-      retry = true;
     }
+  }
+
+  /// Update email verification
+  updateEmailVerification(Player player){
+    Firestore.instance.collection(FirestoreResources.userCollectionName).document(player.membershipId)
+        .updateData(player.toMap());
   }
 
   savePlayer(Player player){
@@ -82,7 +88,8 @@ class Dashboard{
         user.phoneNumber == null?"":user.phoneNumber,
         DateTime.now(),
         // Player membership date
-        user.photoUrl == null?"":user.photoUrl // Player profile Image URL (To be updated later)
+        user.photoUrl == null?"":user.photoUrl,
+        user.isEmailVerified?true:false// Player profile Image URL (To be updated later)
     );
 
     FirestoreOperations()
@@ -100,5 +107,6 @@ class Dashboard{
 
     });
   }
+
 
 }

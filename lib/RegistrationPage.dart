@@ -173,7 +173,8 @@ class RegistrationPageState extends State<RegistrationPage>
         "",
         DateTime.now(),
         // Player membership date
-        "" // Player profile Image URL (To be updated later)
+        "",
+        _firebaseUser.isEmailVerified// Player profile Image URL (To be updated later)
     );
 
     FirestoreOperations()

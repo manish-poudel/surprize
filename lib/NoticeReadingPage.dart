@@ -2,6 +2,7 @@ import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NoticeReadingPage extends StatefulWidget{
 
@@ -15,11 +16,15 @@ class NoticeReadingPage extends StatefulWidget{
 }
 
 class NoticeReadingPageState extends State<NoticeReadingPage>{
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
+          key: _scaffoldKey,
             appBar:  CustomAppBar("Notice",context),
           body:SingleChildScrollView(child: newsContent())
         ));
@@ -33,7 +38,8 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
         children: <Widget>[
         newsTitle(),
         Visibility(visible: widget.notice.photoUrl != null, child: Center(child: newsImage())),
-        newsBody()
+        newsBody(),
+        Container(height: 48)
       ],),
     );
   }
@@ -70,12 +76,39 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
         ));
   }
 
+  /// Launch url
+  _launchURL() async {
+    var url =
+        widget.notice.urlRoute;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      AppHelper.showSnackBar("Couldn't launch " + url, _scaffoldKey);
+      throw 'Could not launch $url';
+    }
+  }
+
   /// News body
   Widget newsBody(){
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Text(
-        widget.notice.body,style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Raleway'),
+      child: Column(
+        children: <Widget>[
+          Text(
+            widget.notice.body,style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Raleway')),
+          widget.notice.urlRoute != null ?Visibility(visible: widget.notice.urlRoute.isNotEmpty || widget.notice.urlRoute != null, child: Center(
+            child: FlatButton(child:
+            Container(
+              padding: EdgeInsets.all(16),
+                decoration: new BoxDecoration(
+                  color: Colors.grey[100],
+                    border: new Border.all(color: Colors.white, width: 1),
+                    borderRadius: new BorderRadius.all(Radius.circular(40.0))
+                ),
+                child: Text(widget.notice.urlRoute,style: TextStyle(color:Colors.blue,decoration: TextDecoration.underline)))
+                ,onPressed: () => _launchURL()),
+          )):Visibility(visible: false,child: Container(height: 0, width: 0)),
+        ],
       ),
     );
   }

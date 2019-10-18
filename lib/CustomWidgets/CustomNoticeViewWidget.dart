@@ -2,6 +2,7 @@ import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/NoticeReadingPage.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/WebViewPage.dart';
 import 'package:flutter/material.dart';
 
 class CustomNoticeViewWidget extends StatefulWidget {
@@ -20,7 +21,17 @@ class _CustomNoticeViewWidgetState extends State<CustomNoticeViewWidget> {
         contentPadding: EdgeInsets.all(8.0),
           leading: noticeImageView(),
           title: noticeTitle(),
-          trailing: IconButton(icon: Icon(Icons.navigate_next), onPressed: () => AppHelper.cupertinoRoute(context, NoticeReadingPage(widget._notice))),
+          trailing: IconButton(icon: Icon(Icons.navigate_next), onPressed: () {
+            if (widget._notice.redirect == null ||
+                widget._notice.redirect == "IN_APP") {
+              AppHelper.cupertinoRoute(
+                  context, NoticeReadingPage(widget._notice));
+            }
+            else if(widget._notice.redirect == "WEB"){
+              AppHelper.cupertinoRoute(context, WebViewPage("Notice", widget._notice.urlRoute));
+            }
+          }),
+
       ),
     );
   }

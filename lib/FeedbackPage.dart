@@ -47,7 +47,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   /// If pop up menu item is selected
   void _onPopUpMenuItemSelected(String value) {
     if (value == "Send feedback") {
-      AppHelper.cupertinoRoute(_context, SendFeedbackPage());
+      AppHelper.cupertinoRoute(_context, SendFeedbackPage(""));
     }
   }
 
@@ -68,7 +68,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                         child: Text("SEND FEEDBACK",
                             style: TextStyle(color: Colors.grey)),
                         onPressed: () =>
-                            AppHelper.cupertinoRoute(context, SendFeedbackPage()))
+                            AppHelper.cupertinoRoute(context, SendFeedbackPage("")))
                   ],
                 ))));
   }

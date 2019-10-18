@@ -6,6 +6,7 @@ import 'package:Surprize/GoogleAds/CurrentAdDisplayPage.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/NoNetwork.dart';
 import 'package:Surprize/Models/Notice.dart';
+import 'package:Surprize/Models/Player.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
 import 'package:Surprize/NoInternetConnectionPage.dart';
@@ -15,6 +16,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/DailyQuizChallengePage.dart';
@@ -56,13 +58,16 @@ class PlayerDashboardState extends State<PlayerDashboard>
   AdmobBanner _admobBanner;
   bool _showAd = false;
   bool _adLoaded = false;
+  bool isEmailVerified;
+  bool showEmailVerificationPopUp = false;
 
 
   @override
   void initState() {
     super.initState();
     Admob.initialize(GoogleAdManager.appId);
-    _admobBanner = AdmobBanner(adUnitId:BannerAd.testAdUnitId, adSize: AdmobBannerSize.BANNER,
+    _admobBanner = AdmobBanner(adUnitId:BannerAd.testAdUnitId
+      , adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args){
         handleBannerAdEvent(event, args);
       },
@@ -76,8 +81,27 @@ class PlayerDashboardState extends State<PlayerDashboard>
     getLatestNotice();
     checkNetworkConnection();
     WidgetsBinding.instance.addObserver(this);
+    checkEmailVerificationState();
   }
 
+  /// Check email verification state
+  void checkEmailVerificationState() {
+    UserMemory().firebaseUser.getIdToken();
+    FirebaseAuth.instance.currentUser().then((user){
+      user.reload();
+      UserMemory().firebaseUser = user;
+      setState(() {
+        isEmailVerified = UserMemory().firebaseUser.isEmailVerified;
+        showEmailVerificationPopUp = !isEmailVerified;
+      });
+    });
+  }
+
+  /// Update email verification
+  updateEmailVerification(Player player){
+    Firestore.instance.collection(FirestoreResources.userCollectionName).document(player.membershipId)
+        .updateData(player.toMap());
+  }
 
   /// Banner events
   handleBannerAdEvent(AdmobAdEvent event, Map<String, dynamic> args) {
@@ -161,7 +185,8 @@ class PlayerDashboardState extends State<PlayerDashboard>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  dashboardBody()
+                  dashboardBody(),
+                  Container(height: 48)
                 ],
               )),
             )));
@@ -173,7 +198,38 @@ class PlayerDashboardState extends State<PlayerDashboard>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          //  profileInformationHolder(),
+          Visibility(
+            visible: showEmailVerificationPopUp,
+              child: Container(
+              width: MediaQuery.of(context).size.width,
+              color: Colors.purple[800],
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left:16.0,top:8.0,bottom: 8.0,right: 8.0),
+                      child: Text("Your email is not verified",
+                        style: TextStyle(color: Colors.white, fontFamily: 'Raleway'),),
+                    ),
+                    FlatButton(color: Colors.purple,child: Text("Send verification link",
+                        style: TextStyle(color: Colors.white, fontFamily: 'Raleway')),onPressed: (){
+                      UserMemory().firebaseUser.sendEmailVerification().then((_){
+                        setState(() {
+                          AppHelper.showSnackBar("Email verification link has been sent to your email id. Follow the link to verify your email address. Please note that it may take some time before you see any changes!", _scaffoldKey);
+                          showEmailVerificationPopUp = false;
+                        });
+                      });
+                    })
+                  ],
+                ),
+                    IconButton(icon: Icon(Icons.close),color: Colors.red, iconSize:18, onPressed: (){
+                      setState(() {
+                          showEmailVerificationPopUp = false;
+                      });
+                    })
+          ]))),
           noticeView(),
           Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),

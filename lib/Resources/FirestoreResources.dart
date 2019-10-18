@@ -33,6 +33,7 @@ class FirestoreResources {
   static final String fieldPlayerAddress = 'address';
   static final String fieldPlayerProfileURL = 'profileImageURL';
   static final String fieldPlayerMembershipDate = 'membershipDate';
+  static final String fieldPlayerAccountVerified = 'accountVerified';
 
   /*****************************************************************/
 
@@ -98,6 +99,8 @@ class FirestoreResources {
   static final String fieldNoticeImageUrl = "Image Url";
   static final String fieldNoticeImageDesc = "Image Desc";
   static final String fieldNoticeAddedDate = "Added date";
+  static final String fieldNoticeRedirect = "redirect";
+  static final String fieldNoticeRouteUrl = "url";
 
   /// Related to user presence
 
@@ -129,9 +132,12 @@ class FirestoreResources {
   static final String fieldReferralCollection = "/Referrals";
   static final String fieldReferralId = 'Id';
   static final String fieldReferralCode = "Code";
-  static final String fieldReferralCreateDate = "Created at";
-  static final String fieldReferralCreator = "Created by";
+  static final String fieldReferralCreateDate = "createdAt";
+  static final String fieldReferralCreator = "createdBy";
+  static final String fieldReferralUsedBy = "usedBy";
   static final String fieldReferralState = "State";
+  static final String fieldReferralAccountStateReceiver = "receiverAccountState";
+  static final String fieldReferralAccountStateSender = "senderAccountState";
 
   static get fieldDailyQuizState => "State";
 

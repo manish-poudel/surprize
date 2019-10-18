@@ -11,6 +11,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SendFeedbackPage extends StatefulWidget {
+
+  String intialMessage = "";
+
+  SendFeedbackPage(this.intialMessage);
   @override
   _SendFeedbackPageState createState() => _SendFeedbackPageState();
 }
@@ -26,7 +30,7 @@ class _SendFeedbackPageState extends State<SendFeedbackPage> {
     super.initState();
     customDropDownWidget = CustomDropDownWidget(["Report issue", "Improvement tips", "Ask", "Other"],
         "Report issue", "Select subject for your report", Colors.black, Colors.white);
-    customMultiLineTextFieldWidget = CustomMultiLineTextFieldWidget("Write message", "", Colors.black,140);
+    customMultiLineTextFieldWidget = CustomMultiLineTextFieldWidget("Write message", widget.intialMessage, Colors.black,140);
   }
   @override
   Widget build(BuildContext context) {

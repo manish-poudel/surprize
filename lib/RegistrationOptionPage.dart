@@ -118,7 +118,6 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
         case FacebookLoginStatus.loggedIn:
           AuthCredential credential = FacebookAuthProvider.getCredential(
               accessToken: result.accessToken.token);
-          print("The credential" + credential.toString());
           FirebaseAuth.instance.signInWithCredential(credential).then((
               authResult) {
             print("User " + authResult.toString());
@@ -161,7 +160,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
 
   /// Register profile information
   registerProfileInformation(FirebaseUser user) {
-
+    user.reload();
 
     // Save user profile information to the database
     Player player = Player(
@@ -182,7 +181,8 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
         user.phoneNumber == null?"":user.phoneNumber,
         DateTime.now(),
         // Player membership date
-        user.photoUrl == null?"":user.photoUrl // Player profile Image URL (To be updated later)
+        user.photoUrl == null?"":user.photoUrl,
+        user.isEmailVerified// Player profile Image URL (To be updated later)
     );
 
     FirestoreOperations()
@@ -207,9 +207,11 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
 
   /// Check if user already exists
   checkIfUserExists(FirebaseUser user) async {
+    user.reload();
      Firestore.instance.collection(FirestoreResources.userCollectionName).document(user.uid).get().then((documentSnapshot){
        if(documentSnapshot.exists){
          Player player = Player.fromMap(documentSnapshot.data);
+         player.accountVerified = user.isEmailVerified;
          saveUserToMemoryAndProceed(player, user);
          Navigator.of(context).popUntil((route) => route.isFirst);
          AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
@@ -220,11 +222,17 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
      });
   }
 
+  /// Update email verification
+  updateEmailVerification(Player player){
+    Firestore.instance.collection(FirestoreResources.userCollectionName).document(player.membershipId)
+        .updateData(player.toMap());
+  }
+
   /// Save user to memory and proceed.
   saveUserToMemoryAndProceed(Player player,FirebaseUser user){
     UserMemory().savePlayer(player);
     UserMemory().saveFirebaseUser(user);
-
+    updateEmailVerification(player);
     _customRegistrationProgressBar.stopAndEndProgressBar(context);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:Surprize/Resources/ErrorResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
 import 'package:Surprize/WebViewPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -92,6 +93,22 @@ class AppHelper{
       print(error);
     }
     return intValue;
+  }
+
+  /// Return login error string message based on error code.
+  static getErrorCodeString(String errorCode){
+    switch(errorCode){
+      case "ERROR_INVALID_EMAIL":
+        return ErrorResources.invalidEmailError;
+      case "ERROR_USER_NOT_FOUND":
+        return ErrorResources.noEmailError;
+      case "ERROR_WRONG_PASSWORD":
+        return ErrorResources.wrongPasswordError;
+      case "ERROR_EMAIL_ALREADY_IN_USE":
+        return ErrorResources.emailAlreadyInUseError;
+      default:
+        return ErrorResources.defaultError;
+    }
   }
 
   /***
@@ -377,5 +394,36 @@ class AppHelper{
   static int getRandomNumberInBetweenValues(min, max){
     Random rnd = new Random();
     return min + rnd.nextInt(max - min);
+  }
+
+ static Widget settingMenu(context, String name, IconData icon, Function onPressed) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Icon(
+                    icon,
+                    color: Colors.purple,
+                  ),
+                ),
+                FlatButton(
+                    child: Text(name,
+                        style: TextStyle(
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w300,
+                            fontSize: 18,
+                            color: Colors.black)),
+                    onPressed: onPressed),
+              ],
+            )),
+      ),
+    );
   }
 }

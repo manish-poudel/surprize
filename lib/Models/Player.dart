@@ -6,8 +6,8 @@ import 'package:Surprize/Resources/FirestoreResources.dart';
 Model class for player
  */
 class Player extends User{
-  Player(String membershipId, String name, String dob, String address, String country, String gender, String email, String phoneNumber, DateTime membershipDate, String profileImageURL) :
-        super(membershipId, name, dob, address, country, gender, email, phoneNumber, membershipDate, profileImageURL);
+  Player(String membershipId, String name, String dob, String address, String country, String gender, String email, String phoneNumber, DateTime membershipDate, String profileImageURL, bool accountVerified) :
+        super(membershipId, name, dob, address, country, gender, email, phoneNumber, membershipDate, profileImageURL,accountVerified);
 
   /*
  Convert player to map
@@ -27,6 +27,7 @@ class Player extends User{
     map[FirestoreResources.fieldPlayerPhoneNumber] = phoneNumber;
     map[FirestoreResources.fieldPlayerMembershipDate] = membershipDate;
     map[FirestoreResources.fieldPlayerProfileURL] = profileImageURL;
+    map[FirestoreResources.fieldPlayerAccountVerified] = accountVerified;
 
     return map;
   }
@@ -43,5 +44,8 @@ class Player extends User{
       map[FirestoreResources.fieldPlayerEmail] ,
       map[FirestoreResources.fieldPlayerPhoneNumber],
       AppHelper.convertToDateTime(map[FirestoreResources.fieldPlayerMembershipDate]),
-      map[FirestoreResources.fieldPlayerProfileURL]);
+      map[FirestoreResources.fieldPlayerProfileURL],
+      map[FirestoreResources.fieldPlayerAccountVerified]
+
+  );
 }

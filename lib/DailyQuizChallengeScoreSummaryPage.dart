@@ -1,4 +1,5 @@
 import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizSummaryDisplayWidget.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Leaderboard/ScoreSystem.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
@@ -274,13 +275,20 @@ class DailyQuizChallengeScoreSummaryPageState
   @override
   void initState() {
     super.initState();
+    GoogleAdManager().showQuizGameInterstitialAd(0.0, AnchorType.top);
     _userProfile = UserProfile();
      updateScoreForGamePlay();
       UserMemory().gamePlayed = true;
      Future.delayed(Duration(seconds: 3), () => showForm());
   }
 
-  
+  @override
+  void dispose(){
+    GoogleAdManager().disposeQuizGameInterstitialAd();
+    super.dispose();
+  }
+
+  ///Show video ad
   showVideoAd() async {
     MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(childDirected: false);
     RewardedVideoAd.instance.listener =

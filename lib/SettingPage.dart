@@ -1,3 +1,4 @@
+import 'package:Surprize/AccountPage.dart';
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/PoliciesPage.dart';
@@ -60,14 +61,16 @@ class _SettingPageState extends State<SettingPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        settingMenu("Profile", Icons.perm_identity,
+        AppHelper.settingMenu(context,"Profile", Icons.perm_identity,
             () => AppHelper.cupertinoRoute(context, ProfilePage())),
-        settingMenu("Policies", Icons.info,
+        AppHelper.settingMenu(context,"Account", Icons.account_circle,
+                () => AppHelper.cupertinoRoute(context, AccountPage())),
+        AppHelper.settingMenu(context,"Policies", Icons.info,
             () => AppHelper.cupertinoRoute(context, PoliciesPage())),
-        settingMenu("Referral", Icons.group_work,
+        AppHelper.settingMenu(context,"Referral", Icons.group_work,
                 () => AppHelper.cupertinoRoute(context, ReferralViewPage())),
         settingButtonWithInfo("Update", Icons.update, () => _launchURL()),
-        settingMenu("Logout", Icons.call_missed_outgoing,
+        AppHelper.settingMenu(context,"Logout", Icons.call_missed_outgoing,
             () => AppHelper().logoutUser(context)),
       ],
     );
@@ -82,37 +85,6 @@ class _SettingPageState extends State<SettingPage> {
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  Widget settingMenu(String name, IconData icon, Function onPressed) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Container(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Icon(
-                    icon,
-                    color: Colors.purple,
-                  ),
-                ),
-                FlatButton(
-                    child: Text(name,
-                        style: TextStyle(
-                            fontFamily: 'Raleway',
-                            fontWeight: FontWeight.w300,
-                            fontSize: 18,
-                            color: Colors.black)),
-                    onPressed: onPressed),
-              ],
-            )),
-      ),
-    );
   }
 
   Widget settingButtonWithInfo(String name, IconData icon, Function onPressed) {

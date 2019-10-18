@@ -24,7 +24,7 @@ class LoginPageState extends State<LoginPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   CustomLabelTextFieldWidget _emailField =
-      CustomLabelTextFieldWidget("Email", "", Colors.black, false);
+      CustomLabelTextFieldWidget("Email", "", Colors.black, false, validation: AppHelper.validateEmail);
   CustomLabelTextFieldWidget _passwordField =
       CustomLabelTextFieldWidget("Password", "", Colors.black, true);
   CustomProgressbarWidget _customProgressBarWidget = CustomProgressbarWidget();
@@ -51,7 +51,7 @@ class LoginPageState extends State<LoginPage> {
       if(error is PlatformException){
         try {
           PlatformException platformException = error;
-          AppHelper.showSnackBar(getErrorCodeString(platformException.code), _scaffoldKey);
+          AppHelper.showSnackBar(AppHelper.getErrorCodeString(platformException.code), _scaffoldKey);
         }
         catch(error){
           AppHelper.showSnackBar("Error connecting.", _scaffoldKey);
@@ -62,19 +62,7 @@ class LoginPageState extends State<LoginPage> {
     });
   }
 
-/// Return login error string message based on error code.
-  getErrorCodeString(String errorCode){
-    switch(errorCode){
-      case "ERROR_INVALID_EMAIL":
-        return ErrorResources.invalidEmailError;
-      case "ERROR_USER_NOT_FOUND":
-        return ErrorResources.noEmailError;
-      case "ERROR_WRONG_PASSWORD":
-        return ErrorResources.wrongPasswordError;
-      default:
-        return ErrorResources.defaultError + errorCode;
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {

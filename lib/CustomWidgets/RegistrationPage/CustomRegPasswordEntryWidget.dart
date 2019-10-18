@@ -4,6 +4,10 @@ class CustomRegPasswordEntryWidget extends StatefulWidget{
 
   CustomRegPasswordEntryWidgetState _state;
 
+  String firstPasswordFieldHint;
+  String secondPasswordFieldHint;
+  CustomRegPasswordEntryWidget(this.firstPasswordFieldHint, this.secondPasswordFieldHint);
+
   String getPassword(){
     return _state.getPassword();
   }
@@ -67,7 +71,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
         _passwordValue = val;
       },
       decoration: InputDecoration(
-        hintText: "Enter password",
+        hintText: widget.firstPasswordFieldHint,
         hintStyle: TextStyle(color:Colors.grey),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
@@ -93,7 +97,7 @@ class CustomRegPasswordEntryWidgetState extends State<CustomRegPasswordEntryWidg
                   _passwordValue = val;
                 },
                 decoration: InputDecoration(
-                  hintText: "Password again",
+                  hintText: widget.secondPasswordFieldHint,
                   hintStyle: TextStyle(color:Colors.grey),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),

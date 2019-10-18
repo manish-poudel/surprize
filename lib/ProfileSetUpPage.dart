@@ -138,8 +138,9 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
     , isEqualTo: _customReferralLabelTextField.getValue().trim().toUpperCase()).getDocuments().then((snapshot){
       snapshot.documents.forEach((docSnapshot){
         Referral referral = Referral.fromMap(docSnapshot.data);
-        updateScore(referral.createdBy);
         referral.referralState = ReferralState.COMPLETED;
+        referral.usedBy = widget._firebaseUser.uid;
+        referral.referralAccountStateForReceiver = ReferralAccountState.PENDING_VERIFICATION;
         Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document(docSnapshot.documentID).updateData(referral.toMap());
       });
     });
@@ -147,7 +148,7 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
 
   /// Update score
   void updateScore(String id) {
-      LeaderboardManager().saveForAllTimeScore(id, 10, (value){
+/*      LeaderboardManager().saveForAllTimeScore(id, 10, (value){
 
       });
       LeaderboardManager().saveForWeeklyScore(id, 10, (value){
@@ -158,8 +159,7 @@ class _ProfileSetUpPageState extends State<ProfileSetUpPage> {
       });
       LeaderboardManager().saveForWeeklyScore(widget._firebaseUser.uid,5, (value){
 
-      });
-
+      });*/
   }
 
 }

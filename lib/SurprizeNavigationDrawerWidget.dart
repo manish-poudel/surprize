@@ -1,5 +1,6 @@
 import 'package:Surprize/AppIntroPage.dart';
 import 'package:Surprize/AppShare/ShareApp.dart';
+import 'package:Surprize/DailyQuizChallengeGamePlayPage.dart';
 
 import 'package:Surprize/FeedbackPage.dart';
 
@@ -87,7 +88,8 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
           profileDisplay(),
           drawerButtons(),
           Container(color: Colors.white,height: 1),
-          AppHelper().socialMediaWidget(_selfContext)
+          AppHelper().socialMediaWidget(_selfContext),
+          Container(height: 52)
         ],
       ),
     );
@@ -112,7 +114,6 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
               padding: const EdgeInsets.only(bottom:8.0),
               child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple), "Settings"),
             ),
-
             // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
           ]),
     );

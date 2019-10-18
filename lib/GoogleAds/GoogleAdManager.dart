@@ -11,6 +11,7 @@ class GoogleAdManager {
 
   static String quizLetterInterstitialAdId = "ca-app-pub-2130188164225142/4408997619";
   static String leaderboardInterstitialAdId = "ca-app-pub-2130188164225142/8895037531";
+  static String quizGameInterstitialAdId ="ca-app-pub-2130188164225142/7434873367";
 
   static String dashboardBannerId = "ca-app-pub-2130188164225142/9852895986";
   static String quizLetterBannerAdId = "ca-app-pub-2130188164225142/3287487633";
@@ -20,6 +21,7 @@ class GoogleAdManager {
 
   GoogleAdFormats _googleQuizLetterInterstitialAdId;
   GoogleAdFormats _googleLeaderboardInterstitialAdId;
+  GoogleAdFormats _quizGameInterstitialAd;
 
   GoogleAdFormats _googleBannerAdForQuizLetters;
   GoogleAdFormats _googleBannerAdForNotice;
@@ -139,6 +141,21 @@ class GoogleAdManager {
     catch(error){}
   }
 
+  /// Show Interstitial ad
+  void showQuizGameInterstitialAd(double offSet, AnchorType anchorType){
+    try {
+      init();
+      _quizGameInterstitialAd = GoogleInterstitialAds();
+      _quizGameInterstitialAd.initAd(
+          InterstitialAd.testAdUnitId, null, (MobileAdEvent event) {
+
+      });
+      _quizGameInterstitialAd.showAd(offSet, anchorType);
+
+    }
+    catch(error){}
+  }
+
   /// Dispose interstitial ad
   void disposeQuizLetterInterstitialAd(){
     _googleQuizLetterInterstitialAdId.dispose();
@@ -149,6 +166,12 @@ class GoogleAdManager {
   void disposeLeaderboardInterstitialAd(){
     _googleLeaderboardInterstitialAdId.dispose();
     _googleLeaderboardInterstitialAdId = null;
+  }
+
+  /// Dispose interstitial ad
+  void disposeQuizGameInterstitialAd(){
+    _quizGameInterstitialAd.dispose();
+    _quizGameInterstitialAd = null;
   }
 
 }

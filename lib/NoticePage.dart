@@ -62,7 +62,12 @@ class _NoticePageState extends State<NoticePage> {
       onWillPop: _willPopCallback,
       child: Scaffold(
         appBar: CustomAppBar("Notice",context),
-        body: SingleChildScrollView(child: noticeList()),
+        body: SingleChildScrollView(child: Column(
+          children: <Widget>[
+            noticeList(),
+            Container(height: 48)
+          ],
+        )),
       ),
     );
   }

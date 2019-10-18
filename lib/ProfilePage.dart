@@ -30,6 +30,7 @@ class ProfilePageState extends State<ProfilePage> {
   double _imageUploadProgressValue;
   bool _isImageLoading = false;
   UserBLOC _userBLOC;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Add email","", Colors.black, false,validation: AppHelper.validateEmail);
   final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
@@ -47,6 +48,8 @@ class ProfilePageState extends State<ProfilePage> {
     _userBLOC = UserBLOC();
     _userBLOC.init();
     _userBLOC.playerEventSink.add("Player");
+    UserMemory().firebaseUser.reload();
+    UserMemory().firebaseUser.getIdToken();
 
   }
 
@@ -57,6 +60,7 @@ class ProfilePageState extends State<ProfilePage> {
     return MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
+          key: _scaffoldKey,
             appBar: CustomAppBarWithAction("Profile", context, appBarActions()),
             body: SingleChildScrollView(
                 child: StreamBuilder(
@@ -171,17 +175,44 @@ class ProfilePageState extends State<ProfilePage> {
            visible:_player.email.isNotEmpty,
            child: Padding(
               padding:const EdgeInsets.only(bottom:8.0),
-              child: Text(
-                _player.email,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontFamily: 'Raleway',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Visibility(visible:UserMemory().firebaseUser.isEmailVerified,
+                      child: Icon(Icons.verified_user,color: Colors.white,size: 18)),
+                  Padding(
+                    padding: const EdgeInsets.only(left:8.0),
+                    child: Text(
+                      _player.email,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Raleway',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ),
-         )
+         ),
+          Visibility(
+            visible: !UserMemory().firebaseUser.isEmailVerified,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text("Your email is not verified!", style: TextStyle(color: Colors.white,fontFamily: 'Raleway')),
+                  FlatButton(color:Colors.black38,child: Text("Click to send verification link",style: TextStyle(color: Colors.white,fontFamily: 'Raleway')),onPressed: () {
+                    UserMemory().firebaseUser.sendEmailVerification().then((_){
+                      AppHelper.showSnackBar("Email verification link has been sent to your email id. Follow the link to verify your email address. Please note that it may take some time before you see any changes!", _scaffoldKey);
+                    });
+                  })
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -5,6 +5,7 @@ import 'package:Surprize/Models/ReferralState.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ShareApp{
 
@@ -47,8 +48,11 @@ class ShareApp{
 
   /// Save referral code
   saveReferralCode(){
+     FirebaseUser firebaseUser = UserMemory().firebaseUser;
+     firebaseUser.reload();
+
     Firestore.instance.collection(FirestoreResources.fieldReferralCollection).document(referralId).setData(
-      Referral(referralId, referralCode, DateTime.now(), UserMemory().getPlayer().membershipId, ReferralState.ACTIVE).toMap()
+      Referral(referralId, referralCode, DateTime.now(), UserMemory().getPlayer().membershipId, ReferralState.ACTIVE,"",firebaseUser.isEmailVerified?ReferralAccountState.ACCOUNT_VERIFIED:ReferralAccountState.PENDING_VERIFICATION, ReferralAccountState.UNKNOWN).toMap()
     );
   }
 }

@@ -1,5 +1,12 @@
 enum ReferralState{
   ACTIVE,
   COMPLETED,
+  REWARDED,
+  UNKNOWN
+}
+
+enum ReferralAccountState{
+  ACCOUNT_VERIFIED,
+  PENDING_VERIFICATION,
   UNKNOWN
 }

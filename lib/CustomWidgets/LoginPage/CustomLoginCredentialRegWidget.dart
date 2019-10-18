@@ -41,7 +41,7 @@ class CustomLoginCredentialRegWidgetState extends State<CustomLoginCredentialReg
   }
 
   CustomLabelTextFieldWidget _emailField = CustomLabelTextFieldWidget("Email","", Colors.black, false, validation: AppHelper.validateEmail);
-  CustomRegPasswordEntryWidget _passwordField = CustomRegPasswordEntryWidget();
+  CustomRegPasswordEntryWidget _passwordField = CustomRegPasswordEntryWidget("Enter password", "Enter password again");
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +51,9 @@ class CustomLoginCredentialRegWidgetState extends State<CustomLoginCredentialReg
       child: Column(
         children: <Widget>[
           Container(
-              child: _emailField),
-          _passwordField
+              child:
+              _emailField),
+              _passwordField
         ],
       ),
     );

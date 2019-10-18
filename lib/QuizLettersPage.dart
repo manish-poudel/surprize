@@ -6,6 +6,7 @@ import 'package:Surprize/CustomWidgets/CustomAppBarWithAction.dart';
 import 'package:Surprize/CustomWidgets/ExpandableWidgets/QuizLetterExpandableWidget.dart';
 import 'package:Surprize/GoogleAds/CurrentAdDisplayPage.dart';
 import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart' as prefix0;
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/QuizDataState.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
@@ -66,7 +67,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   }
 
   /// If pop up menu item is selected
-  void _onPopUpMenuItemSelected(String value) {;
+  void _onPopUpMenuItemSelected(String value) {
   setState(() {
     _showQuizLetterType = value;
   });
@@ -77,6 +78,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
   void initState() {
     super.initState();
     GoogleAdManager().currentPage = CurrentPage.QUIZ_LETTER;
+    GoogleAdManager().disposeNoticeBannerAd();
     GoogleAdManager().showQuizLetterInterstitialAd(0.0, AnchorType.top);
     SQLiteManager().initAppDatabase();
     this._openedQuizId = (widget._openedQuizId != null?widget._openedQuizId:"0");

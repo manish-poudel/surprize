@@ -39,8 +39,9 @@ class _SplashScreenState extends State<SplashScreen> {
       if(user == null) {
         AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
       } else{
+          user.reload();
           UserMemory().firebaseUser = user;
-          checkNetworkConnection(user);
+          Dashboard(context).nav();
       }
     });
   }
@@ -86,13 +87,16 @@ class _SplashScreenState extends State<SplashScreen> {
   /// Check for network connection
   checkNetworkConnection(FirebaseUser user){
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+
+      print(result.toString());
       if(result == ConnectivityResult.none){
         AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.SPLASH_SCREEN));
       }
       else if(result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
         AppHelper.checkInternetConnection().then((val){
           if(val){
-            Dashboard(context).nav();
+            print("Network exists!");
+
           }
           else{
             AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.SPLASH_SCREEN));

@@ -12,9 +12,10 @@ class User{
   String _phoneNumber;
   DateTime _membershipDate;
   String _profileImageURL;
+  bool  accountVerified;
 
   User(this._membershipId, this._name, this._dob, this._address, this. _country, this._gender,
-      this._email, this._phoneNumber, this._membershipDate, this._profileImageURL);
+      this._email, this._phoneNumber, this._membershipDate, this._profileImageURL,this.accountVerified);
 
   String get membershipId => _membershipId;
   String get name => _name;
@@ -26,6 +27,7 @@ class User{
   String get phoneNumber => _phoneNumber;
   String get country => _country;
   String get address => _address;
+
 
   set membershipId(String membershipId) => _membershipId;
   set name(String name) => _name = name;

@@ -20,7 +20,7 @@ class FirestoreOperations extends FirestoreAuthOperations with FirestoreStorage,
 
   // Sign in with email and password
   @override
-  loginUser(email, password){
+  Future<AuthResult> loginUser(email, password){
     return FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
   }
 
