@@ -39,7 +39,6 @@ class _SplashScreenState extends State<SplashScreen> {
       if(user == null) {
         AppHelper.cupertinoRouteWithPushReplacement(context, LoginPage());
       } else{
-          user.reload();
           UserMemory().firebaseUser = user;
           Dashboard(context).nav();
       }

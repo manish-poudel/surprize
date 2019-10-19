@@ -20,10 +20,17 @@ class Dashboard{
   Dashboard(this.context);
 
   /// Go to page
-  nav(){
+  nav() async {
     try {
-      FirebaseUser firebaseUser = UserMemory().firebaseUser;
-      firebaseUser.reload();
+      FirebaseUser firebaseUser;
+      try{
+        firebaseUser = await FirebaseAuth.instance.currentUser();
+        firebaseUser.reload();
+      }
+      catch(error){
+        firebaseUser = UserMemory().firebaseUser;
+      }
+
       UserProfile().getProfile(firebaseUser.uid).then((
           DocumentSnapshot documentSnapshot) {
 

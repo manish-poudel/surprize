@@ -338,9 +338,11 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                           fontWeight: FontWeight.w500))
                 ],
               ),
+
             ),
             flex: 3,
           ),
+          leaderboard.isEmailVerified != null?Visibility(visible:leaderboard.isEmailVerified, child: Icon(Icons.verified_user, color: Colors.purpleAccent, size: 12)):Container(height: 0, width: 0)
 
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
 import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
 import 'package:Surprize/CustomWidgets/RegistrationPage/CustomRegPasswordEntryWidget.dart';
+import 'package:Surprize/EmailChangeSuccess.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
@@ -35,7 +36,6 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
   bool errorInChange = false;
   String errorString = "";
 
-  bool emailChangedSuccess = false;
   bool passwordChangeSuccess = false;
 
 
@@ -205,7 +205,6 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
 
 
     }).catchError((error) {
-      print("catching error");
       _customProgressBarWidget.stopAndEndProgressBar(context);
       displayError(error);
     });
@@ -235,30 +234,10 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
       )
     );
   }
-  Widget changeEmail(){
-    return emailChangedSuccess? Container(
-        child: Column(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top:16.0,left:16.0),
-            child: Row(
-              children: <Widget>[
-                Text("Email changed to: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
-                Text(UserMemory().getPlayer().email,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w600,fontSize: 14)),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: <Widget>[
-                Text("A verification link has been sent to your email address. Click on it to verify your account!",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
-                Text("Note: if you are unable to find the email sent by us, please make sure to check your spam inbox",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
-              ],
-            ),
-          ),
 
-        ])
-    ):Container(
+  
+  Widget changeEmail(){
+    return Container(
       child: Form(
         key: _formKey,
         child: Column(
@@ -327,13 +306,9 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
                 .updateData({
                FirestoreResources.fieldPlayerEmail: _emailField.getValue().trim()
             }).then((value){
-              AppHelper.showSnackBar("Email changed successfully. ", _scaffoldKey);
-              setState(() {
-                UserMemory().getPlayer().email = _emailField.getValue().toString();
-                emailChangedSuccess = true;
-              });
-
               _customProgressBarWidget.stopAndEndProgressBar(context);
+              Navigator.of(context).popUntil((route) => route.isFirst);
+              AppHelper.cupertinoRouteWithPushReplacement(context, EmailChangeSuccess(_emailField.getValue()));
             });
           }).catchError((error){
             _customProgressBarWidget.stopAndEndProgressBar(context);

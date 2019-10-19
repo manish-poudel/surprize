@@ -113,7 +113,7 @@ class LeaderboardManager{
    /// Add to leaderboard list
     docSnapshot.forEach((documentSnapshot)  async {
       Player player = await getProfileData(documentSnapshot.documentID);
-      getScorer(Leaderboard(docSnapshot.indexOf(documentSnapshot) + 1,player, documentSnapshot.data[fieldValue]));
+      getScorer(Leaderboard(docSnapshot.indexOf(documentSnapshot) + 1,player, documentSnapshot.data[fieldValue], player.accountVerified));
      });
   }
 

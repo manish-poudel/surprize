@@ -66,7 +66,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
   void initState() {
     super.initState();
     Admob.initialize(GoogleAdManager.appId);
-    _admobBanner = AdmobBanner(adUnitId:BannerAd.testAdUnitId
+    _admobBanner = AdmobBanner(adUnitId:GoogleAdManager.dashboardBannerId
       , adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args){
         handleBannerAdEvent(event, args);
@@ -207,21 +207,21 @@ class PlayerDashboardState extends State<PlayerDashboard>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.only(left:16.0,top:8.0,bottom: 8.0,right: 8.0),
-                      child: Text("Your email is not verified",
+                      padding: const EdgeInsets.only(left:16.0,top:16),
+                      child: Text("Account not verified! Send verification link",
                         style: TextStyle(color: Colors.white, fontFamily: 'Raleway'),),
                     ),
-                    FlatButton(color: Colors.purple,child: Text("Send verification link",
-                        style: TextStyle(color: Colors.white, fontFamily: 'Raleway')),onPressed: (){
+                    IconButton(color: Colors.purple, icon:Icon(Icons.send),onPressed: (){
                       UserMemory().firebaseUser.sendEmailVerification().then((_){
                         setState(() {
-                          AppHelper.showSnackBar("Email verification link has been sent to your email id. Follow the link to verify your email address. Please note that it may take some time before you see any changes!", _scaffoldKey);
+                          AppHelper.showSnackBar("Email verification link has been sent to your email id. Follow the link to verify your email address. Please note that it might take some time to see changes", _scaffoldKey);
                           showEmailVerificationPopUp = false;
                         });
                       });
-                    })
+                    }),
                   ],
                 ),
                     IconButton(icon: Icon(Icons.close),color: Colors.red, iconSize:18, onPressed: (){

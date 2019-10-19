@@ -118,7 +118,7 @@ class _ReferralViewPageState extends State<ReferralViewPage> {
       children: <Widget>[
         referralCodeStateDisplay(referral.usedBy.isNotEmpty?"Code used":"Waiting for code usage",referral.usedBy.isNotEmpty?Icons.check:Icons.fiber_manual_record, referral.usedBy.isNotEmpty?Colors.green:Colors.grey),
         referralCodeStateDisplay(referral.referralAccountStateForReceiver == ReferralAccountState.ACCOUNT_VERIFIED?"Receiver account verified":"Receiver account not verified",referral.referralAccountStateForReceiver == ReferralAccountState.ACCOUNT_VERIFIED?Icons.check:Icons.fiber_manual_record, referral.referralAccountStateForReceiver == ReferralAccountState.ACCOUNT_VERIFIED?Colors.green:Colors.grey),
-        referralCodeStateDisplay(referral.referralState == ReferralState.REWARDED?"Rewarded point":"Not rewarded",referral.referralState == ReferralState.REWARDED?Icons.check:Icons.fiber_manual_record, referral.referralState == ReferralState.REWARDED?Colors.green:Colors.grey)
+        referralCodeStateDisplay(referral.referralState == ReferralState.REWARDED?"Rewarded point":"No rewards",referral.referralState == ReferralState.REWARDED?Icons.check:Icons.fiber_manual_record, referral.referralState == ReferralState.REWARDED?Colors.green:Colors.grey)
       ],
     );
   }

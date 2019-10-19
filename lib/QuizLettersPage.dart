@@ -83,7 +83,7 @@ class _QuizLettersPageState extends State<QuizLettersPage> {
     SQLiteManager().initAppDatabase();
     this._openedQuizId = (widget._openedQuizId != null?widget._openedQuizId:"0");
     getQuizLetters();
-    _admobBanner = AdmobBanner(adUnitId: BannerAd.testAdUnitId, adSize: AdmobBannerSize.BANNER,
+    _admobBanner = AdmobBanner(adUnitId: GoogleAdManager.quizLetterBannerAdId, adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args){
         handleBannerAdEvent(event, args);
       },

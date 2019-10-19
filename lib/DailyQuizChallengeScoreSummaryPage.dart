@@ -312,7 +312,7 @@ class DailyQuizChallengeScoreSummaryPageState
       if(event == RewardedVideoAdEvent.closed){
       }
     };
-   await RewardedVideoAd.instance.load(adUnitId: RewardedVideoAd.testAdUnitId, targetingInfo: targetingInfo);
+   await RewardedVideoAd.instance.load(adUnitId: GoogleAdManager.rewardedVideoAdId, targetingInfo: targetingInfo);
   }
 
 
