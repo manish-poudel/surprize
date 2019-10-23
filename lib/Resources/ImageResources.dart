@@ -19,5 +19,8 @@ class ImageResources{
   static final String helpQuickTour = 'assets/images/quick_tour.png';
   static final String googlebutton = 'assets/images/googlebutton.png';
   static final String appIcon1024 = 'assets/images/icon1024.png';
+  static final String moneyBag = 'assets/images/money-bag.png';
+  static final String diwaliImage = 'assets/images/diwali.png';
+  static final String dqcBackground = 'assets/images/dqc_background.jpg';
 
 }

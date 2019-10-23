@@ -64,6 +64,8 @@ class Dashboard{
         .updateData(player.toMap());
   }
 
+
+  /// Save player
   savePlayer(Player player){
     UserMemory().savePlayer(player);
     PushNotification().configure(context);

@@ -23,6 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Image logoImage;
   var subscription;
+  bool noInternetConnection = false;
 
   @override
   initState() {
@@ -30,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
     logoImage = Image.asset(ImageResources.appMainLogo);
     Firestore.instance.settings(persistenceEnabled: false);
     checkIfUserLoggedIn(context);
+    checkNetworkConnection();
   }
 
 
@@ -76,6 +78,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                 logoImage,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Visibility(visible: noInternetConnection, child: Text("No internet connection",style: TextStyle(fontFamily: 'Raleway', color: Colors.white),)),
+                  )
                 ],
               ),
             ),
@@ -84,23 +90,26 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   /// Check for network connection
-  checkNetworkConnection(FirebaseUser user){
+  checkNetworkConnection(){
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
 
-      print(result.toString());
       if(result == ConnectivityResult.none){
-        AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.SPLASH_SCREEN));
+        setState(() {
+          noInternetConnection = true;
+        });
       }
       else if(result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
         AppHelper.checkInternetConnection().then((val){
           if(val){
-            print("Network exists!");
-
-          }
-          else{
-            AppHelper.cupertinoRouteWithPushReplacement(context, NoInternetConnectionPage(Source.SPLASH_SCREEN));
+           // checkIfUserLoggedIn(context);
           }
         });
-      }});
+      }
+      else{
+        setState(() {
+          noInternetConnection = true;
+        });
+      }
+    });
   }
 }

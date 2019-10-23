@@ -14,7 +14,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'FirebaseMessaging/PushNotification/PushNotification.dart';
@@ -102,39 +101,6 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
           ),
         )
     );
-  }
-
-  // Sign in using facebook
-  signInWithFacebook() async {
-    try {
-      _customRegistrationProgressBar.startProgressBar(context, "Registering...", Colors.white, Colors.black);
-      var facebookLogin = new FacebookLogin();
-      var result = await facebookLogin.logInWithReadPermissions(
-          ['email']);
-
-
-      switch (result.status) {
-
-        case FacebookLoginStatus.loggedIn:
-          AuthCredential credential = FacebookAuthProvider.getCredential(
-              accessToken: result.accessToken.token);
-          FirebaseAuth.instance.signInWithCredential(credential).then((
-              authResult) {
-            print("User " + authResult.toString());
-            checkIfUserExists(authResult.user);
-          });
-          break;
-        case FacebookLoginStatus.cancelledByUser:
-          _customRegistrationProgressBar.stopAndEndProgressBar(context);
-          break;
-        case FacebookLoginStatus.error:
-          _customRegistrationProgressBar.stopAndEndProgressBar(context);
-          AppHelper.showSnackBar("Could not login using facebook", _scaffoldKey);
-          break;
-      }
-    }catch(error){
-
-    }
   }
 
   // Sign in using google

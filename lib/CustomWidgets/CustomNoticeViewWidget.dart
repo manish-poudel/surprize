@@ -19,7 +19,9 @@ class _CustomNoticeViewWidgetState extends State<CustomNoticeViewWidget> {
     return Container(
       child: ListTile(
         contentPadding: EdgeInsets.all(8.0),
-          leading: noticeImageView(),
+          leading: ClipRRect(
+              borderRadius:BorderRadius.all(Radius.circular(10.0)),
+              child: noticeImageView()),
           title: noticeTitle(),
           trailing: IconButton(icon: Icon(Icons.navigate_next), onPressed: () {
             if (widget._notice.redirect == null ||

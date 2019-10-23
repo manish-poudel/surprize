@@ -54,7 +54,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(top:32.0,left: 16.0, right: 16.0, bottom: 16.0),
             child: CircleAvatar(radius: 40, backgroundColor: Colors.white, backgroundImage:
             _player.profileImageURL.isEmpty?AssetImage(ImageResources.emptyUserProfilePlaceholderImage):
             CachedNetworkImageProvider( _player.profileImageURL)
@@ -81,8 +81,9 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
 
   /// Drawer list
   Widget drawerList() {
-    return Padding(
-      padding: const EdgeInsets.all(0.0),
+    return MediaQuery.removePadding(
+     context: _parentContext,
+      removeTop: true,
       child: ListView(
         children: <Widget>[
           profileDisplay(),
@@ -103,16 +104,16 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             goToGamePlay(),
-            drawerButtonNavigationWithPadding(QuizLettersPage(null),Icon(Icons.event_note, color: Colors.purple), "Quiz Letters"),
-            drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple),"Leaderboard"),
-            drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple), "Notice"),
-            drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple), "Feedback"),
-            drawerButtonNavigationWithPadding(AppIntroPage("HELP"),Icon(Icons.live_help, color: Colors.purple), "Help"),
-            AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple), () => ShareApp().shareAppToMedia(), "Share"),
-
+            drawerButtonNavigationWithPadding(QuizLettersPage(null),Icon(Icons.event_note, color: Colors.purple[700]), "Quiz Letters"),
+            drawerButtonNavigationWithPadding(LeaderboardPage(_player.membershipId), Icon(Icons.score, color: Colors.purple[700]),"Leaderboard"),
+            drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple[700]), "Notice"),
+            drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple[700]), "Feedback"),
+            drawerButtonNavigationWithPadding(AppIntroPage("HELP"),Icon(Icons.live_help, color: Colors.purple[700]), "Help"),
+            drawerButtonNavigationWithPadding(DailyQuizChallengeGamePlayPage(),Icon(Icons.live_help, color: Colors.purple[700]), "Test play"),
+            AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple[700]), () => ShareApp().shareAppToMedia(), "Share"),
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),
-              child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple), "Settings"),
+              child: drawerButtonNavigationWithPadding(SettingPage(),Icon(Icons.settings, color: Colors.purple[700]), "Settings"),
             ),
             // drawerButtonNavigationWithPadding(DailyQuizChallengeScoreSummaryPage(0),Icon(Icons.people, color: Colors.purple), "Summary page"),
           ]),
@@ -144,7 +145,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget goToGamePlay(){
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
-        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple),() => DailyQuizChallengePage(_selfContext).openPage(), "Daily Quiz Challenge")
+        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple[800]),() => DailyQuizChallengePage(_selfContext).openPage(), "Daily Quiz Challenge")
     );
   }
 }

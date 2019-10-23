@@ -58,7 +58,7 @@ class GoogleAdManager {
     try{
       init();
       _googleBannerAdForNotice = GoogleBannerAds(AdSize.smartBanner);
-      _googleBannerAdForNotice.initAd(noticeBannerAdId, null, (MobileAdEvent event){
+      _googleBannerAdForNotice.initAd(BannerAd.testAdUnitId, null, (MobileAdEvent event){
         if(event == MobileAdEvent.loaded) {
           noticeBannerLoaded = true;
         }
@@ -79,7 +79,7 @@ class GoogleAdManager {
     try{
       init();
       _googleBannerAdForQuizLetters = GoogleBannerAds(AdSize.smartBanner);
-      _googleBannerAdForQuizLetters.initAd(quizLetterBannerAdId, null, (MobileAdEvent event){
+      _googleBannerAdForQuizLetters.initAd(BannerAd.testAdUnitId, null, (MobileAdEvent event){
         if(event == MobileAdEvent.loaded) {
           quizLetterBannerLoaded = true;
         }
@@ -118,7 +118,7 @@ class GoogleAdManager {
     try{
       init();
       _googleQuizLetterInterstitialAdId = GoogleInterstitialAds();
-      _googleQuizLetterInterstitialAdId.initAd(leaderboardInterstitialAdId,
+      _googleQuizLetterInterstitialAdId.initAd(InterstitialAd.testAdUnitId,
            null, (MobileAdEvent event) {});
       _googleQuizLetterInterstitialAdId.showAd(offSet, anchorType);
     }
@@ -132,7 +132,7 @@ class GoogleAdManager {
       init();
       _googleQuizLetterInterstitialAdId = GoogleInterstitialAds();
       _googleQuizLetterInterstitialAdId.initAd(
-          quizLetterInterstitialAdId, null, (MobileAdEvent event) {
+          InterstitialAd.testAdUnitId, null, (MobileAdEvent event) {
 
       });
       _googleQuizLetterInterstitialAdId.showAd(offSet, anchorType);
@@ -147,7 +147,7 @@ class GoogleAdManager {
       init();
       _quizGameInterstitialAd = GoogleInterstitialAds();
       _quizGameInterstitialAd.initAd(
-          quizGameInterstitialAdId, null, (MobileAdEvent event) {
+          InterstitialAd.testAdUnitId, null, (MobileAdEvent event) {
 
       });
       _quizGameInterstitialAd.showAd(offSet, anchorType);

@@ -1,7 +1,7 @@
 import 'package:Surprize/CustomWidgets/CustomFooterWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomNoticeViewWidget.dart';
 import 'package:Surprize/CustomWidgets/CustomQuizLettersWidget.dart';
-import 'package:Surprize/GoogleAds/CurrentAdDisplayPage.dart';
+import 'package:Surprize/CustomWidgets/GameCards.dart';
 
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/NoNetwork.dart';
@@ -43,7 +43,8 @@ class PlayerDashboard extends StatefulWidget {
 class PlayerDashboardState extends State<PlayerDashboard>
     with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   DailyQuizChallengePage _dailyQuizChallengePage;
-  AnimationController _animationController;
+
+  AnimationController _animationControllerSurprize;
 
   bool _showDailyQuizChallengeWidget = false;
   var subscription;
@@ -66,15 +67,15 @@ class PlayerDashboardState extends State<PlayerDashboard>
   void initState() {
     super.initState();
     Admob.initialize(GoogleAdManager.appId);
-    _admobBanner = AdmobBanner(adUnitId:GoogleAdManager.dashboardBannerId
+    _admobBanner = AdmobBanner(adUnitId:BannerAd.testAdUnitId
       , adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args){
         handleBannerAdEvent(event, args);
       },
     );
     displayAd();
-    _animationController = new AnimationController(vsync: this, duration: Duration(seconds: 1));
-    _animationController.repeat();
+    _animationControllerSurprize = new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animationControllerSurprize.repeat();
     _dailyQuizChallengePage = new DailyQuizChallengePage(context);
     isDailyQuizAvailable();
     getQuizLetters();
@@ -144,7 +145,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _animationControllerSurprize.dispose();
     WidgetsBinding.instance.removeObserver(this);
     _adLoaded = false;
     super.dispose();
@@ -232,6 +233,10 @@ class PlayerDashboardState extends State<PlayerDashboard>
           ]))),
           noticeView(),
           Padding(
+            padding: const EdgeInsets.only(left:12.0, right:12.0,top:4.0),
+            child: GameCards(),
+          ),
+          Padding(
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: CustomUpcomingEventsWidget()),
           advertisement(),
@@ -303,7 +308,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   Widget noticeView() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(top:16.0,left:16.0,right:16.0),
       child: Container(
 
         child: Visibility(
@@ -340,7 +345,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
       child: Column(
         children: <Widget>[
           FadeTransition(
-            opacity: _animationController,
+            opacity: _animationControllerSurprize,
             child: Text(
               "Game is on !!!",
               style: TextStyle(
@@ -370,7 +375,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
     return Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16.0,bottom: 16.0),
       child: Card(
-        color: Colors.purple[600],
+        color: Colors.purple[800],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),

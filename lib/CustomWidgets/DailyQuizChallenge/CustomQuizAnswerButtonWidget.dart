@@ -36,7 +36,7 @@ class CustomQuizAnswerButtonWidget extends StatefulWidget{
 
 }
 
-class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidget>{
+class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidget> with TickerProviderStateMixin{
   String _quizAnswer = "";
   EdgeInsets _edgeInsets;
   final int _buttonId;
@@ -84,10 +84,12 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
     ];
   }
 
+  AnimationController _fadeInAnimation;
   @override
   void initState() {
     super.initState();
     initColor();
+
   }
 
   CustomQuizAnswerButtonWidgetState(this._customQuizAnswerButtonWidget,this._onPressed, this._buttonId, this._quizAnswer, this._edgeInsets);
@@ -95,7 +97,8 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
 
   @override
   Widget build(BuildContext context) {
-
+    _fadeInAnimation = new AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+      _fadeInAnimation.forward();
       return GestureDetector(
         child: Padding(
           padding: _edgeInsets,
@@ -107,8 +110,11 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
             ),
             child: Padding(padding: EdgeInsets.all(16.0),
             child: Center(
-                child: Text(_quizAnswer, style: TextStyle(color: Colors.white, fontSize: 18.0,
-                    fontFamily: 'Raleway')),
+                child: FadeTransition(
+                  opacity: _fadeInAnimation,
+                  child: Text(_quizAnswer, style: TextStyle(color: Colors.white, fontSize: 18.0,
+                      fontFamily: 'Raleway')),
+                ),
             ),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/UserPresenceState.dart';
@@ -92,12 +93,14 @@ class DailyQuizChallengeGamePlayPageState
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     initQuizQuestion();
-    listenForQuizState();
+    //listenForQuizState();
     _userProfile = UserProfile();
     _userProfile.setUserPresence(
         UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
     _soundHelper = SoundHelper();
     _scaffoldKey = GlobalKey<ScaffoldState>();
+    GoogleAdManager().disposeNoticeBannerAd();
+    GoogleAdManager().disposeQuizLetterBannerAd();
   }
 
   @override
@@ -317,7 +320,7 @@ class DailyQuizChallengeGamePlayPageState
               image: DecorationImage(
                   image: new AssetImage(ImageResources.appBackgroundImage),
                   fit: BoxFit.fill)),
-          child: (_hasQuizListBeenRetrieved && _readyToShowQuestion
+          child: (_hasQuizListBeenRetrieved && true
               ? ifAllQuizValueHasBeenSet()
               : ifQuizValueIsInRetrievedMode()),
         ),
@@ -377,25 +380,12 @@ class DailyQuizChallengeGamePlayPageState
     }
 
     if (!_isGameFinished) {
-      keepTimeTrack(10);
+      keepTimeTrack(11);
     }
 
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 32.0),
-            child: Center(
-              child: Text(
-                StringResources.headingText,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 21,
-                    fontFamily: 'Raleway',
-                    fontWeight: FontWeight.w300),
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(32.0),
             child: _customCountDownTimerWidget,

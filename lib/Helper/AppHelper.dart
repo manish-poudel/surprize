@@ -220,7 +220,7 @@ class AppHelper{
   /// Button with text widget
   Widget buttonText(String text) {
     return Text(text,
-        style: TextStyle(color: Colors.purple[800], fontFamily: 'Raleway' ,fontSize: 18, fontWeight: FontWeight.w500));
+        style: TextStyle(color: Colors.purple[800] ,fontSize: 18, fontWeight: FontWeight.w400));
   }
 
   /// Flat button with route

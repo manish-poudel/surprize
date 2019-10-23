@@ -277,7 +277,7 @@ class DailyQuizChallengeScoreSummaryPageState
     super.initState();
     GoogleAdManager().showQuizGameInterstitialAd(0.0, AnchorType.top);
     _userProfile = UserProfile();
-     updateScoreForGamePlay();
+   //  updateScoreForGamePlay();
       UserMemory().gamePlayed = true;
      Future.delayed(Duration(seconds: 3), () => showForm());
   }
@@ -312,7 +312,7 @@ class DailyQuizChallengeScoreSummaryPageState
       if(event == RewardedVideoAdEvent.closed){
       }
     };
-   await RewardedVideoAd.instance.load(adUnitId: GoogleAdManager.rewardedVideoAdId, targetingInfo: targetingInfo);
+   await RewardedVideoAd.instance.load(adUnitId: RewardedVideoAd.testAdUnitId, targetingInfo: targetingInfo);
   }
 
 

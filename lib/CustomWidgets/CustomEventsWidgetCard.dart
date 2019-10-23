@@ -24,7 +24,9 @@ class CustomEventWidgetCard extends StatelessWidget {
   Widget getCard(context) {
     return Container(
       child: Card(
-        color: Colors.purple[700],
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        color: Colors.purple[800],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -35,7 +37,6 @@ class CustomEventWidgetCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                     // color: Colors.purple[700],
                       child: FadeInImage.assetNetwork(placeholder: ImageResources.appIcon1024,
                           image: _photoUrl,  width: double.infinity, height: MediaQuery.of(context).size.height * 0.4,
                         fit: BoxFit.cover,)),
