@@ -10,8 +10,10 @@ class ImageResources{
   static final String twitterIcon = 'assets/images/twitter_icon.png';
   static final String instagramIcon = 'assets/images/instagram_icon.png';
   static final String winnerBanner = 'assets/images/winner_banner.png';
-  static final String helpDQCButton = 'assets/images/daily_quiz_challenge_button.png';
+  static final String helpDQCButton = 'assets/images/daily_quiz_challenge_button.jpg';
+  static final String helpSurprizeButton = 'assets/images/surprize_quiz_challenge_button.jpg';
   static final String helpDQC = 'assets/images/DqcPlay.jpg';
+  static final String helpSurprize = 'assets/images/SurprizePlay.jpg';
   static final String helpQuizLetter = 'assets/images/quiz_letter_display.jpg';
   static final String helpQuizLetterOpening = 'assets/images/opening_quiz_letter.png';
   static final String helpQuizLetterOpeningTwo = 'assets/images/opening_quiz_letter_two.png';
@@ -21,6 +23,8 @@ class ImageResources{
   static final String appIcon1024 = 'assets/images/icon1024.png';
   static final String moneyBag = 'assets/images/money-bag.png';
   static final String diwaliImage = 'assets/images/diwali.png';
-  static final String dqcBackground = 'assets/images/dqc_background.jpg';
+  static final String sadEmoji = 'assets/images/sad.png';
+  static final String happyEmoji = 'assets/images/happy.png';
+  static final String achievementTrophy = 'assets/images/award.png';
 
 }

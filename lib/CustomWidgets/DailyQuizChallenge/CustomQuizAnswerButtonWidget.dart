@@ -5,7 +5,7 @@ class CustomQuizAnswerButtonWidget extends StatefulWidget{
    int _buttonId;
    String _quizAnswer;
    EdgeInsets _edgeInsets;
-  Function _onPressed;
+   Function _onPressed;
    CustomQuizAnswerButtonWidgetState _state;
 
    void setQuizAnswer(String answer){
@@ -26,12 +26,13 @@ class CustomQuizAnswerButtonWidget extends StatefulWidget{
   /*
   Change color
    */
-  void changeColor(id){
-    _state._changeColor(id);
+  void changeColor(id, String type){
+    _state._changeColor(id , type);
   }
 
   void resetColor(){
-    _state.resetColor();
+    if(_state != null)
+      _state.resetColor();
   }
 
 }
@@ -53,15 +54,33 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
   /*
   Change color
    */
-  void _changeColor(id){
+  void _changeColor(id, String type){
     if(id == _buttonId) {
       setState(() {
-        _colorList = [
-          Colors.orange[900],
-          Colors.orange[800],
-          Colors.orange[700],
-          Colors.orange[600],
-        ];
+        if(type == "SELECTED") {
+          _colorList = [
+            Colors.orange[900],
+            Colors.orange[800],
+            Colors.orange[700],
+            Colors.orange[600],
+          ];
+        }
+        if(type == "CORRECT"){
+          _colorList = [
+            Colors.green[900],
+            Colors.green[800],
+            Colors.green[700],
+            Colors.green[600],
+          ];
+        }
+        if(type == "WRONG"){
+          _colorList = [
+            Colors.red[900],
+            Colors.red[800],
+            Colors.red[700],
+            Colors.red[600],
+          ];
+        }
       });
     }
     _colorList = _colorList;
@@ -104,7 +123,7 @@ class CustomQuizAnswerButtonWidgetState extends State<CustomQuizAnswerButtonWidg
           padding: _edgeInsets,
           child: Container(
             decoration: new BoxDecoration(
-              gradient: LinearGradient(colors: _colorList),
+                gradient: LinearGradient(colors: _colorList),
                 border: new Border.all(color: Colors.white, width: 1),
                 borderRadius: new BorderRadius.all(Radius.circular(40.0))
             ),

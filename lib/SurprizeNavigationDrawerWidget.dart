@@ -1,6 +1,7 @@
 import 'package:Surprize/AppIntroPage.dart';
 import 'package:Surprize/AppShare/ShareApp.dart';
-import 'package:Surprize/DailyQuizChallengeGamePlayPage.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/SurprizeGamePlayPage.dart';
 
 import 'package:Surprize/FeedbackPage.dart';
 
@@ -9,13 +10,14 @@ import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:Surprize/SettingPage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 
 import 'CustomWidgets/CustomNavigationDrawerWidget.dart';
-import 'DailyQuizChallengePage.dart';
+import 'SurprizeChallengePage.dart';
 import 'LeaderboardPage.dart';
 import 'Models/Player.dart';
 
@@ -90,6 +92,13 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
           drawerButtons(),
           Container(color: Colors.white,height: 1),
           AppHelper().socialMediaWidget(_selfContext),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(child: Text("delete"),onTap: (){
+              Firestore.instance.collection(FirestoreResources.collectionDailyQuizChallenge).document(FirestoreResources.docChallengeOfToday)
+                  .collection(FirestoreResources.docChallengePlayerList).document(UserMemory().getPlayer().membershipId).delete();
+            }),
+          ),
           Container(height: 52)
         ],
       ),
@@ -109,7 +118,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
             drawerButtonNavigationWithPadding(NoticePage(),Icon(Icons.new_releases, color: Colors.purple[700]), "Notice"),
             drawerButtonNavigationWithPadding(FeedbackPage(),Icon(Icons.feedback, color: Colors.purple[700]), "Feedback"),
             drawerButtonNavigationWithPadding(AppIntroPage("HELP"),Icon(Icons.live_help, color: Colors.purple[700]), "Help"),
-            drawerButtonNavigationWithPadding(DailyQuizChallengeGamePlayPage(),Icon(Icons.live_help, color: Colors.purple[700]), "Test play"),
+            drawerButtonNavigationWithPadding(SurprizeGamePlayPage(),Icon(Icons.live_help, color: Colors.purple[700]), "Test play"),
             AppHelper().flatButtonWithRoute(Icon(Icons.share, color: Colors.purple[700]), () => ShareApp().shareAppToMedia(), "Share"),
             Padding(
               padding: const EdgeInsets.only(bottom:8.0),
@@ -145,7 +154,7 @@ class SurprizeNavigationDrawerWidget extends StatelessWidget {
   Widget goToGamePlay(){
     return Padding(
         padding: const EdgeInsets.only(top: 1.0),
-        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple[800]),() => DailyQuizChallengePage(_selfContext).openPage(), "Daily Quiz Challenge")
+        child:  AppHelper().flatButtonWithRoute(Icon(Icons.games, color: Colors.purple[800]),() => SurprizeChallengePage(_selfContext).openPage(), "Surprize Challenge")
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/LoginPage.dart';
 import 'package:Surprize/SplashScreen.dart';
 import 'package:flutter/material.dart';
 

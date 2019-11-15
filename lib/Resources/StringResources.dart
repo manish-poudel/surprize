@@ -27,10 +27,10 @@ class StringResources{
   static final String goBackToolTipText = 'Go back';
 
   // Related to daily quiz challenge page
-  static final String noCurrentGameText = "We are not having any quiz right now. \n Set reminder so you get notified for next game!";
+  static final String noCurrentGameText = "Set reminder to get notified for next game!";
   static final String setReminderButtonText = "Set reminder";
   static final String exitButtonText = "Exit";
-  static final String countDownTimeString ="Game starts at";
+  static final String countDownTimeString ="Next Game On";
   static final String setReminderTitle = "Reminder for Daily Quiz Challenge";
   static final String setReminderDescription = "Let's play the daily quiz challenge!!!!";
   static final String setReminderSuccessMessage = "Reminder for daily quiz challenge has been set";

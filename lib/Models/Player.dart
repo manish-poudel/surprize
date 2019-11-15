@@ -46,6 +46,21 @@ class Player extends User{
       AppHelper.convertToDateTime(map[FirestoreResources.fieldPlayerMembershipDate]),
       map[FirestoreResources.fieldPlayerProfileURL],
       map[FirestoreResources.fieldPlayerAccountVerified]
+  );
 
+  /*
+  Convert map to player
+   */
+  Player.fromSQLiteMap(Map<String, dynamic> map) : super( map[FirestoreResources.fieldPlayerId],
+      map[FirestoreResources.fieldPlayerName],
+      map[FirestoreResources.fieldPlayerDOB],
+      map[FirestoreResources.fieldPlayerAddress],
+      map[FirestoreResources.fieldPlayerCountry],
+      map[FirestoreResources.fieldPlayerGender],
+      map[FirestoreResources.fieldPlayerEmail] ,
+      map[FirestoreResources.fieldPlayerPhoneNumber],
+      DateTime.parse(map[FirestoreResources.fieldPlayerMembershipDate].toString().split('&&&')[0]),
+      map[FirestoreResources.fieldPlayerProfileURL],
+      map[FirestoreResources.fieldPlayerAccountVerified] == "true"
   );
 }

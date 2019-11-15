@@ -12,6 +12,7 @@ class GoogleAdManager {
   static String quizLetterInterstitialAdId = "ca-app-pub-2130188164225142/4408997619";
   static String leaderboardInterstitialAdId = "ca-app-pub-2130188164225142/8895037531";
   static String quizGameInterstitialAdId ="ca-app-pub-2130188164225142/7434873367";
+  static String dailyQuizExitInterstitialAd = "ca-app-pub-2130188164225142~4388816314";
 
   static String dashboardBannerId = "ca-app-pub-2130188164225142/9852895986";
   static String quizLetterBannerAdId = "ca-app-pub-2130188164225142/3287487633";
@@ -21,6 +22,7 @@ class GoogleAdManager {
 
   GoogleAdFormats _googleQuizLetterInterstitialAdId;
   GoogleAdFormats _googleLeaderboardInterstitialAdId;
+  GoogleAdFormats _googleDQCExitInterstitialAdId;
   GoogleAdFormats _quizGameInterstitialAd;
 
   GoogleAdFormats _googleBannerAdForQuizLetters;
@@ -113,7 +115,7 @@ class GoogleAdManager {
 
   }
 
-
+  /// Leaderboard interstitial ad
   showLeaderboardInterstitialAd(double offSet, AnchorType anchorType){
     try{
       init();
@@ -121,6 +123,19 @@ class GoogleAdManager {
       _googleQuizLetterInterstitialAdId.initAd(InterstitialAd.testAdUnitId,
            null, (MobileAdEvent event) {});
       _googleQuizLetterInterstitialAdId.showAd(offSet, anchorType);
+    }
+    catch(error){
+    }
+  }
+
+  /// Leaderboard interstitial ad
+  showDQCExitInterstitialAd(double offSet, AnchorType anchorType){
+    try{
+      init();
+      _googleDQCExitInterstitialAdId = GoogleInterstitialAds();
+      _googleDQCExitInterstitialAdId.initAd(InterstitialAd.testAdUnitId,
+          null, (MobileAdEvent event) {});
+      _googleDQCExitInterstitialAdId.showAd(offSet, anchorType);
     }
     catch(error){
     }
@@ -160,6 +175,14 @@ class GoogleAdManager {
   void disposeQuizLetterInterstitialAd(){
     _googleQuizLetterInterstitialAdId.dispose();
     _googleQuizLetterInterstitialAdId = null;
+  }
+
+  /// Dispose interstitial ad
+  void disposeDQCInterstitialAd(){
+    if(_googleDQCExitInterstitialAdId == null)
+      return;
+    _googleDQCExitInterstitialAdId.dispose();
+    _googleDQCExitInterstitialAdId = null;
   }
 
   /// Dispose interstitial ad

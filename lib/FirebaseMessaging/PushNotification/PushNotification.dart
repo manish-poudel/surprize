@@ -1,9 +1,9 @@
 
 import 'dart:async';
 
-import 'package:Surprize/DailyQuizChallengeGamePlayPage.dart';
+import 'package:Surprize/SurprizeGamePlayPage.dart';
 import 'package:Surprize/DailyQuizChallengeNotAvailablePage.dart';
-import 'package:Surprize/DailyQuizChallengePage.dart';
+import 'package:Surprize/SurprizeChallengePage.dart';
 import 'package:Surprize/FeedbackPage.dart';
 import 'package:Surprize/FirebaseMessaging/PushNotification/LocalNotification.dart';
 import 'package:Surprize/Helper/AppHelper.dart';

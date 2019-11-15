@@ -220,7 +220,7 @@ class AppHelper{
   /// Button with text widget
   Widget buttonText(String text) {
     return Text(text,
-        style: TextStyle(color: Colors.purple[800] ,fontSize: 18, fontWeight: FontWeight.w400));
+        style: TextStyle(color: Colors.purple[800] ,fontSize: 18, fontFamily:'Raleway',fontWeight: FontWeight.w500));
   }
 
   /// Flat button with route
@@ -331,20 +331,17 @@ class AppHelper{
 
   Widget socialMediaWidget(context){
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top:16.0),
+            padding: const EdgeInsets.only(left:8.0),
             child: Text("Finds us on:",style:TextStyle(
                 fontFamily: 'Raleway',
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w400)),
+                color: Colors.purple[800],
+                fontSize: 18,
+                fontWeight: FontWeight.w700)),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top:8.0),
-            child: imageIconButton(context),
-          )
+          imageIconButton(context)
         ]
     );
   }
@@ -394,6 +391,21 @@ class AppHelper{
   static int getRandomNumberInBetweenValues(min, max){
     Random rnd = new Random();
     return min + rnd.nextInt(max - min);
+  }
+
+
+  /// Get list of random numbers
+  static List<int> randomNumberList(int totalNumber, min, max){
+    int i = 0;
+    List<int> randomNumbers =[];
+    while(i != totalNumber){
+      int randomNumber = getRandomNumberInBetweenValues(min, max);
+      if(!randomNumbers.contains(randomNumber)){
+        randomNumbers.add(randomNumber);
+        i++;
+      }
+    }
+    return randomNumbers;
   }
 
  static Widget settingMenu(context, String name, IconData icon, Function onPressed) {

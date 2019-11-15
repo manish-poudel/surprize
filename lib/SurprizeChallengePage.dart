@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
-import 'DailyQuizChallengeGamePlayPage.dart';
+import 'SurprizeGamePlayPage.dart';
 import 'DailyQuizChallengeNotAvailablePage.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 
-class DailyQuizChallengePage {
+class SurprizeChallengePage {
 
   BuildContext  _context;
-  DailyQuizChallengePage(this._context);
+  SurprizeChallengePage(this._context);
 
   /// Open page
   openPage() async {
     QuizState quizState = await dailyQuizState();
-    goToPage(quizState.quizState != CurrentQuizState.QUIZ_IS_OFF?DailyQuizChallengeGamePlayPage():
+    goToPage(quizState.quizState != CurrentQuizState.QUIZ_IS_OFF?SurprizeGamePlayPage():
         DailyQuizChallengeNotAvailablePage(quizState.quizStartTime)
         , _context);
   }

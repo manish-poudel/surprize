@@ -33,6 +33,8 @@ class SQLiteHelper{
     return "INSERT INTO " + tableName + " (";
   }
 
+
+
   /// column append
   static String insertColumnAppend(List<String> columnName){
     String appendedColumn;

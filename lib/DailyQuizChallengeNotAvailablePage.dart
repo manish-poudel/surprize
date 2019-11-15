@@ -61,7 +61,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
                 image:DecorationImage(image: new AssetImage(ImageResources.appBackgroundImage), fit: BoxFit.cover)
             ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top:8.0),
@@ -77,8 +77,8 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
               padding: const EdgeInsets.all(32.0),
               child: CustomCountDownTimerWidget(true,32,true, countDownDuration,
                   StringResources.countDownTimeString,
-                  MediaQuery.of(context).size.height * 0.30,
-                  MediaQuery.of(context).size.height * 0.30,
+                  MediaQuery.of(context).size.height * 0.35,
+                  MediaQuery.of(context).size.height * 0.35,
                   Colors.white,
                   Colors.redAccent,
                   CountDownTimeTypeEnum.DAILY_QUIZ_CHALLENGE_NOT_AVAILABLE),

@@ -16,13 +16,15 @@ class LeaderboardManager{
 
   String _userId;
   int _totalScore;
+  int _totalRightAnswer;
 
   bool _isDailyQuizWinner;
 
 
   /// Save score after game play
-  void saveScoreAfterGamePlay(int scoreFromQuizPlay, String playedQuizId, String playedQuizName, Function allTimeScoredSaved, Function weeklyScoredSaved, Function dailyQuizWinnerSaved){
+  void saveScoreAfterGamePlay(int totalRightAnswer,int scoreFromQuizPlay, String playedQuizId, String playedQuizName, Function allTimeScoredSaved, Function weeklyScoredSaved, Function dailyQuizWinnerSaved){
 
+    this._totalRightAnswer = totalRightAnswer;
     FirebaseAuth.instance.currentUser().then((firebaseUser){
       _userId = firebaseUser.uid;
       _totalScore = scoreFromQuizPlay + ScoreSystem.getScoreFromGamePlay();
@@ -30,9 +32,11 @@ class LeaderboardManager{
       saveForAllTimeScore(_userId,_totalScore, (value){
         allTimeScoredSaved(value);
       });
+
       saveForWeeklyScore(_userId, _totalScore,(value){
         weeklyScoredSaved(value);
       });
+
       _saveForDailyQuizWinner(scoreFromQuizPlay ,playedQuizId, playedQuizName, (value){
         dailyQuizWinnerSaved(value);
       });
@@ -57,14 +61,17 @@ class LeaderboardManager{
   /// Save for daily quiz winner
   void _saveForDailyQuizWinner(int scoreFromQuiz, String playedQuizId, String quizName, Function dailyQuizWinnerSaved){
 
+    print("About to save user in leaderboard daily");
     _isDailyQuizWinner = (scoreFromQuiz == ScoreSystem.getFullSoreFromQuizPlay());
 
     QuizPlay quizPlay;
-    quizPlay = _isDailyQuizWinner?QuizPlay(PlayState.WON, DateTime.now(),playedQuizId,quizName):QuizPlay(PlayState.LOST,DateTime.now(), playedQuizId, quizName);
+    quizPlay = _isDailyQuizWinner?QuizPlay(PlayState.WON, DateTime.now(),playedQuizId,quizName, _totalScore,_totalRightAnswer):QuizPlay(PlayState.LOST,DateTime.now(), playedQuizId, quizName, _totalScore,_totalRightAnswer);
     DocumentReference leaderboardDocRef = FirestoreOperations().getNestedCollectionReference(FirestoreResources.leaderboardCollection,
         FirestoreResources.leaderboardSubCollection, FirestoreResources.leaderboardDaily).document(_userId);
     leaderboardDocRef.setData(quizPlay.toMap()).then((value){
       dailyQuizWinnerSaved(value);
+    }).catchError((error){
+      print("THE ERROR WHILE SAVING DAILY WINNER" + error.toString());
     });
   }
 
@@ -87,7 +94,6 @@ class LeaderboardManager{
     int oldScore;
     documentReference.get().then((documentSnapshot){
       (!documentSnapshot.exists) ? oldScore = 0: oldScore =  documentSnapshot.data[FirestoreResources.fieldLeaderBoardScore];
-
       documentReference.setData({
         FirestoreResources.fieldLeaderBoardScore: (oldScore + totalScore)
       }).catchError((error){
@@ -113,6 +119,8 @@ class LeaderboardManager{
    /// Add to leaderboard list
     docSnapshot.forEach((documentSnapshot)  async {
       Player player = await getProfileData(documentSnapshot.documentID);
+      if(player == null)
+        return;
       getScorer(Leaderboard(docSnapshot.indexOf(documentSnapshot) + 1,player, documentSnapshot.data[fieldValue], player.accountVerified));
      });
   }
@@ -126,15 +134,17 @@ class LeaderboardManager{
   }
 
 
-  /// GET SCORE BY iD
-
-
-
 /// Get player data
   Future<Player> getProfileData(String id) async {
     DocumentSnapshot documentSnapshot = await FirestoreOperations().getDocumentSnapshot(FirestoreResources.userCollectionName
-        , id).get();
-    Player player = Player.fromMap(documentSnapshot.data);
+        ,id).get();
+    Player player;
+    try {
+      player = Player.fromMap(documentSnapshot.data);
+    }
+    catch(error){
+
+    }
     return player;
   }
 

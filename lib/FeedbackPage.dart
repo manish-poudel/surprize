@@ -59,18 +59,23 @@ class _FeedbackPageState extends State<FeedbackPage> {
         home: Scaffold(
             appBar:
             CustomAppBarWithAction("Feedbacks", context, appBarActions()),
-            body: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    showFeedbacks(),
-                    FlatButton(
-                        child: Text("SEND FEEDBACK",
-                            style: TextStyle(color: Colors.grey)),
-                        onPressed: () =>
-                            AppHelper.cupertinoRoute(context, SendFeedbackPage("")))
-                  ],
-                ))));
+            body: Column(
+              children: <Widget>[
+                Expanded(
+                  child: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          showFeedbacks(),
+                        ],
+                      )),
+                ),
+                FlatButton(
+                    child: Text("SEND FEEDBACK",
+                        style: TextStyle(color: Colors.grey)),
+                    onPressed: () =>
+                        AppHelper.cupertinoRoute(context, SendFeedbackPage("")))
+              ],
+            )));
   }
 
 

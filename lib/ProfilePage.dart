@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:Surprize/CustomWidgets/CustomLabelTextFieldWidget.dart';
+import 'package:Surprize/SqliteDb/SQLiteManager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,18 +63,17 @@ class ProfilePageState extends State<ProfilePage> {
         home: Scaffold(
           key: _scaffoldKey,
             appBar: CustomAppBarWithAction("Profile", context, appBarActions()),
-            body: SingleChildScrollView(
-                child: StreamBuilder(
-                    stream: _userBLOC.player,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<Player> playerSnapshot) {
-                      _player = playerSnapshot.data;
-                      print("Player" + _player.toString());
-                      if (_player == null) {
-                        return noProfileDisplay();
-                      }
-                      return displayProfile();
-                    }))));
+            body: StreamBuilder(
+                stream: _userBLOC.player,
+                builder: (BuildContext context,
+                    AsyncSnapshot<Player> playerSnapshot) {
+                  _player = playerSnapshot.data;
+                  print("Player" + _player.toString());
+                  if (_player == null) {
+                    return noProfileDisplay();
+                  }
+                  return displayProfile();
+                })));
   }
 
   /// App bar actions
@@ -129,17 +129,34 @@ class ProfilePageState extends State<ProfilePage> {
   Widget displayProfile() {
     return Container(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment:MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Center(child: profilePhotoContainer()),
-          personalInformationHolder(),
-          //AppHelper.appSmallHeader("Recent Activity"),
-          //Container(child: recentActivityList()),
-          Visibility(visible:_player.email.isEmpty, child: _emailForm()),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Center(child: FlatButton(color:Colors.purple[400], onPressed: () => AppHelper.cupertinoRoute(context, EditProfilePage()),
-                child: Text("Edit profile", style: TextStyle(fontFamily: 'Raleway', fontSize:18,color:Colors.white)))),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Center(child: profilePhotoContainer()),
+                  personalInformationHolder(),
+                  //AppHelper.appSmallHeader("Recent Activity"),
+                  //Container(child: recentActivityList()),
+                  Visibility(visible:_player.email.isEmpty, child: _emailForm()),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap:() => AppHelper.cupertinoRoute(context, EditProfilePage()),
+            child: Container(
+              padding: EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(color: Colors.black, offset: Offset(4.0, 18.0), blurRadius: 26.0),
+                ],
+              ),
+              width: MediaQuery.of(context).size.width,
+              child: Center(child: Icon(Icons.edit)),
+            ),
           )
         ],
       ),
@@ -269,6 +286,7 @@ class ProfilePageState extends State<ProfilePage> {
             child: textWithIcon(Icons.place, _player.country, Colors.purple),
           ),
         ),
+
         Visibility(
           visible: _player.address.isNotEmpty,
           child: Padding(
@@ -277,6 +295,7 @@ class ProfilePageState extends State<ProfilePage> {
                 Icons.location_city, _player.address, Colors.purple),
           ),
         ),
+
         Visibility(
           visible: _player.dob.isNotEmpty,
           child: Padding(
@@ -383,6 +402,7 @@ class ProfilePageState extends State<ProfilePage> {
       setState(() {
         _isImageLoading = false;
         _player.profileImageURL = url;
+        SQLiteManager().updateProfile(_player);
         UserMemory().getPlayer().profileImageURL = url;
       });
     });
@@ -413,8 +433,10 @@ class ProfilePageState extends State<ProfilePage> {
       return;
 
     _player.email = _emailField.getValue();
-    UserMemory().savePlayer(_player);
+
     UserProfile().updateProfile(_player.membershipId, _player).then((_){
+      UserMemory().savePlayer(_player);
+      SQLiteManager().updateProfile(_player);
       setState(() {
         _player = _player;
       });

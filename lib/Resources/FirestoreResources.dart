@@ -3,6 +3,8 @@ class FirestoreResources {
 
   static final leaderboardCollection = "Leaderboard";
   static final leaderboardSubCollection = "Leaderboard_scores";
+  static final leaderboardSubCollectionLatestQuiz = "Leaderboard_scores_latest";
+  static final leaderboardSubCollectionBeforeLatestQuiz = "Leaderboard_scores_before_latest";
 
   /// Related to leaderboard
   static final String leaderboardAllTime = "All Time Score";
@@ -18,6 +20,8 @@ class FirestoreResources {
   static final String fieldDailyQuizLastPlayed = "Last played";
   static final String fieldDailyQuizPlayedId = "Quiz played id";
   static final String fieldDailyQuizPlayedName = "Quiz played name";
+  static final String fieldDailyQuizTotalCorrectAnswer = "Total correct answer";
+  static final String fieldDailyQuizPlayScore = "score";
 
   /// Related to registration
 
@@ -148,10 +152,43 @@ class FirestoreResources {
   static final String fieldSurveyIssueYesNoField = "Had Issue?";
   static final String fieldSurveyIssueDesc = "Issue Desc";
   static final String fieldSurveyNoOfQuizQuestion ="Total Question faced";
+  static final String fieldSurveyTime = "time";
+  static final String fieldSurveyFor = "quizName";
   static final String fieldSurveyQuizKeywords = "Keywords";
 
   /// Related to version
   static final String fieldAppVersionCollection = "/App version";
   static final String fieldAppLatestVersionDocument = "latest version";
   static final String fieldVersion = "version";
+
+
+  /// Related to Daily Quiz Challenge
+  static final String collectionDailyQuizChallenge = "/Daily Quiz Challenge";
+  static final String docChallengeOfToday = "Today";
+  static final String docChallengeOfYesterday = "Yesterday";
+  static final String collectionChallengeInfo = "Data";
+  static final String docChallengeConductedOn = "Conducted on";
+  static final String docChallengePlayerList = "Players";
+  static final String fieldDQCConductedOn = "date";
+  static final String fieldDQCPlayerId = "playerId";
+  static final String fieldDQCid=  "id";
+  static final String fieldDQCRank = "rank";
+  static final String fieldDQCPlayerName = "playerName";
+  static final String fieldDQCPlayerEmailVerified = "isEmailVerified";
+  static final String fieldDQCHasPlayerWon = "didPlayerWon";
+  static final String fieldDQCPlayedOn = "playedOn";
+  static final String fieldDQCPlayerScore = "score";
+  static final String fieldNextGameOn = "nextGameOn";
+  static final String collectionEasyQuestion = "Easy Questions";
+  static final String collectionMediumQuestion = "Medium Questions";
+  static final String collectionHardQuestion = "Hard Questions";
+
+
+  /// Related to facts
+  static final String collectionsDidYouKnow = '/Did You Know';
+  static final String fieldDYKId =  'id';
+  static final String fieldDYKBody =  'body';
+  static final String fieldDRYKImageUrl=  'imageUrl';
+  static final String fieldDYKState = 'state';
+
 }

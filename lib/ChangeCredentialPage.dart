@@ -5,8 +5,10 @@ import 'package:Surprize/CustomWidgets/RegistrationPage/CustomRegPasswordEntryWi
 import 'package:Surprize/EmailChangeSuccess.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/Player.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/SendFeedbackPage.dart';
+import 'package:Surprize/SqliteDb/SQLiteManager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -306,6 +308,10 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
                 .updateData({
                FirestoreResources.fieldPlayerEmail: _emailField.getValue().trim()
             }).then((value){
+              Player player = UserMemory().getPlayer();
+              player.email = _emailField.getValue();
+              UserMemory().savePlayer(player);
+              SQLiteManager().updateProfile(player);
               _customProgressBarWidget.stopAndEndProgressBar(context);
               Navigator.of(context).popUntil((route) => route.isFirst);
               AppHelper.cupertinoRouteWithPushReplacement(context, EmailChangeSuccess(_emailField.getValue()));

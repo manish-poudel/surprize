@@ -51,10 +51,10 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
      child: Column(
        crossAxisAlignment: CrossAxisAlignment.start,
        children: <Widget>[
-         Text(widget.notice.title, style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 24, fontWeight: FontWeight.w500)),
+         Text(widget.notice.title, style: TextStyle(color: Colors.black ,fontSize: 24, fontWeight: FontWeight.w400)),
          Padding(
            padding: const EdgeInsets.only(top:2.0),
-           child: Text(AppHelper.dateToReadableString(widget.notice.addedTime), style: TextStyle(color: Colors.grey, fontFamily: 'Raleway' ,fontSize: 12, fontWeight: FontWeight.w500)),
+           child: Text(AppHelper.dateToReadableString(widget.notice.addedTime), style: TextStyle(color: Colors.grey ,fontSize: 12, fontWeight: FontWeight.w400)),
          )
        ],
      ),
@@ -70,7 +70,7 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
             Visibility(visible: widget.notice.photoDesc.isNotEmpty || widget.notice.photoDesc != null,
               child: Container(
                   height: 20,
-                  child: Text(widget.notice.photoDesc, style: TextStyle(color: Colors.black, fontFamily: 'Raleway' ,fontSize: 14, fontWeight: FontWeight.w300))),
+                  child: Text(widget.notice.photoDesc, style: TextStyle(color: Colors.black ,fontSize: 14, fontWeight: FontWeight.w300))),
             ),
           ],
         ));
@@ -95,7 +95,7 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
       child: Column(
         children: <Widget>[
           Text(
-            widget.notice.body,style: TextStyle(color: Colors.black, fontSize: 18, fontFamily: 'Raleway')),
+            widget.notice.body,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w300, fontSize: 18)),
           widget.notice.urlRoute != null ?Visibility(visible: widget.notice.urlRoute.isNotEmpty || widget.notice.urlRoute != null, child: Center(
             child: FlatButton(child:
             Container(

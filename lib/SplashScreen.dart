@@ -2,8 +2,6 @@ import 'package:Surprize/Dashboard.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/LoginPage.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
-import 'package:Surprize/Models/NoNetwork.dart';
-import 'package:Surprize/NoInternetConnectionPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Image logoImage;
   var subscription;
   bool noInternetConnection = false;
+  String _internetConnectionMsg = "";
 
   @override
   initState() {
@@ -78,9 +77,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                 logoImage,
+                Text("Play, Learn, and Earn",style: TextStyle(fontFamily: 'Raleway', fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white)),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Visibility(visible: noInternetConnection, child: Text("No internet connection",style: TextStyle(fontFamily: 'Raleway', color: Colors.white),)),
+                    child: Visibility(visible: noInternetConnection, child: Text(_internetConnectionMsg,style: TextStyle(fontFamily: 'Raleway', color: Colors.white),)),
                   )
                 ],
               ),
@@ -95,15 +95,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if(result == ConnectivityResult.none){
         setState(() {
+          _internetConnectionMsg = "No internet connection";
           noInternetConnection = true;
         });
       }
       else if(result == ConnectivityResult.mobile || result == ConnectivityResult.wifi){
-        AppHelper.checkInternetConnection().then((val){
-          if(val){
-           // checkIfUserLoggedIn(context);
-          }
-        });
       }
       else{
         setState(() {

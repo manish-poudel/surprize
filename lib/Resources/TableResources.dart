@@ -1,4 +1,6 @@
 import 'package:Surprize/Helper/SQLiteHelper.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/Resources/StringResources.dart';
 
 
 class SQLiteDatabaseResources{
@@ -26,6 +28,23 @@ class SQLiteDatabaseResources{
   static final String fieldQuizLetterBodyReveal= "revealBody";
   static final String fieldQuizLetterUserId = "userId";
 
+  /// Related to user profile
+
+  static String getProfileTable(){
+    return SQLiteHelper.createTable("Players") +
+        SQLiteHelper.primaryColumn(FirestoreResources.fieldPlayerId) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerAccountVerified) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerAddress) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerCountry) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerDOB) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerEmail) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerGender) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerMembershipDate) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerName) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerPhoneNumber) + "," +
+        SQLiteHelper.column(FirestoreResources.fieldPlayerProfileURL) +
+     ")";
+  }
 
 
   /// get quiz table creation string
@@ -75,6 +94,7 @@ class SQLiteDatabaseResources{
     return text;
   }
 
+  /// Insert statement for favourite quote
   static final String insertIntoFavQuoteTableStatement =  SQLiteHelper.insertStatement(tableQuizFavourite) +
   SQLiteHelper.insertColumnAppend([
     fieldQuizLetterDisplayId,
@@ -95,5 +115,35 @@ class SQLiteDatabaseResources{
     fieldQuizLetterExpanded,
     fieldQuizLetterBodyReveal
   ]) + ") " + getInsertValueField(17);
+
+/// Insert statement for profile
+  static final String insertIntoProfile = SQLiteHelper.insertStatement("Players") + SQLiteHelper.insertColumnAppend([
+    FirestoreResources.fieldPlayerId,
+    FirestoreResources.fieldPlayerAccountVerified,
+    FirestoreResources.fieldPlayerAddress,
+    FirestoreResources.fieldPlayerCountry,
+    FirestoreResources.fieldPlayerDOB,
+    FirestoreResources.fieldPlayerEmail,
+    FirestoreResources.fieldPlayerGender,
+    FirestoreResources.fieldPlayerMembershipDate,
+    FirestoreResources.fieldPlayerName,
+    FirestoreResources.fieldPlayerPhoneNumber,
+    FirestoreResources.fieldPlayerProfileURL
+  ]) + ") " + getInsertValueField(11);
+
+  /// Update player profile statement
+    static final String updateIntoProfile = 'UPDATE Players SET ' +
+        FirestoreResources.fieldPlayerAccountVerified + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerAddress + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerCountry + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerDOB + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerEmail + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerGender + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerName + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerPhoneNumber + ' =? ' + ',' +
+        FirestoreResources.fieldPlayerProfileURL + ' =? ' +
+        'WHERE ' +
+        FirestoreResources.fieldPlayerId + ' =?';
+
 
 }

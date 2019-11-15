@@ -7,6 +7,9 @@ import 'package:path_provider/path_provider.dart';
 
 class SoundHelper{
   AudioPlayer _audioPlayer;
+  String _filename;
+  String _location;
+  bool _loop = false;
   /*
   Loading assets.
    */
@@ -14,16 +17,34 @@ class SoundHelper{
     return await rootBundle.load(location);
   }
 
+  loop(bool loop){
+    _loop = loop;
+  }
+
   Future<void> playBackgroundSound(String filename, String location) async{
+    this._filename = filename;
+    this._location = location;
     _audioPlayer = new AudioPlayer();
     try {
       final file = new File('${(await getTemporaryDirectory()).path}/$filename');
       await file.writeAsBytes((await loadAsset(location)).buffer.asUint8List());
       await _audioPlayer.play(file.path, isLocal: true);
+      if(_loop){
+        loopSound();
+      }
     }
     catch(error){
       print(error);
     }
+  }
+
+  /// Loop sound
+  void loopSound(){
+    _audioPlayer.onPlayerStateChanged.listen((val){
+      if(val == AudioPlayerState.COMPLETED){
+        playBackgroundSound(_filename, _location);
+      }
+    });
   }
 
   void stopSound(){

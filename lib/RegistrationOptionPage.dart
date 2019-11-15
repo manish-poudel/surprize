@@ -10,6 +10,7 @@ import 'package:Surprize/ProfileSetUpPage.dart';
 import 'package:Surprize/RegistrationPage.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/ImageResources.dart';
+import 'package:Surprize/SqliteDb/SQLiteManager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -156,15 +157,19 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
         player.toMap())
         .then((value) {
 
-          saveUserToMemoryAndProceed(player, user);
+      PushNotification().configure(context);
+      PushNotification().saveToken(player.membershipId);
 
-          PushNotification().configure(context);
-          PushNotification().saveToken(UserMemory().getPlayer().membershipId);
-
-          Navigator.of(context).popUntil((route) => route.isFirst);
-          AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(user));
+      SQLiteManager().insertProfile(user, player).then((value){
+        saveUserToMemoryAndProceed(player, user);
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        AppHelper.cupertinoRouteWithPushReplacement(context, ProfileSetUpPage(user));
+      }).catchError((error){
+        print("Error while saving player" + error.toString());
+      });
 
     }).catchError((error) {
+      print("error occured haii" + error.toString());
       AppHelper.showSnackBar(error.toString(), _scaffoldKey);
     });
   }

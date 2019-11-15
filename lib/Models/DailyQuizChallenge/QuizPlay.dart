@@ -7,8 +7,10 @@ class QuizPlay{
   DateTime playedOn;
   String playedQuizId;
   String playedQuizName;
+  int correctAnswer;
+  int score;
 
-  QuizPlay(this.playState, this.playedOn, this.playedQuizId, this.playedQuizName);
+  QuizPlay(this.playState, this.playedOn, this.playedQuizId, this.playedQuizName, this.score, this.correctAnswer);
 
   Map<String, dynamic> toMap() {
     var map = new Map<String, dynamic>();
@@ -16,6 +18,8 @@ class QuizPlay{
     map[FirestoreResources.fieldDailyQuizLastPlayed] = playedOn;
     map[FirestoreResources.fieldDailyQuizPlayedId] = playedQuizId;
     map[FirestoreResources.fieldDailyQuizPlayedName] = playedQuizName;
+    map[FirestoreResources.fieldDailyQuizTotalCorrectAnswer] = correctAnswer;
+    map[FirestoreResources.fieldDailyQuizPlayScore] = score;
     return map;
   }
 
@@ -24,6 +28,8 @@ class QuizPlay{
     playedOn =  AppHelper.convertToDateTime(map[FirestoreResources.fieldDailyQuizLastPlayed]);
     playedQuizId = map[FirestoreResources.fieldDailyQuizPlayedId];
     playedQuizName = map[FirestoreResources.fieldDailyQuizPlayedName];
+    score = map[FirestoreResources.fieldDailyQuizPlayScore];
+    correctAnswer = map[FirestoreResources.fieldDailyQuizTotalCorrectAnswer];
   }
 
   /// Convert enum to string

@@ -44,7 +44,7 @@ class _CustomNoticeViewWidgetState extends State<CustomNoticeViewWidget> {
         ? Icon(Icons.info_outline, size: 100)
         : FadeInImage.assetNetwork(
         image: widget._notice.photoUrl,
-        placeholder: ImageResources.emptyImageLoadingUrlPlaceholder, height: 100, width:80,fit: BoxFit.fill);
+        placeholder: ImageResources.emptyImageLoadingUrlPlaceholder, height: 80, width:80,fit: BoxFit.fill);
   }
 
   /// Notice title
@@ -52,10 +52,10 @@ class _CustomNoticeViewWidgetState extends State<CustomNoticeViewWidget> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-      Text(widget._notice.title,style: TextStyle( fontSize: 16, fontFamily:'Raleway',color: Colors.deepPurple[500], fontWeight: FontWeight.w500)),
+      Text(widget._notice.title,style: TextStyle( fontSize: 16)),
       Padding(
         padding: const EdgeInsets.only(top:2.0),
-        child: Text(AppHelper.dateToReadableString(widget._notice.addedTime),style: TextStyle(color:Colors.grey[600], fontSize:10, fontWeight:FontWeight.w500,fontFamily: 'Roboto')),
+        child: Text(AppHelper.dateToReadableString(widget._notice.addedTime),style: TextStyle(color:Colors.grey[600], fontSize:12,)),
       ),
     ]);
   }

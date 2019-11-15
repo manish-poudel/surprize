@@ -43,6 +43,7 @@ dependencies:
   admob_flutter: ^0.3.3
   package_info: 0.4.0+6
   url_launcher: 5.1.6
+  carousel_slider: 1.3.1
 
 dev_dependencies:
   flutter_test:
@@ -76,13 +77,18 @@ flutter:
     - assets/user_placeholder.png
     - assets/dailyQuizPlayBackgroundMusic.mp3
     - assets/waiting_music.mp3
+    - assets/correct_selection.wav
+    - assets/incorrect_selection.wav
+    - assets/won.mp3
     - assets/image_placeholder.png
     - assets/facebook_icon.png
     - assets/instagram_icon.png
     - assets/twitter_icon.png
     - assets/winner_banner.png
-    - assets/images/daily_quiz_challenge_button.png
+    - assets/images/daily_quiz_challenge_button.jpg
+    - assets/images/surprize_quiz_challenge_button.jpg
     - assets/images/DqcPlay.jpg
+    - assets/images/SurprizePlay.jpg
     - assets/images/quiz_letter_display.jpg
     - assets/images/opening_quiz_letter.png
     - assets/images/opening_quiz_letter_two.png
@@ -92,7 +98,9 @@ flutter:
     - assets/images/icon1024.png
     - assets/images/money-bag.png
     - assets/images/diwali.png
-    - assets/images/dqc_background.jpg
+    - assets/images/sad.png
+    - assets/images/happy.png
+    - assets/images/award.png
 
   fonts:
     - family: Raleway

@@ -1,7 +1,14 @@
 import 'package:Surprize/CustomWidgets/CustomAppBar.dart';
+import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
+
+import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/DailyQuizChallenge/DLeaderboard.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/QuizPlay.dart';
+import 'package:Surprize/Models/Player.dart';
+import 'package:Surprize/Models/SurprizeLeaderboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
@@ -9,10 +16,11 @@ import 'package:Surprize/Models/Leaderboard.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
+import 'package:intl/intl.dart';
+
 import 'Resources/ImageResources.dart';
 
 class LeaderboardPage extends StatefulWidget {
-
   String _playerId;
   LeaderboardPage(this._playerId);
 
@@ -28,10 +36,19 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   bool _weeklyScorerLeaderboardLoaded = false;
   bool _allTimeScorerLeaderboardLoaded = false;
 
-  QuizPlay _quizPlay;
 
   Map<String, Leaderboard> _allTimeScorerMap = new Map();
   Map<String, Leaderboard> _weeklyScorerMap = new Map();
+  Map<String, DLeaderboard> _todayWinners = new Map();
+  Map<String, DLeaderboard> _yesterdayWinners = new Map();
+
+  String surprizeGameDateSelection = "Latest";
+  Map<String, SurprizeLeaderboard> _latestSurprizePlayers = new Map();
+  Map<String, SurprizeLeaderboard> _beforeLatestSurrpizePlayers = new Map();
+
+
+  DateTime latestSurprizeDate;
+  DateTime beforeLatestSurprizeDate;
 
   double _screenWidth;
 
@@ -44,8 +61,11 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    _leaderboardOptions = <Widget>[_dailyQuizBody(), _weeklyScoreBody(), _allTimeScoreBody()];
+    _leaderboardOptions = <Widget>[
+      _displayChallengeWinners(),
+      _weeklyScoreBody(),
+      _allTimeScoreBody()
+    ];
 
     _screenWidth = MediaQuery.of(context).size.width;
 
@@ -53,108 +73,560 @@ class LeaderboardPageState extends State<LeaderboardPage> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(primaryColor: Colors.purple[800]),
         home: Scaffold(
-            appBar: CustomAppBar("Leaderboard",context),
-
-            bottomNavigationBar: BottomNavigationBar(items: const<BottomNavigationBarItem>[
-              BottomNavigationBarItem(icon: Icon(Icons.stars), title: Text("Daily quiz",style: TextStyle(fontFamily: 'Raleway'))),
-              BottomNavigationBarItem(icon: Icon(Icons.view_week), title: Text("Weekly Score",style: TextStyle(fontFamily: 'Raleway'))),
-              BottomNavigationBarItem(icon: Icon(Icons.score), title: Text("All time score",style: TextStyle(fontFamily: 'Raleway'))),
-            ], currentIndex:_selectedIndex,  selectedItemColor: Colors.purple, onTap: _onItemSelected),
-
+            appBar: CustomAppBar("Leaderboard", context),
+            bottomNavigationBar: BottomNavigationBar(
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                      icon: Icon(
+                        Icons.games,
+                        color: Colors.purple,
+                      ),
+                      title: Text("Challengers",
+                          style: TextStyle(fontFamily: 'Raleway'))),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.view_week, color: Colors.purple),
+                      title: Text("Weekly Score",
+                          style: TextStyle(fontFamily: 'Raleway'))),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.score, color: Colors.purple),
+                      title: Text("All Time Score",
+                          style: TextStyle(fontFamily: 'Raleway'))),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.purple,
+                onTap: _onItemSelected),
             body: _leaderboardOptions.elementAt(_selectedIndex)));
   }
 
   /// On bottom navigation bar selected
-  _onItemSelected(int index){
+  _onItemSelected(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-
-  /// Daily quiz body for leaderboard page
-   Widget _dailyQuizBody() {
-    return SingleChildScrollView(
-      child: !_dailyQuizWinnerDataLoaded? Center(child: CircularProgressIndicator()):
-       Center(
-          child: Column(
-        children: <Widget>[
-          Container(
-            color: Colors.grey[50],
-            child: Image.asset(ImageResources.dailyQuizChallengeLogo),
+  /// Challenge winners
+  Widget _displayChallengeWinners() {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: Colors.purple[800],
+        appBar: TabBar(indicatorColor: Colors.white, tabs: [
+          Tab(
+              child: Text("Daily Quiz Challenge",
+                  style: TextStyle(fontFamily: 'Raleway'))),
+          Tab(
+              child: Text("Surprize Challenge",
+                  style: TextStyle(fontFamily: 'Raleway'))),
+        ]),
+        body: Container(
+          color: Colors.white,
+          child: TabBarView(
+            children: <Widget>[_dailyQuizWinnerBody(), _surprizeWinnerBody()],
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: (Text(_dailyQuizPlayChallengeText() ,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontFamily: 'Raleway'),
-            )),
-          ),
-          _quizPlay != null?Visibility(
-            visible: (_quizPlay.playState == PlayState.WON || _quizPlay.playState == PlayState.LOST),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                (Text("Last played on: " ,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18,fontFamily: 'Raleway', fontWeight: FontWeight.w500),
-                )),
-                Text(AppHelper.dateToReadableString(_quizPlay.playedOn) ,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, color:Colors.grey,fontFamily: 'Raleway',fontWeight: FontWeight.w300),
-                )
-              ],
-            ),
-          ):Container()
-        ],
-      )),
+        ),
+      ),
     );
   }
 
-  String _dailyQuizPlayChallengeText(){
-    print("Daily wuiz state" + _quizPlay.playState.toString());
-   if(_quizPlay == null)
-     return "New challenge is in progress. Get ready!";
-   if(_quizPlay.playState == PlayState.WON)
-     return "Congratulation! You are a winner of daily quiz challenge!";
-   if(_quizPlay.playState == PlayState.LOST)
-     return "You are not a daily quiz winner. You can improve your chance of winning by reading quiz letters.";
-    if(_quizPlay.playState == PlayState.NOT_PLAYED)
-      return "New challenge is in progress. Get ready!";
-    return "";
+  /// Daily quiz winner body
+  Widget _dailyQuizWinnerBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(child: Center(child: showDQCList())),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(0.0, 5.0),
+                  blurRadius: 10.0),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              timeDropDownMenu(),
+              playerTypeForDQC(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Get dqc score
+  getDQCScorers() {
+    /// Today winners
+    Firestore.instance
+        .collection(FirestoreResources.collectionDailyQuizChallenge)
+        .document(FirestoreResources.docChallengeOfToday)
+        .collection(FirestoreResources.docChallengePlayerList)
+        .snapshots()
+        .listen((querySnapshot) {
+      querySnapshot.documents.forEach((documentSnapshot) {
+        DLeaderboard dLeaderboard = DLeaderboard.fromMap(documentSnapshot.data);
+        if (_todayWinners.containsKey(dLeaderboard.playerId)) {
+          _todayWinners.remove(dLeaderboard.playerId);
+        }
+        setState(() {
+          print("The laderboard" + dLeaderboard.playerName.toString());
+          _todayWinners.putIfAbsent(dLeaderboard.playerId, () => dLeaderboard);
+        });
+      });
+    });
+
+    /// Yesterday
+    Firestore.instance
+        .collection(FirestoreResources.collectionDailyQuizChallenge)
+        .document(FirestoreResources.docChallengeOfYesterday)
+        .collection(FirestoreResources.docChallengePlayerList)
+        .snapshots()
+        .listen((querySnapshot) {
+      querySnapshot.documents.forEach((documentSnapshot) {
+        DLeaderboard dLeaderboard = DLeaderboard.fromMap(documentSnapshot.data);
+        if (_yesterdayWinners.containsKey(dLeaderboard.playerId)) {
+          _yesterdayWinners.remove(dLeaderboard.playerId);
+        }
+        _yesterdayWinners.putIfAbsent(
+            dLeaderboard.playerId, () => dLeaderboard);
+      });
+    });
+  }
+
+  /// Get player data
+  Future<Player> getProfileData(String id) async {
+    DocumentSnapshot documentSnapshot = await FirestoreOperations()
+        .getDocumentSnapshot(FirestoreResources.userCollectionName, id)
+        .get();
+    Player player = Player.fromMap(documentSnapshot.data);
+    return player;
+  }
+
+  String lastQuizName;
+  DateTime lastPlayedOn;
+
+  /// Get surprize Player
+  getSurprizePlayer() async {
+    await Firestore.instance.collection(FirestoreResources.leaderboardCollection).document(FirestoreResources.leaderboardDaily).
+        snapshots().listen((documentSnapshot){
+
+          latestSurprizeDate = AppHelper.convertToDateTime(documentSnapshot.data['latestQuizDate']);
+          beforeLatestSurprizeDate = AppHelper.convertToDateTime(documentSnapshot.data['beforeLatestQuizDate']);
+    });
+
+    /// Get latest surprize players
+    Firestore.instance.collection(FirestoreResources.leaderboardCollection).document(FirestoreResources.leaderboardDaily)
+    .collection(FirestoreResources.leaderboardSubCollectionLatestQuiz).snapshots().listen((querySnapshot){
+
+      querySnapshot.documents.forEach((docSnapshot) async {
+                Player player = await getProfileData(docSnapshot.documentID);
+                if(_latestSurprizePlayers.containsKey(player.membershipId)){
+                  _latestSurprizePlayers.remove(player.membershipId);
+                }
+
+                setState(() {
+                  _latestSurprizePlayers.putIfAbsent(player.membershipId, () => SurprizeLeaderboard(QuizPlay.fromMap(docSnapshot.data),player));
+                });
+      });
+
+    });
+
+    /// Get before latest surprize players
+    Firestore.instance.collection(FirestoreResources.leaderboardCollection).document(FirestoreResources.leaderboardDaily)
+        .collection(FirestoreResources.leaderboardSubCollectionBeforeLatestQuiz).snapshots().listen((querySnapshot){
+
+      querySnapshot.documents.forEach((docSnapshot) async {
+        Player player = await getProfileData(docSnapshot.documentID);
+        if(_beforeLatestSurrpizePlayers.containsKey(player.membershipId)){
+          _beforeLatestSurrpizePlayers.remove(player.membershipId);
+        }
+        setState(() {
+          _beforeLatestSurrpizePlayers.putIfAbsent(player.membershipId, () => SurprizeLeaderboard(QuizPlay.fromMap(docSnapshot.data),player));
+        });
+      });
+
+    });
+  }
+
+  Widget showSurprizePlayerList() {
+    List<SurprizeLeaderboard> playerLeaderboard = getSurprizePlayerList();
+    if(playerLeaderboard.length > 1) {
+      playerLeaderboard.sort((leaderboard1, leaderboard2) {
+        if (leaderboard1.quizPlay.score == null) {
+          leaderboard1.quizPlay.score = -1;
+        }
+        if (leaderboard2.quizPlay.score == null) {
+          leaderboard2.quizPlay.score = -1;
+        }
+        return leaderboard2.quizPlay.score.compareTo(
+            leaderboard1.quizPlay.score);
+      });
+    }
+    if (playerLeaderboard.length == 0) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[Text(_playerTypeDropdownValueForSurprize == "All players"?"No players":"No winners", style: TextStyle(fontFamily: 'Raleway'))],
+      );
+    }
+    return ListView.builder(
+        itemCount: playerLeaderboard.length,
+        itemBuilder: (BuildContext context, int index) {
+          SurprizeLeaderboard leaderboard = playerLeaderboard[index];
+
+          return Padding(
+              padding: const EdgeInsets.only(bottom: 1.0),
+              child: Container(
+                  color: Colors.white,
+                  child: Card(
+                      color: Colors.white,
+                      child: leaderboard != null?challengePlayerDisplayCard(
+                        leaderboard.player != null && leaderboard.player.name.isNotEmpty?leaderboard.player.name:"",
+                        leaderboard.player != null?leaderboard.player.profileImageURL:"",
+                        leaderboard.quizPlay != null && leaderboard.quizPlay.score != null?leaderboard.quizPlay.score.toString():"",
+                        leaderboard.quizPlay != null || leaderboard.quizPlay.playState != null?leaderboard.quizPlay.playState == PlayState.WON:false,
+                        leaderboard != null?(index + 1):-1,
+
+                      ):Container(height:0, width:0))));
+        });
+  }
+
+  /// Show dqc list
+  Widget showDQCList() {
+    List<DLeaderboard> playersLeaderboard = getPlayersForDQC();
+    if(playersLeaderboard.length > 1) {
+      playersLeaderboard.sort((leaderboard1, leaderboard2) =>
+          leaderboard2.score.compareTo(leaderboard1.score));
+    }
+    if (playersLeaderboard.length == 0) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[Text(_playerTypeDropdownValue == "All players"?"No players":"No winners",style: TextStyle(fontFamily: 'Raleway'))],
+      );
+    }
+    return ListView.builder(
+        itemCount: playersLeaderboard.length,
+        itemBuilder: (BuildContext context, int index) {
+
+          DLeaderboard leaderboard = playersLeaderboard[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 1.0),
+            child: Container(
+                color: Colors.white,
+                child: Card(
+                    color: Colors.white,
+                    child: leaderboard != null?challengePlayerDisplayCard(
+                    leaderboard.playerName != null || leaderboard.playerName.isNotEmpty?leaderboard.playerName:"",
+                    leaderboard.playerUrl != null || leaderboard.playerUrl.isNotEmpty?leaderboard.playerUrl:"",
+                    leaderboard.score != null?leaderboard.score.toString():"",
+                    leaderboard.won != null?leaderboard.won:false,
+                    leaderboard != null?(index + 1):-1,
+
+          ):Container(height:0, width:0))));
+        });
+  }
+
+  /// Challenge player display card
+  challengePlayerDisplayCard(String name, String profileUrl, String score, bool won, int rank) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                 rank.toString(),
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontFamily: 'Raleway',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600)),
+            ),
+          ),
+          Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipOval(
+                  child:profileUrl.isEmpty
+                      ? Image.asset(
+                    ImageResources.emptyUserProfilePlaceholderImage,
+                    height: 32,
+                    width: 32,
+                  )
+                      : FadeInImage.assetNetwork(
+                      image: profileUrl,
+                      height: 32,
+                      width: 32,
+                      placeholder:
+                      ImageResources.emptyUserProfilePlaceholderImage)),
+            ),
+          ),
+          Flexible(
+            child: Container(
+              width: _screenWidth * 0.5,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      won == true? ClipOval(
+                  child: Image.asset(
+                    ImageResources.achievementTrophy,
+                    height:16,
+                    width: 16,
+                  )):Container(height: 0,width: 0),
+                      Padding(
+                        padding: const EdgeInsets.only(left:4.0),
+                        child: Text(
+                           name,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                color: Colors.purple,
+                                fontFamily: 'Raleway',
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            flex: 3,
+          ),
+          Text(score != "-1"?score:"  ",
+              style: TextStyle(
+                  color: Colors.purple,
+                  fontFamily: 'Raleway',
+                  fontSize: 21,
+                  fontWeight: FontWeight.w500))
+        ],
+      ),
+    );
+  }
+
+  List<DLeaderboard> getPlayersForDQC() {
+    if (dropdownValue == "Today") {
+      return _todayWinners.values.where((dLeaderboard) {
+        if (_playerTypeDropdownValue == "All players") {
+          return true;
+        }
+        return dLeaderboard.won;
+      }).toList();
+    }
+    if (dropdownValue == "Yesterday") {
+      return _yesterdayWinners.values.where((dLeaderboard) {
+        if (_playerTypeDropdownValue == "All players") {
+          return true;
+        }
+        return dLeaderboard.won;
+      }).toList();
+    }
+  }
+
+  List<SurprizeLeaderboard> getSurprizePlayerList() {
+
+    if(surprizeGameDateSelection == "Latest") {
+      return _latestSurprizePlayers.values.where((leaderboard) {
+        if (_playerTypeDropdownValueForSurprize == "All players") {
+          return true;
+        }
+        return leaderboard.quizPlay.playState == PlayState.WON;
+      }).toList();
+    }
+    return _beforeLatestSurrpizePlayers.values.where((leaderboard) {
+      if (_playerTypeDropdownValueForSurprize == "All players") {
+        return true;
+      }
+      return leaderboard.quizPlay.playState == PlayState.WON;
+    }).toList();
+  }
+
+  String dropdownValue = "Today";
+  Widget timeDropDownMenu() {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      elevation: 16,
+      style: TextStyle(color: Colors.white),
+      underline: SizedBox(),
+      iconSize: 21,
+      iconEnabledColor: Colors.purple,
+      onChanged: (String newValue) {
+        setState(() {
+          dropdownValue = newValue;
+        });
+      },
+      items: <String>['Today', 'Yesterday']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value,
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.purple,
+                  fontSize: 15,
+                  fontFamily: 'Raleway')),
+        );
+      }).toList(),
+    );
+  }
+
+  String _playerTypeDropdownValue = "All players";
+  Widget playerTypeForDQC() {
+    return DropdownButton<String>(
+      value: _playerTypeDropdownValue,
+      elevation: 16,
+      style: TextStyle(color: Colors.purple),
+      underline: SizedBox(),
+      iconSize: 21,
+      iconEnabledColor: Colors.purple,
+      onChanged: (String newValue) {
+        setState(() {
+          _playerTypeDropdownValue = newValue;
+        });
+      },
+      items: <String>['All players', 'Winners']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value,
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.purple,
+                  fontSize: 16,
+                  fontFamily: 'Raleway')),
+        );
+      }).toList(),
+    );
+  }
+
+  String _playerTypeDropdownValueForSurprize = "All players";
+  Widget playerTypeForSurprize() {
+    return DropdownButton<String>(
+      value: _playerTypeDropdownValueForSurprize,
+      elevation: 16,
+      style: TextStyle(color: Colors.purple),
+      underline: SizedBox(),
+      iconSize: 21,
+      iconEnabledColor: Colors.purple,
+      onChanged: (String newValue) {
+        setState(() {
+          _playerTypeDropdownValueForSurprize = newValue;
+        });
+      },
+      items: <String>['All players', 'Winners']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value,
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.purple,
+                  fontSize: 16,
+                  fontFamily: 'Raleway')),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget dateSelectionForSurprize() {
+    return DropdownButton<String>(
+      value: surprizeGameDateSelection,
+      elevation: 16,
+      style: TextStyle(color: Colors.purple),
+      underline: SizedBox(),
+      iconSize: 21,
+      iconEnabledColor: Colors.purple,
+      onChanged: (String newValue) {
+        setState(() {
+          surprizeGameDateSelection = newValue;
+        });
+      },
+      items: <String>['Latest', 'Previous']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value,
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Colors.purple,
+                  fontSize: 16,
+                  fontFamily: 'Raleway')),
+        );
+      }).toList(),
+    );
+  }
+
+  /// Surprize winner body
+  Widget _surprizeWinnerBody() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(child: Center(child: showSurprizePlayerList())),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(0.0, 5.0),
+                  blurRadius: 10.0),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              dateSelectionForSurprize(),
+              playerTypeForSurprize(),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   /// Weekly score body for leaderboard page
-   _weeklyScoreBody() {
-     if(!_weeklyScorerLeaderboardLoaded) return Center(child: CircularProgressIndicator());
+  _weeklyScoreBody() {
+    if (!_weeklyScorerLeaderboardLoaded)
+      return Center(child: CircularProgressIndicator());
 
-     return Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Expanded(
+            child: _allTimeScorerMap.length == 0
+                ? Center(
+                    child: Text("Empty leaderboard",
+                        style: TextStyle(fontFamily: 'Raleway')))
+                : showTopScorers(_weeklyScorerMap.values.toList())),
         myScore(_weeklyScorerMap[widget._playerId]),
-        Padding(
-          padding: const EdgeInsets.only(top: 24.0),
-          child: leaderboardHeading("Top Weekly scorers"),
-        ),
-        Expanded(child: _allTimeScorerMap.length == 0?Center(child: Text("Empty leaderboard",style: TextStyle(fontFamily:'Raleway'))):showTopScorers(_weeklyScorerMap.values.toList())),
       ],
     );
   }
 
   /// All time score body for leaderboard page
-   _allTimeScoreBody() {
-   if(!_allTimeScorerLeaderboardLoaded) return Center(child: CircularProgressIndicator());
+  _allTimeScoreBody() {
+    if (!_allTimeScorerLeaderboardLoaded)
+      return Center(child: CircularProgressIndicator());
 
-     return Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Expanded(
+            child: _allTimeScorerMap.length == 0
+                ? Center(
+                    child: Text("Empty leaderboard",
+                        style: TextStyle(fontFamily: 'Raleway')))
+                : showTopScorers(_allTimeScorerMap.values.toList())),
         myScore(_allTimeScorerMap[widget._playerId]),
-        Padding(
-          padding: const EdgeInsets.only(top: 24.0),
-          child: leaderboardHeading("Top all time scorers"),
-        ),
-        Expanded(child: _allTimeScorerMap.length == 0?Center(child: Text("Empty leaderboard",style: TextStyle(fontFamily:'Raleway'))):showTopScorers(_allTimeScorerMap.values.toList())),
       ],
     );
   }
@@ -162,32 +634,11 @@ class LeaderboardPageState extends State<LeaderboardPage> {
   @override
   void initState() {
     super.initState();
-    checkForDailyWinner();
     getAllTimeScorer();
     getWeeklyScorer();
+    getDQCScorers();
+    getSurprizePlayer();
     GoogleAdManager().showLeaderboardInterstitialAd(0.0, AnchorType.bottom);
-  }
-
-   checkForDailyWinner() async {
-    await LeaderboardManager().getDailyScoreWinner(widget._playerId).then((value){
-      value.listen((snapshot){
-        if(mounted) {
-          setState(() {
-            _dailyQuizWinnerDataLoaded = true;
-            if (!snapshot.exists) {
-              _quizPlay =
-                  QuizPlay(PlayState.NOT_PLAYED, DateTime.now(), "", "");
-              return;
-            }
-            else {
-              _quizPlay = QuizPlay.fromMap(snapshot.data);
-            }
-
-          });
-        }
-      });
-    });
-
   }
 
   /// Get all time scorer
@@ -196,11 +647,10 @@ class LeaderboardPageState extends State<LeaderboardPage> {
         FirestoreResources.fieldLeaderBoardScore, (Leaderboard leaderboard) {
       setState(() {
         _allTimeScorerLeaderboardLoaded = true;
-        if(leaderboard != null) {
+        if (leaderboard != null) {
           _allTimeScorerMap.putIfAbsent(
               leaderboard.player.membershipId, () => leaderboard);
         }
-
       });
     });
   }
@@ -210,7 +660,7 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     LeaderboardManager().getScorer(FirestoreResources.leaderboardWeekly,
         FirestoreResources.fieldLeaderBoardScore, (leaderboard) {
       setState(() {
-        if(leaderboard != null) {
+        if (leaderboard != null) {
           _weeklyScorerMap.putIfAbsent(
               leaderboard.player.membershipId, () => leaderboard);
         }
@@ -219,57 +669,38 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     });
   }
 
-
   /// Widget to show the player score
   Widget myScore(Leaderboard leaderboard) {
-    if(leaderboard == null)
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(Icons.tag_faces, size: 20, color: Colors.grey),
-              Padding(
-                padding: const EdgeInsets.only(top:8.0),
-                child: Text("Play or share the game to be listed on the leaderboard!",style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Roboto',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300)),
-              ),
-            ],
-          ),
-        ),
-      );
+    if (leaderboard == null) {
+      leaderboard = new Leaderboard(0, UserMemory().getPlayer(), 0,
+          UserMemory().firebaseUser.isEmailVerified);
+    }
 
-    return Card(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black12,
-                offset: Offset(1.0, 2.0),
-                blurRadius: 25.0),
-          ],
-        ),
-        child: playerScoreHolder(leaderboard),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black, offset: Offset(4.0, 18.0), blurRadius: 26.0),
+        ],
       ),
+      child: playerScoreHolder(leaderboard, Colors.purple),
     );
   }
 
   /// Widget to populate top scorer
   Widget showTopScorers(List<Leaderboard> topScorerLeaderboardList) {
-
-    if(topScorerLeaderboardList.length == 0)
-      return Center(child: Text("Empty leaderboard", style: TextStyle(fontFamily: 'Raleway')));
+    if (topScorerLeaderboardList.length == 0)
+      return Center(
+          child: Text("Empty leaderboard",
+              style: TextStyle(fontFamily: 'Raleway')));
     if (topScorerLeaderboardList.length > 1) {
       topScorerLeaderboardList.sort((Leaderboard lbOne, Leaderboard lbTwo) =>
           lbOne.rank.compareTo(lbTwo.rank));
     }
 
     return ListView.builder(
+
         itemCount: topScorerLeaderboardList.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
@@ -278,72 +709,79 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                 color: Colors.white,
                 child: Card(
                     color: Colors.white,
-                    child: playerScoreHolder(topScorerLeaderboardList[index]))),
+                    child: playerScoreHolder(
+                        topScorerLeaderboardList[index], Colors.purple))),
           );
-        });
+        },
+    );
   }
 
   /// Widget to hold each player score
-  Widget playerScoreHolder(Leaderboard leaderboard) {
-    Color color = Colors.white;
+  Widget playerScoreHolder(Leaderboard leaderboard, Color color) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(color: Colors.white),
+      color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
+            color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child:Text(
-                  leaderboard == null
-                      ? ""
+              child: Text(
+                  leaderboard == null || leaderboard.rank == 0
+                      ? "-"
                       : leaderboard.rank.toString(),
                   style: TextStyle(
-                      color: Colors.purple,
+                      color: color,
                       fontFamily: 'Raleway',
                       fontSize: 16,
                       fontWeight: FontWeight.w600)),
             ),
           ),
-
           Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: ClipOval(
-
-                  child:leaderboard.player.profileImageURL.isEmpty
+                  child: leaderboard.player.profileImageURL.isEmpty
                       ? Image.asset(
-                      ImageResources.emptyUserProfilePlaceholderImage, height: 50,width: 50,)
-                      : FadeInImage.assetNetwork(image: leaderboard.player.profileImageURL,height:50,width:50,placeholder: ImageResources.emptyUserProfilePlaceholderImage)),
+                          ImageResources.emptyUserProfilePlaceholderImage,
+                          height: 32,
+                          width: 32,
+                        )
+                      : FadeInImage.assetNetwork(
+                          image: leaderboard.player.profileImageURL,
+                          height: 32,
+                          width: 32,
+                          placeholder:
+                              ImageResources.emptyUserProfilePlaceholderImage)),
             ),
           ),
           Flexible(
             child: Container(
               width: _screenWidth * 0.5,
-              child: Column(
-                children: <Widget>[
-                  Text(leaderboard == null ? "" : leaderboard.player.name,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  child: Text(
+                      leaderboard == null ? "" : leaderboard.player.name,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                          color: Colors.purple[800],
+                          color: color,
                           fontFamily: 'Raleway',
                           fontSize: 18,
                           fontWeight: FontWeight.w500)),
-                  Text(leaderboard == null ? "" : leaderboard.score.toString(),
-                      style: TextStyle(
-                          color: Colors.purple[600],
-                          fontFamily: 'Raleway',
-                          fontSize: 21,
-                          fontWeight: FontWeight.w500))
-                ],
+                ),
               ),
-
             ),
             flex: 3,
           ),
-          leaderboard.isEmailVerified != null?Visibility(visible:leaderboard.isEmailVerified, child: Icon(Icons.verified_user, color: Colors.purpleAccent, size: 12)):Container(height: 0, width: 0)
-
+          Text(leaderboard == null ? "0" : leaderboard.score.toString(),
+              style: TextStyle(
+                  color: color,
+                  fontFamily: 'Raleway',
+                  fontSize: 21,
+                  fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -364,5 +802,4 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                   fontWeight: FontWeight.w400)),
         ));
   }
-
 }

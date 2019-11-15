@@ -57,11 +57,10 @@ class _NoInternetConnectionPageState extends State<NoInternetConnectionPage> {
         Future.delayed(Duration(seconds: 5),() => Dashboard(context).nav());
         break;
       case Source.PLAYER_DASHBOARD:
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        AppHelper.cupertinoRouteWithPushReplacement(context, PlayerDashboard());
+        Future.delayed(Duration(seconds: 5),() => Dashboard(context).nav());
         break;
       default:
-        Future.delayed(Duration(seconds: 5),() => Dashboard(context).nav());
+
     }
   }
 

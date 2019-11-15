@@ -7,6 +7,7 @@ import 'package:Surprize/Models/Player.dart';
 
 import 'package:Surprize/ProfileSetUpPage.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/SqliteDb/SQLiteManager.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -181,16 +182,24 @@ class RegistrationPageState extends State<RegistrationPage>
         .createData(FirestoreResources.userCollectionName, player.membershipId,
         player.toMap())
         .then((value) {
-      _customLoginProgressbar.stopAndEndProgressBar(context);
 
-      UserMemory().savePlayer(player);
-      UserMemory().saveFirebaseUser(_firebaseUser);
 
       PushNotification().configure(context);
-      PushNotification().saveToken(UserMemory().getPlayer().membershipId);
+      PushNotification().saveToken(player.membershipId);
 
-      Navigator.of(context).popUntil((route) => route.isFirst);
-      AppHelper.cupertinoRouteWithPushReplacement(_context, ProfileSetUpPage(_firebaseUser));
+      SQLiteManager().insertProfile(_firebaseUser, player).then((value){
+        UserMemory().savePlayer(player);
+        UserMemory().saveFirebaseUser(_firebaseUser);
+        _customLoginProgressbar.stopAndEndProgressBar(context);
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        AppHelper.cupertinoRouteWithPushReplacement(_context, ProfileSetUpPage(_firebaseUser));
+      }).catchError((error){
+        print("Error while saving player" + error.toString());
+      });
+
+
+
+
     }).catchError((error) {
       _customLoginProgressbar.stopAndEndProgressBar(context);
       AppHelper.showSnackBar(error.toString(), _scaffoldKey);

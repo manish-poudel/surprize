@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:Surprize/DailyQuizChallengeGamePlayPage.dart';
-import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
+import 'package:Surprize/SurprizeGamePlayPage.dart';
+import 'package:Surprize/SurprizeSummaryPage.dart';
 import 'package:Surprize/ProfilePage.dart';
 import 'package:Surprize/SplashScreen.dart';
 import 'package:Surprize/DailyQuizChallengeNotAvailablePage.dart';
@@ -21,8 +21,8 @@ class EntryPoint extends StatelessWidget{
         '/loginPage': (BuildContext context) => LoginPage(),
         '/registrationPage': (BuildContext context) => RegistrationPage(),
         '/dailyQuizChallengeNotAvailablePage': (BuildContext context) => DailyQuizChallengeNotAvailablePage(DateTime.now()),
-        '/dailyQuizChallengeGamePlayPage': (BuildContext context) => DailyQuizChallengeGamePlayPage(),
-        '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0, null,null),
+        '/dailyQuizChallengeGamePlayPage': (BuildContext context) => SurprizeGamePlayPage(),
+        '/dailyQuizChallengeScoreSummaryPage': (BuildContext context) => DailyQuizChallengeScoreSummaryPage(0, 0, null,null),
         '/playerProfilePage': (BuildContext context) => ProfilePage()
       },
       home: Scaffold(

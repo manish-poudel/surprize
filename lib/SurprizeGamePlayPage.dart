@@ -1,18 +1,21 @@
 import 'dart:async';
 
+import 'package:Surprize/CustomWidgets/CustomDidYouKnowWidget.dart';
 import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
+import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/UserPresenceState.dart';
+import 'package:Surprize/Models/Facts.dart';
 import 'package:Surprize/Models/QuizDataState.dart';
+import 'package:Surprize/TimesUpPage.dart';
 import 'package:Surprize/UserProfileManagement/UserProfile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CountDownTimerTypeEnum.dart';
 import 'package:Surprize/CustomWidgets/CustomCountDownTimerWidget.dart';
 import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizAnswerButtonWidget.dart';
-import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizQuestionHolderWidget.dart';
-import 'package:Surprize/DailyQuizChallengeScoreSummaryPage.dart';
+import 'package:Surprize/SurprizeSummaryPage.dart';
 import 'package:Surprize/Firestore/FirestoreOperations.dart';
 import 'package:Surprize/Helper/SoundHelper.dart';
 import 'package:Surprize/Leaderboard/ScoreSystem.dart';
@@ -25,16 +28,16 @@ import 'package:Surprize/Resources/StringResources.dart';
 
 import 'package:Surprize/Models/DailyQuizChallenge/enums/CurrentQuizState.dart';
 
-class DailyQuizChallengeGamePlayPage extends StatefulWidget {
+class SurprizeGamePlayPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return DailyQuizChallengeGamePlayPageState();
+    return SurprizeGamePlayPageState();
   }
 }
 
-class DailyQuizChallengeGamePlayPageState
-    extends State<DailyQuizChallengeGamePlayPage> with WidgetsBindingObserver {
+class SurprizeGamePlayPageState
+    extends State<SurprizeGamePlayPage> with WidgetsBindingObserver,TickerProviderStateMixin {
   static double countDownTimerHeight = 120.0;
   static double countDownTimerWidth = 200.0;
 
@@ -48,7 +51,8 @@ class DailyQuizChallengeGamePlayPageState
 
   List<DailyQuizChallengeQnA> _dailyQuizChallengeQnAList;
 
-  CustomQuizQuestionHolderWidget _quizQuestion;
+
+  FadeTransition _quizQuestion;
   CustomQuizAnswerButtonWidget _firstAnswer;
   CustomQuizAnswerButtonWidget _secondAnswer;
   CustomQuizAnswerButtonWidget _thirdAnswer;
@@ -80,34 +84,64 @@ class DailyQuizChallengeGamePlayPageState
   SoundHelper _soundHelper;
 
   int _totalScore = 0;
+  int _totalRightAnswer = 0;
 
   UserProfile _userProfile;
 
   Map<String, DQCPlay> quizPlayList = new Map();
+  Map<String, Facts> _funFacts = new Map();
+
   GlobalKey<ScaffoldState> _scaffoldKey;
 
   bool _isQuestionFromCache = false;
+  AnimationController _fadeInAnimation;
 
   @override
   void initState() {
     super.initState();
+    getFacts();
     WidgetsBinding.instance.addObserver(this);
+    _fadeInAnimation = new AnimationController(
+        vsync: this, duration: Duration(milliseconds: 500));
+    _fadeInAnimation.forward();
     initQuizQuestion();
-    //listenForQuizState();
+    listenForQuizState();
     _userProfile = UserProfile();
     _userProfile.setUserPresence(
-        UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
+     UserMemory().getPlayer().membershipId, UserPresenceState.ONLINE);
     _soundHelper = SoundHelper();
     _scaffoldKey = GlobalKey<ScaffoldState>();
-    GoogleAdManager().disposeNoticeBannerAd();
-    GoogleAdManager().disposeQuizLetterBannerAd();
+      Future.delayed(Duration(seconds: 5), (){
+      GoogleAdManager().disposeNoticeBannerAd();
+      GoogleAdManager().disposeQuizLetterBannerAd();
+    });
   }
+
+  getFacts(){
+    Firestore.instance.collection(FirestoreResources.collectionsDidYouKnow).snapshots().listen((querySnapshot){
+      querySnapshot.documents.forEach((docSnapshot){
+        Facts fact = Facts.fromMap(docSnapshot.data);
+        if(_funFacts.containsKey(fact.id)){
+          _funFacts.remove(fact.id);
+        }
+        if(fact.state == "DELETED")
+          return;
+
+        setState(() {
+          _funFacts.putIfAbsent(fact.id, () => fact);
+        });
+
+      });
+    });
+  }
+
 
   @override
   void dispose() {
     if (!_isGameFinished)
       _userProfile.setUserPresence(UserMemory().getPlayer().membershipId,
           UserPresenceState.END_GAME_ABRUPTLY);
+    _fadeInAnimation.dispose();
     WidgetsBinding.instance.removeObserver(this);
     if (_soundHelper != null) {
       _soundHelper.stopSound();
@@ -115,7 +149,6 @@ class DailyQuizChallengeGamePlayPageState
     _quizState = null;
     super.dispose();
   }
-
   /// Detect the change in app lifecycle state
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -153,8 +186,16 @@ class DailyQuizChallengeGamePlayPageState
   void initializeQuestionAndAnswer(int currentIndex) {
     try {
       // setting quiz question
-      _quizQuestion = CustomQuizQuestionHolderWidget(
-          _dailyQuizChallengeQnAList[currentIndex].question);
+      _quizQuestion = FadeTransition(
+        opacity: _fadeInAnimation,
+        child: Text(_dailyQuizChallengeQnAList[currentIndex].question,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 21.0,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Raleway')),
+      );
 
       // Setting answer button for the quiz
       _firstAnswer = CustomQuizAnswerButtonWidget(
@@ -251,8 +292,17 @@ class DailyQuizChallengeGamePlayPageState
    */
   void updateQuestionAndAnswer() {
     // Update answer
-    _quizQuestion
-        .updateQuestion(_dailyQuizChallengeQnAList[currentIndex].question);
+    _quizQuestion =
+        FadeTransition(
+          opacity: _fadeInAnimation,
+          child: Text(_dailyQuizChallengeQnAList[currentIndex].question,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 21.0,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Raleway')),
+        );
 
     // Update question
     _firstAnswer.setQuizAnswer(
@@ -274,23 +324,26 @@ class DailyQuizChallengeGamePlayPageState
         .getSnapshotStream(FirestoreResources.collectionQuizName,
             FirestoreResources.fieldQuizDocumentName)
         .listen((snapshot) {
-      if (mounted) {
-        setState(() {
+
           _quizState = QuizState.fromMap(snapshot.data);
           if (_quizState.quizState ==
               CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED) {
-            _readyToShowQuestion = true;
+
+            setState(() {
+              _readyToShowQuestion = true;
+            });
           }
-          if (_quizState.quizState ==
-              CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED) {
-            _readyToShowQuestion = false;
+          if (_quizState.quizState == CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_NOT_BEING_DISPLAYED) {
+            setState(() {
+              _readyToShowQuestion = false;
+            });
           }
           if (_quizState.quizState == CurrentQuizState.QUIZ_IS_OFF) {
-            Navigator.of(context).pop();
+            _soundHelper.stopSound();
+            AppHelper.cupertinoRouteWithPushReplacement(context, TimesUpPage());
           }
         });
-      }
-    });
+
   }
 
   /*
@@ -302,10 +355,20 @@ class DailyQuizChallengeGamePlayPageState
           value;
       if (isRightAnswer(value)) {
         _totalScore = _totalScore + ScoreSystem.getScoreFromQuizCorrectAnswer();
+        _totalRightAnswer++;
       }
       setButtonClickable(false);
-      button.changeColor(value);
+      button.changeColor(value,"SELECTED");
     }
+  }
+
+  /// Handle question fade in animation
+  initQuestionFadeInAnimation() {
+    if (currentIndex + 1 > _dailyQuizChallengeQnAList.length) {
+      _fadeInAnimation.stop();
+      return;
+    }
+    _fadeInAnimation.forward();
   }
 
   @override
@@ -320,7 +383,7 @@ class DailyQuizChallengeGamePlayPageState
               image: DecorationImage(
                   image: new AssetImage(ImageResources.appBackgroundImage),
                   fit: BoxFit.fill)),
-          child: (_hasQuizListBeenRetrieved && true
+          child: (_readyToShowQuestion && _hasQuizListBeenRetrieved
               ? ifAllQuizValueHasBeenSet()
               : ifQuizValueIsInRetrievedMode()),
         ),
@@ -367,6 +430,78 @@ class DailyQuizChallengeGamePlayPageState
     _fourthAnswer.resetColor();
   }
 
+  /// Quiz Heading
+  Widget quizHeadingTitle() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Text("Surprize Challenge",
+            style: TextStyle(
+                fontWeight: FontWeight.w300,
+                fontSize: 24,
+                color: Colors.white,
+                fontFamily: 'Raleway')),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text("Question: ",
+                style: TextStyle(
+                    fontWeight: FontWeight.w200,
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontFamily: 'Raleway')),
+            Text(
+                (currentIndex + 1).toString() +
+                    "/" +
+                    _dailyQuizChallengeQnAList.length.toString(),
+                style: TextStyle(
+                    fontWeight: FontWeight.w200,
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontFamily: 'Raleway')),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// Quiz question and answer box
+  Widget quizQuestionAnswerBox() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 18, right: 18),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 4.0, right: 4.0, top: 4.0, bottom: 8.0),
+            child: _quizQuestion,
+          ),
+          SizedBox(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(1.0, 3.0),
+                        blurRadius: 21.0),
+                  ],
+                  border: new Border.all(color: Colors.white10, width: 0),
+                  borderRadius: new BorderRadius.all(Radius.circular(21.0))),
+              child: Column(
+                children: <Widget>[
+                  _firstAnswer,
+                  _secondAnswer,
+                  _thirdAnswer,
+                  _fourthAnswer,
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   /*
   Widget for quiz play
    */
@@ -380,69 +515,17 @@ class DailyQuizChallengeGamePlayPageState
     }
 
     if (!_isGameFinished) {
+      initQuestionFadeInAnimation();
       keepTimeTrack(11);
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: _customCountDownTimerWidget,
-          ),
-          Stack(
-            children: <Widget>[
-              Container(
-                height: 50,
-                width: 50,
-                decoration:
-                    BoxDecoration(color: Colors.purple, shape: BoxShape.circle),
-                child: Center(
-                  child: Text(
-                    (currentIndex + 1).toString(),
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Raleway',
-                        fontSize: 24,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 18, right: 18, top: 32.0),
-                child: SizedBox(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black26,
-                              offset: Offset(1.0, 3.0),
-                              blurRadius: 21.0),
-                        ],
-                        border: new Border.all(color: Colors.white10, width: 0),
-                        borderRadius:
-                            new BorderRadius.all(Radius.circular(21.0))),
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 4.0, right: 4.0, top: 4.0),
-                          child: _quizQuestion,
-                        ),
-                        _firstAnswer,
-                        _secondAnswer,
-                        _thirdAnswer,
-                        _fourthAnswer,
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        quizHeadingTitle(),
+        _customCountDownTimerWidget,
+        quizQuestionAnswerBox()
+      ],
     );
   }
 
@@ -468,15 +551,19 @@ class DailyQuizChallengeGamePlayPageState
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 240.0),
-      child: Center(
-        child: Column(children: <Widget>[
-          CircularProgressIndicator(
-            backgroundColor: Colors.redAccent,
-          ),
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(bottom:8.0),
+            child: _funFacts.length != 0?Text("Did you know?", style: TextStyle(fontFamily: 'Raleway', color: Colors.white,fontWeight: FontWeight.w600, fontSize: 18)):Container(height:0, width:0)
+    ),
+          _funFacts.length != 0?CustomDidYouKnowWidget(_funFacts.values.toList()):Container(height: 0, width: 0),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
             child: Text(
                 _isQuestionFromCache
                     ? "We are unable to load new quiz questions. Make sure your internet is working!"
@@ -485,19 +572,20 @@ class DailyQuizChallengeGamePlayPageState
                 style: TextStyle(
                     color: Colors.white, fontFamily: 'Raleway', fontSize: 21)),
           ),
-          IconButton(
-              icon: Icon(soundOn ? Icons.pause : Icons.play_arrow),
-              color: Colors.white,
-              onPressed: () {
-                if (mounted) {
-                  setState(() {
-                    soundOn = !soundOn;
-                  });
-                }
-              }),
-        ]),
+        ],
       ),
-    );
+
+      IconButton(
+          icon: Icon(soundOn ? Icons.volume_up : Icons.volume_off),
+          color: Colors.white,
+          onPressed: () {
+            if (mounted) {
+              setState(() {
+                soundOn = !soundOn;
+              });
+            }
+          }),
+    ]);
   }
 
 /*
@@ -507,8 +595,7 @@ Go to summary page after game is finished.
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => DailyQuizChallengeScoreSummaryPage(
-              _totalScore, _quizState, quizPlayList),
+          builder: (context) => DailyQuizChallengeScoreSummaryPage(_totalRightAnswer,_totalScore, _quizState, quizPlayList),
         ));
   }
 

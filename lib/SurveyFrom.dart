@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 class SurveyForm extends StatefulWidget {
 
   final GlobalKey<ScaffoldState> _scaffoldKey;
-
-  SurveyForm(this._scaffoldKey);
+  String quizName;
+  SurveyForm(this._scaffoldKey,this.quizName);
 
   @override
   _SurveyFormState createState() => _SurveyFormState();
@@ -267,6 +267,8 @@ class _SurveyFormState extends State<SurveyForm> {
     FirestoreResources.fieldSurveyIssueYesNoField:_issueSelection,
     FirestoreResources.fieldSurveyIssueDesc: fieldSurveyIssueDesc,
     FirestoreResources.fieldSurveyNoOfQuizQuestion:_totalQuestionSelection,
+    FirestoreResources.fieldSurveyTime: DateTime.now(),
+    FirestoreResources.fieldSurveyFor: widget.quizName,
     FirestoreResources.fieldSurveyQuizKeywords: _customMultiLineTextFieldWidgetForKeywords == null?"Unable to get value":_customMultiLineTextFieldWidgetForKeywords.getValue()
     }).then((_){
       if(widget._scaffoldKey != null) {

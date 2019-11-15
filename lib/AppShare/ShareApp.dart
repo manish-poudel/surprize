@@ -26,6 +26,13 @@ class ShareApp{
     Share.text("Surprize", body, 'text/plain');
   }
 
+  shareAppFromDQC(){
+    String code = createReferralCode();
+    String body = "Yay!!! I just won cash prize by playing Surprize Challenge!\nYou can win too! \n\nDownload app by clicking on the link below and don't forget to use referral code to earn points! \n\nReferral code: " + code + "\n" +"https://play.google.com/store/apps/details?id=com.siliconguy.surprize";
+    Share.text("Surprize", body, 'text/plain');
+    saveReferralCode();
+  }
+
   shareQuizLetter(String body) async {
      String code = createReferralCode();
      String finalBody  = "Referral code: " + code + "\n" + "Use this code while registration to earn points! " + "\n \n Did you know? \n" +body + "\n \n A chance to win cash prize and many more. Download app by clicking on the link: \n https://play.google.com/store/apps/details?id=com.siliconguy.surprize";

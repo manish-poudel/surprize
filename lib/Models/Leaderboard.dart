@@ -12,4 +12,9 @@ class Leaderboard{
   Player get player => _player;
   int get score => _score;
   bool get isEmailVerified => _isEmailVerified;
+
+  set rank(int rank) => _rank = rank;
+  set player(Player player) => _player = player;
+  set score(int score) => _score = score;
+  set isEmailVerified(bool verified) => _isEmailVerified = verified;
 }

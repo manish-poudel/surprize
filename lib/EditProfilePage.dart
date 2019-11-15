@@ -1,4 +1,5 @@
 
+import 'package:Surprize/SqliteDb/SQLiteManager.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
 import 'package:Surprize/Models/Player.dart';
@@ -152,6 +153,7 @@ class EditProfilePageState extends State<EditProfilePage> {
     _player.address = _multiLineAddressTextFieldWidget.getValue();
 
     UserProfile().updateProfile(_player.membershipId, _player).then((value){
+      SQLiteManager().updateProfile(_player);
       UserMemory().savePlayer(_player);
       _customRegistrationProgressBar.stopAndEndProgressBar(context);
       Navigator.pop(context);

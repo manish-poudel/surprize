@@ -1,6 +1,9 @@
 import 'package:Surprize/Memory/UserMemory.dart';
+import 'package:Surprize/Models/Player.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetterDisplay.dart';
+import 'package:Surprize/Resources/FirestoreResources.dart';
 import 'package:Surprize/Resources/TableResources.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'SQLiteDb.dart';
@@ -9,7 +12,7 @@ class SQLiteManager {
   SQLiteDb _sqLiteDatabase;
 
   String _databaseName = "surprize.db";
-  int databaseVersion = 1;
+  int databaseVersion = 2;
 
   static final SQLiteManager _sqLiteManager =
   new SQLiteManager._internal();
@@ -37,11 +40,24 @@ class SQLiteManager {
           print("Error occoured on creating table" + error.toString());
     });
 
+    await database.execute(SQLiteDatabaseResources.getProfileTable()).then((_) {
+      print("Created table for profile");
+    });
+
   }
+
 
   /// Method for upgrading database
   _onUpgradeDatabase(Database database, int oldVersion, int newVersion) async {
-    if (oldVersion == 1 && newVersion == 2) {}
+    if (oldVersion == 1 && newVersion == 2) {
+      /// Create table for quiz conversation
+      await database.execute(SQLiteDatabaseResources.getProfileTable()).then((_) {
+        print("Created table for profile");
+      })
+          .catchError((error) {
+        print("Error occoured on creating table" + error.toString());
+      });
+    }
   }
 
   ///Responsible for creating chat table and initializing database
@@ -76,7 +92,6 @@ class SQLiteManager {
 
   /// Insert favourite quote
   insertFavouriteQuote(QuizLetterDisplay quizLetterDisplay) async {
-    print(SQLiteDatabaseResources.getFavouriteTable());
     SQLiteDb db = await getSQLiteDatabaseInstance();
     int id = await db.createDataRaw(SQLiteDatabaseResources.insertIntoFavQuoteTableStatement, [
       quizLetterDisplay.quizLetter.quizLettersId + UserMemory().getPlayer().membershipId,
@@ -97,8 +112,68 @@ class SQLiteManager {
       quizLetterDisplay.initiallyExpanded.toString(),
       quizLetterDisplay.revealBody.toString()
     ]);
-    print("Insert value " + id.toString());
   }
+
+  /// Insert profile
+  Future<int> insertProfile(FirebaseUser firebaseUser, Player player) async {
+    SQLiteDb db = await getSQLiteDatabaseInstance();
+    int id = await db.createDataRaw(SQLiteDatabaseResources.insertIntoProfile, [
+      player.membershipId,
+      firebaseUser.isEmailVerified.toString(),
+      player.address,
+      player.country,
+      player.dob,
+      player.email,
+      player.gender,
+      player.membershipDate.toIso8601String() + "&&&" + player.membershipDate.millisecondsSinceEpoch.toString(),
+      player.name,
+      player.phoneNumber,
+      player.profileImageURL
+    ]);
+    print("player inserted: " + id.toString());
+    return id;
+  }
+
+  /// Update into profile
+  updateProfile(Player player) async {
+    SQLiteDb db = await getSQLiteDatabaseInstance();
+    int id;
+    try {
+       id = await db.updateDataRaw(
+          SQLiteDatabaseResources.updateIntoProfile, [
+        player.accountVerified,
+        player.address,
+        player.country,
+        player.dob,
+        player.email,
+        player.gender,
+        player.name,
+        player.phoneNumber,
+        player.profileImageURL,
+        player.membershipId
+      ]);
+    }
+    catch(error){
+      print("Error in upadating profile : " + error.toString());
+    }
+    print("player updated: " + id.toString());
+  }
+
+  /// User profile by id
+  getUserProfileById(String id) async {
+    var res;
+    try {
+      SQLiteDb sqLiteDatabase = await getSQLiteDatabaseInstance();
+      res = await sqLiteDatabase.getDataByCondition(
+          "Players", FirestoreResources.fieldPlayerId + " =?",
+          [id]);
+    }
+    catch(error){
+      print(error.toString());
+    }
+    return res;
+  }
+
 
   /// Delete favourite quote
   deleteFavouriteQuote(String delId) async {
