@@ -56,11 +56,11 @@ class _AppIntroPageState extends State<AppIntroPage> {
         description: "Surprize Challenge allows you to play quiz and earn cash prize. "
             "Game time will be notified in the app and you will get notification before the game starts. \n \n"
             "Tips\n \n "
-            "1. You can select answer only once \n "
-            "2. You will get 10 seconds for each question \n "
-            "3. Don't click back button or exit the game until the game is completed \n "
-            "4. Once the game is completed, you will be able to see your score report \n"
-            "5. Watching video ad at the end can earn you extra 10 points ",
+            "1. You can select answer only once. \n "
+            "2. You will get 10 seconds for each question. \n "
+            "3. Don't click back button or exit the game until the game is completed. \n "
+            "4. Once the game is completed, you will be able to see your score report. \n"
+            "5. Watching video ad at the end can earn you extra 10 points. ",
         pathImage: ImageResources.helpSurprize,
         backgroundColor: Colors.purple[800]
     );
@@ -70,9 +70,9 @@ class _AppIntroPageState extends State<AppIntroPage> {
         title: "Daily Quiz Challenge",
         description: "Daily Quiz Challenge allows you to play quiz and earn cash prize. The game is opened for a period of 24 hours and can only be played once.\n\n"
             "Tips\n \n "
-            "1. You can select answer only once \n "
-            "2. You will get 10 seconds for each question \n "
-            "3. Don't click back button or exit the game until the game is completed \n ",
+            "1. You can select answer only once. \n "
+            "2. You will get 10 seconds for each question. \n "
+            "3. Don't click back button or exit the game until the game is completed. \n ",
         pathImage: ImageResources.helpDQC,
         backgroundColor: Colors.purple[800]
     );
@@ -99,7 +99,7 @@ class _AppIntroPageState extends State<AppIntroPage> {
     Slide slideQuizLetters = Slide(
         title: "Quiz Letters",
         description: "Quiz letters is a fun way to play quiz and test your knowledge on different subject with interesting facts."
-            "\n \n You will be provided with new quiz letter every day. Play them to increase your chance of winning Daily Quiz Challenge."
+            "\n \n You will be provided with new quiz letter every day. Play them to increase your chance of winning Surprize Challenge."
             ,
         pathImage: ImageResources.helpQuizLetter,
         backgroundColor: Colors.purple[800]

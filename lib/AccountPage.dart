@@ -69,7 +69,7 @@ class _AccountPageState extends State<AccountPage> {
               Icon(icon, color: Colors.blueGrey[300], size: 64),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(message, textAlign:TextAlign.center,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+                child: Text(message, textAlign:TextAlign.center,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
               ),
               FlatButton(
                   child: Text("Send",
@@ -162,7 +162,7 @@ class _AccountPageState extends State<AccountPage> {
                               Text("Change email",
                                   style: TextStyle(
                                       fontFamily: 'Raleway',
-                                      fontWeight: FontWeight.w300,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 18,
                                       color: Colors.black)),
                               Text(

@@ -277,13 +277,11 @@ class DailyQuizChallengeScoreSummaryPageState
   @override
   void initState() {
     super.initState();
-    GoogleAdManager().showQuizGameInterstitialAd(0.0, AnchorType.top);
-    _userProfile = UserProfile();
-    print("Togal score" + widget._totalScore.toString());
-    print("Total right anser" + widget._totalRightAnswer.toString());
+       GoogleAdManager().showQuizGameInterstitialAd(0.0, AnchorType.top);
+      _userProfile = UserProfile();
       updateScoreForGamePlay();
       UserMemory().gamePlayed = true;
-     Future.delayed(Duration(seconds: 3), () => showForm());
+      Future.delayed(Duration(seconds: 3), () => showForm());
   }
 
   @override
@@ -304,12 +302,12 @@ class DailyQuizChallengeScoreSummaryPageState
       if (event == RewardedVideoAdEvent.rewarded) {
         rewarded = true;
         AppHelper.showSnackBar("Rewarded 10 points", _scaffoldKey);
- /*       LeaderboardManager().saveForAllTimeScore(UserMemory().getPlayer().membershipId, 10, (value){
+        LeaderboardManager().saveForAllTimeScore(UserMemory().getPlayer().membershipId, 10, (value){
 
         });
         LeaderboardManager().saveForWeeklyScore(UserMemory().getPlayer().membershipId,10, (value){
 
-        });*/
+        });
       }
       if(event == RewardedVideoAdEvent.loaded){
         await RewardedVideoAd.instance.show();
@@ -317,6 +315,7 @@ class DailyQuizChallengeScoreSummaryPageState
       }
 
       if(event == RewardedVideoAdEvent.failedToLoad){
+        AppHelper.showSnackBar("Failed to load ad. Try again!", _scaffoldKey);
         customProgressbarWidget.stopAndEndProgressBar(context);
       }
 
@@ -328,7 +327,7 @@ class DailyQuizChallengeScoreSummaryPageState
         customProgressbarWidget.stopAndEndProgressBar(context);
       }
     };
-   await RewardedVideoAd.instance.load(adUnitId: RewardedVideoAd.testAdUnitId, targetingInfo: targetingInfo);
+   await RewardedVideoAd.instance.load(adUnitId: GoogleAdManager.rewardedVideoAdId, targetingInfo: targetingInfo);
   }
 
 

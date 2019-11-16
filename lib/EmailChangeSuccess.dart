@@ -31,7 +31,7 @@ class _EmailChangeSuccessState extends State<EmailChangeSuccess> {
             padding: const EdgeInsets.only(top:16.0,left:16.0),
             child: Row(
               children: <Widget>[
-                Text("Email changed to: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+                Text("Email changed to: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
                 Text(widget.email,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w600,fontSize: 14)),
               ],
             ),
@@ -40,10 +40,10 @@ class _EmailChangeSuccessState extends State<EmailChangeSuccess> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: <Widget>[
-                Text("A verification link has been sent to your email address. Click on it to verify your account!",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+                Text("A verification link has been sent to your email address. Click on it to verify your account!",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
                 Padding(
                   padding: const EdgeInsets.only(top:8.0),
-                  child: Text("Note: if you are unable to find the email sent by us, please make sure to check your spam folder",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+                  child: Text("Note: if you are unable to find the email sent by us, please make sure to check your spam folder",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
                 ),
               ],
             ),

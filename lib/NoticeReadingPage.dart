@@ -39,7 +39,7 @@ class NoticeReadingPageState extends State<NoticeReadingPage>{
         newsTitle(),
         Visibility(visible: widget.notice.photoUrl != null, child: Center(child: newsImage())),
         newsBody(),
-        Container(height: 48)
+        Container(height: 120)
       ],),
     );
   }

@@ -333,14 +333,11 @@ class AppHelper{
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left:8.0),
-            child: Text("Finds us on:",style:TextStyle(
-                fontFamily: 'Raleway',
-                color: Colors.purple[800],
-                fontSize: 18,
-                fontWeight: FontWeight.w700)),
-          ),
+          Text("Finds us on",style:TextStyle(
+              fontFamily: 'Raleway',
+              color: Colors.purple[900],
+              fontSize: 18,
+              fontWeight: FontWeight.w500)),
           imageIconButton(context)
         ]
     );
@@ -429,7 +426,7 @@ class AppHelper{
                     child: Text(name,
                         style: TextStyle(
                             fontFamily: 'Raleway',
-                            fontWeight: FontWeight.w300,
+                            fontWeight: FontWeight.w400,
                             fontSize: 18,
                             color: Colors.black)),
                     onPressed: onPressed),

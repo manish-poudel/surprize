@@ -146,7 +146,7 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
                 padding: const EdgeInsets.only(top:16.0,left:16.0),
                 child: Row(
                   children: <Widget>[
-                    Text("Change password for: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+                    Text("Change password for: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
                     Text(UserMemory().getPlayer().email,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w600,fontSize: 14)),
                   ],
                 ),
@@ -224,7 +224,7 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
             Icon(icon, color: Colors.blueGrey[300], size: 64),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(message, textAlign:TextAlign.center,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+              child: Text(message, textAlign:TextAlign.center,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
             ),
             FlatButton(
                 child: Text("Send",
@@ -249,7 +249,7 @@ class _ChangeCredentialPageState extends State<ChangeCredentialPage> {
               padding: const EdgeInsets.only(top:16.0,left:16.0),
               child: Row(
                 children: <Widget>[
-                  Text("Your current email address: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w300,fontSize: 14)),
+                  Text("Your current email address: ",style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w400,fontSize: 14)),
                   Text(UserMemory().getPlayer().email,style: TextStyle(color: Colors.blueGrey,fontFamily: 'Raleway',fontWeight: FontWeight.w600,fontSize: 14)),
                 ],
               ),

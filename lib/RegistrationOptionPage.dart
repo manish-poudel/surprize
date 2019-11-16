@@ -67,7 +67,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                   child: Center(
                     child: FlatButton(color:Colors.green,onPressed:()=> AppHelper.cupertinoRoute(context, RegistrationPage()),
                         child: Text("Sign up",
-                            style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300))),
+                            style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w400))),
                   )),
 
                 Center(
@@ -84,7 +84,7 @@ class _RegistrationOptionPageState extends State<RegistrationOptionPage> {
                       children: <Widget>[
                         FlatButton(color:const Color(0xFFD44638),onPressed:()=> signInWithGoogle(),
                             child: Text("Gmail",
-                                style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w300)))
+                                style: TextStyle(color:Colors.white,fontSize: 18,fontFamily: 'Raleway', fontWeight:FontWeight.w400)))
                       ],
                     ),
                   ),

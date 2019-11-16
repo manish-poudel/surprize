@@ -140,7 +140,7 @@ class LoginPageState extends State<LoginPage> {
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontFamily: 'Raleway',
-                                    fontWeight: FontWeight.w300))),
+                                    fontWeight: FontWeight.w400))),
                       ),
                     )
                   ],

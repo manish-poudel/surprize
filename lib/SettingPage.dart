@@ -114,7 +114,7 @@ class _SettingPageState extends State<SettingPage> {
                   Text(name,
                       style: TextStyle(
                           fontFamily: 'Raleway',
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w400,
                           fontSize: 18,
                           color: Colors.black)),
                   Visibility(

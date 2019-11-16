@@ -44,7 +44,7 @@ class _PoliciesPageState extends State<PoliciesPage> {
                   padding: const EdgeInsets.only(left:16.0),
                   child: Icon(icon, color: Colors.purple,),
                 ),
-                FlatButton(child: Text(name,style: TextStyle(fontFamily: 'Raleway', fontWeight:FontWeight.w300,fontSize:18,color: Colors.black)),onPressed: onPressed),
+                FlatButton(child: Text(name,style: TextStyle(fontFamily: 'Raleway', fontWeight:FontWeight.w400,fontSize:18,color: Colors.black)),onPressed: onPressed),
               ],
             )),
       ),

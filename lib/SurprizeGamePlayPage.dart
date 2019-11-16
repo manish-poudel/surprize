@@ -328,7 +328,6 @@ class SurprizeGamePlayPageState
           _quizState = QuizState.fromMap(snapshot.data);
           if (_quizState.quizState ==
               CurrentQuizState.QUIZ_IS_ON_AND_QUESTION_IS_BEING_DISPLAYED) {
-
             setState(() {
               _readyToShowQuestion = true;
             });
@@ -371,6 +370,7 @@ class SurprizeGamePlayPageState
     _fadeInAnimation.forward();
   }
 
+  BuildContext _pageContext;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

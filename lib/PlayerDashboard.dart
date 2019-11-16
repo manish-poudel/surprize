@@ -57,7 +57,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   AdmobBanner _admobBanner;
-  bool _showAd = false;
   bool _adLoaded = false;
   bool _retrieveDQCLoaded = false;
   bool isEmailVerified;
@@ -72,13 +71,12 @@ class PlayerDashboardState extends State<PlayerDashboard>
     super.initState();
     Admob.initialize(GoogleAdManager.appId);
     _admobBanner = AdmobBanner(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: GoogleAdManager.dashboardBannerId,
       adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args) {
         handleBannerAdEvent(event, args);
       },
     );
-    displayAd();
     _animationControllerSurprize =
         new AnimationController(vsync: this, duration: Duration(seconds: 1));
     _animationControllerSurprize.repeat();
@@ -150,7 +148,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
         break;
       case AdmobAdEvent.failedToLoad:
         setState(() {
-          _showAd = false;
           _adLoaded = false;
         });
         break;
@@ -158,15 +155,6 @@ class PlayerDashboardState extends State<PlayerDashboard>
     }
   }
 
-  /// Check to display ad
-  displayAd() {
-    int rand = AppHelper.getRandomNumberInBetweenValues(1, 10);
-    if ([1, 2, 4, 6, 9, 10].contains(rand)) {
-      setState(() {
-        _showAd = true;
-      });
-    }
-  }
 
   /// Check for network connection
   checkNetworkConnection() {
@@ -332,7 +320,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   Widget advertisement() {
     return Visibility(
-      visible: _showAd,
+      visible: _adLoaded,
       child: Padding(
         padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
         child: Container(

@@ -28,14 +28,6 @@ class _QuestionRetrievePageState extends State<QuestionRetrievePage> {
       getQuestion(3, FirestoreResources.collectionMediumQuestion, (_){
         getQuestion(3, FirestoreResources.collectionHardQuestion, (_){
           print("Quesiton lenth" + _questions.length.toString());
-          if(_questions.length < 10){
-
-            int howMuch = (10 - _questions.length);
-            for(int i = 0; i < (10 - howMuch); i++ ){
-              print("how much lenght" + howMuch.toString());
-              _questions.add(_questions[0]);
-            }
-          }
           AppHelper.cupertinoRouteWithPushReplacement(context, DQCGamePlayPage(_questions));
         });
       });
