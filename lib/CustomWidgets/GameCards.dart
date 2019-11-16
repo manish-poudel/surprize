@@ -1,5 +1,4 @@
 
-import 'package:Surprize/DQCGamePlayPage.dart';
 import 'package:Surprize/DQCQuestionRetrievePage.dart';
 import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Resources/ImageResources.dart';

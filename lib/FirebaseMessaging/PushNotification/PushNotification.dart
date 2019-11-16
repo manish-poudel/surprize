@@ -1,21 +1,14 @@
 
 import 'dart:async';
 
-import 'package:Surprize/SurprizeGamePlayPage.dart';
-import 'package:Surprize/DailyQuizChallengeNotAvailablePage.dart';
-import 'package:Surprize/SurprizeChallengePage.dart';
 import 'package:Surprize/FeedbackPage.dart';
 import 'package:Surprize/FirebaseMessaging/PushNotification/LocalNotification.dart';
-import 'package:Surprize/Helper/AppHelper.dart';
-import 'package:Surprize/Models/Notice.dart';
 import 'package:Surprize/NoticePage.dart';
 import 'package:Surprize/QuizLettersPage.dart';
 import 'package:Surprize/SettingPage.dart';
-import 'package:Surprize/SplashScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/rich_text_parser.dart';
 
 class PushNotification {
 

@@ -58,6 +58,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   AdmobBanner _admobBanner;
   bool _adLoaded = false;
+  bool _showAd = true;
   bool _retrieveDQCLoaded = false;
   bool isEmailVerified;
   bool showEmailVerificationPopUp = false;
@@ -148,6 +149,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
         break;
       case AdmobAdEvent.failedToLoad:
         setState(() {
+          _showAd = false;
           _adLoaded = false;
         });
         break;
@@ -320,7 +322,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
 
   Widget advertisement() {
     return Visibility(
-      visible: _adLoaded,
+      visible: _showAd,
       child: Padding(
         padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
         child: Container(

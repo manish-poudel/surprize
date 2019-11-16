@@ -180,7 +180,7 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
         .collection(FirestoreResources.docChallengePlayerList).document(dLeaderboard.playerId).setData(dLeaderboard.toMap());
     if(_totalScore != 0){
       if(!_isScoreSaved){
-        // updateScoreLeaderboard();
+         updateScoreLeaderboard();
         _isScoreSaved = true;
       }
     }
@@ -321,9 +321,7 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     quizHeadingTitle(),
-                    GestureDetector(onTap:(){
-                      showWonDialogBox(context);
-                    },child: _customCountDownTimerWidget),
+                    _customCountDownTimerWidget,
                     quizQuestionAnswerBox()
                   ],
                 ),
