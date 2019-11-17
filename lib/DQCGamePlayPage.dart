@@ -14,6 +14,7 @@ import 'package:Surprize/Models/DailyQuizChallenge/DLeaderboard.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DailyQuizChallengeQnA.dart';
 import 'package:Surprize/Models/QuizLetter/QuizLetter.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
+import 'package:Surprize/SendFeedbackPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,6 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
   @override
   void dispose(){
     saveScore(_isGameWon);
-    GoogleAdManager().disposeDQCInterstitialAd();
     super.dispose();
   }
 
@@ -180,7 +180,7 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
         .collection(FirestoreResources.docChallengePlayerList).document(dLeaderboard.playerId).setData(dLeaderboard.toMap());
     if(_totalScore != 0){
       if(!_isScoreSaved){
-         updateScoreLeaderboard();
+        updateScoreLeaderboard();
         _isScoreSaved = true;
       }
     }
@@ -282,7 +282,6 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
   void keepTimeTrack(int seconds, int questionNumber) {
     Future.delayed(Duration(seconds: seconds), () {
       if ((_currentGameIndex + 1) > _dailyQuizChallengeQnAList.length) {
-        print("Game over");
         _customCountDownTimerWidget.stopCountdown();
         _buttonClickable = false;
         return;
@@ -363,7 +362,6 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
   }
 
   showWonDialogBox(context) {
-    GoogleAdManager().showDQCExitInterstitialAd(0.0, AnchorType.bottom);
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -460,8 +458,9 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
                                     style: TextStyle(
                                         color: Colors.red, fontSize: 18)),
                                 onPressed: () {
+
                                   Navigator.of(context).pop();
-                                  Navigator.of(this.context).pop();
+                                  showSendFeedbackDialogBox();
                                 }),
                             Padding(
                               padding: const EdgeInsets.only(right: 8.0),
@@ -497,6 +496,64 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
           ),
         ));
   }
+
+
+  /// Show send feedback dialog box
+  showSendFeedbackDialogBox(){
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) => Dialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0)),
+          child: Container(
+            padding: EdgeInsets.all(8),
+            height: MediaQuery.of(context).size.height * 0.32,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(Icons.feedback, color: Colors.purple,),
+                    Padding(
+                      padding: const EdgeInsets.only(left:8.0),
+                      child: Text("Send feedback",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(fontFamily: 'Raleway',color:Colors.purple,fontSize: 18, fontWeight: FontWeight.w500)),
+                    )
+                  ],
+                ),
+                Text("Can you help us improve our app by providing your valuable feedback before you exit?",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontFamily: 'Raleway',fontSize: 16),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    FlatButton(
+                        child: Text("Not now",
+                            style: TextStyle(
+                                fontFamily: 'Raleway',
+                                color: Colors.purple, fontSize: 18)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(this.context).pop();
+                        }),
+                    FlatButton(
+                        child: Text("Sure",
+                            style: TextStyle(
+                                color: Colors.purple, fontFamily:'Raleway',fontSize: 18)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                              AppHelper.cupertinoRouteWithPushReplacement(this.context, SendFeedbackPage(""));
+                        }),
+                  ],
+                )
+              ],
+            )
+          ),
+        ));
+  }
+
 
   /// Quiz Heading
   Widget quizHeadingTitle() {
@@ -643,8 +700,6 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
 
   /// On hitting will pop scope
   Future<bool> _onWillPopScope() async {
-    Navigator.of(context).pop();
-    return true;
   }
 
   /// Show resume dialog box
@@ -730,6 +785,7 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
     RewardedVideoAd.instance.listener = (RewardedVideoAdEvent event,
         {String rewardType, int rewardAmount}) async {
       if (event == RewardedVideoAdEvent.rewarded) {
+        _totalScore = _totalScore + ScoreSystem.getScoreFromQuizCorrectAnswer();
         _chancedUsed = true;
         Navigator.of(_dialogBoxContext).pop();
       }
@@ -759,11 +815,11 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
   BuildContext _dialogBoxContext;
   Widget showGameOverDialog(context) {
 
-    GoogleAdManager().showDQCExitInterstitialAd(0.0, AnchorType.bottom);
     this._dialogBoxContext = context;
     return WillPopScope(
       onWillPop: _onWillPopScope,
       child: Dialog(
+
           shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: SingleChildScrollView(
@@ -807,9 +863,8 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
                                 style: TextStyle(color: Colors.red,fontFamily: 'Raleway', fontWeight:FontWeight.w600,fontSize: 18)),
                             onPressed: () {
                               saveScore(_isGameWon);
-                              GoogleAdManager().disposeDQCInterstitialAd();
                               Navigator.of(context).pop();
-                              Navigator.of(this.context).pop();
+                             showSendFeedbackDialogBox();
                             }),
                         Visibility(
                           visible: !_chancedUsed,

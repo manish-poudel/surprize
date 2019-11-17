@@ -10,13 +10,13 @@ import 'package:Surprize/Models/Player.dart';
 import 'package:Surprize/Models/SurprizeLeaderboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:Surprize/Leaderboard/LeaderboardManager.dart';
 import 'package:Surprize/Models/Leaderboard.dart';
 import 'package:Surprize/Resources/FirestoreResources.dart';
 
 import 'package:Surprize/Models/DailyQuizChallenge/enums/PlayState.dart';
-import 'package:intl/intl.dart';
 
 import 'Resources/ImageResources.dart';
 
@@ -32,7 +32,7 @@ class LeaderboardPage extends StatefulWidget {
 }
 
 class LeaderboardPageState extends State<LeaderboardPage> {
-  bool _dailyQuizWinnerDataLoaded = false;
+
   bool _weeklyScorerLeaderboardLoaded = false;
   bool _allTimeScorerLeaderboardLoaded = false;
 
@@ -56,8 +56,6 @@ class LeaderboardPageState extends State<LeaderboardPage> {
 
   List<Widget> _leaderboardOptions;
 
-  Leaderboard _playerWeeklyScore;
-  Leaderboard _playerAllTimeScore;
 
   @override
   Widget build(BuildContext context) {
@@ -378,22 +376,27 @@ class LeaderboardPageState extends State<LeaderboardPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      won == true? ClipOval(
+                      Container(
+                        child: won == true? ClipOval(
                   child: Image.asset(
                     ImageResources.achievementTrophy,
                     height:16,
                     width: 16,
                   )):Container(height: 0,width: 0),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left:4.0),
-                        child: Text(
-                           name,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                color: Colors.purple,
-                                fontFamily: 'Raleway',
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500)),
+                        child: Container(
+                          width: _screenWidth * 0.40,
+                          child: Text(
+                             name,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.purple,
+                                  fontFamily: 'Raleway',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500)),
+                        ),
                       ),
                     ],
                   ),
@@ -402,12 +405,15 @@ class LeaderboardPageState extends State<LeaderboardPage> {
             ),
             flex: 3,
           ),
-          Text(score != "-1"?score:"  ",
-              style: TextStyle(
-                  color: Colors.purple,
-                  fontFamily: 'Raleway',
-                  fontSize: 21,
-                  fontWeight: FontWeight.w500))
+          Padding(
+            padding: EdgeInsets.only(left: score.length == 1?8:0),
+            child: Text(score != "-1"?score:"  ",
+                style: TextStyle(
+                    color: Colors.purple,
+                    fontFamily: 'Raleway',
+                    fontSize: 21,
+                    fontWeight: FontWeight.w500)),
+          )
         ],
       ),
     );

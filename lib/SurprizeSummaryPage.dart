@@ -345,17 +345,14 @@ class DailyQuizChallengeScoreSummaryPageState
     LeaderboardManager().saveScoreAfterGamePlay(widget._totalRightAnswer, widget._totalScore, widget.quizState.quizId, widget.quizState.quizName,
         /// if all time score is saved
             (value){
-          print("ALL TIME SCORE SAVED: " + value.toString());
         },
 
         /// if weekly score is saved
             (value){
-          print("WEEKLY SCORE SAVED: " + value.toString());
         },
 
         /// if daily quiz winner is saved
             (value){
-          print("DAILY QUIZ WINNER SCORE SAVED: " + value.toString());
         });
   }
 
