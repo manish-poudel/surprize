@@ -66,7 +66,7 @@ class DailyQuizChallengeNotAvailablePageState extends State<DailyQuizChallengeNo
             Padding(
               padding: const EdgeInsets.only(top:8.0),
               child: Center(
-                child: Image.asset(ImageResources.dailyQuizChallengeLogo, height: MediaQuery.of(context).size.height * 0.35, width: MediaQuery.of(context).size.width,),
+                child: Image.asset(ImageResources.appSurprizeTextLogo, height: MediaQuery.of(context).size.height * 0.35, width: MediaQuery.of(context).size.width,),
               ),
             ),
             Padding(
