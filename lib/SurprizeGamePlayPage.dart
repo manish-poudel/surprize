@@ -113,7 +113,6 @@ class SurprizeGamePlayPageState
     _scaffoldKey = GlobalKey<ScaffoldState>();
       Future.delayed(Duration(seconds: 5), (){
       GoogleAdManager().disposeNoticeBannerAd();
-      GoogleAdManager().disposeQuizLetterBannerAd();
     });
   }
 

@@ -1,13 +1,9 @@
-import 'package:Surprize/CustomWidgets/CustomProgressbarWidget.dart';
 import 'package:Surprize/CustomWidgets/DailyQuizChallenge/CustomQuizSummaryDisplayWidget.dart';
-import 'package:Surprize/GoogleAds/GoogleAdManager.dart';
-import 'package:Surprize/Helper/AppHelper.dart';
 import 'package:Surprize/Leaderboard/ScoreSystem.dart';
 import 'package:Surprize/Memory/UserMemory.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/DQCPlay.dart';
 import 'package:Surprize/Models/DailyQuizChallenge/enums/QuizState.dart';
 import 'package:Surprize/SurveyFrom.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Surprize/AppShare/ShareApp.dart';
@@ -61,7 +57,6 @@ class DailyQuizChallengeScoreSummaryPageState
                   padding: const EdgeInsets.all(8.0),
                   child: scoreReport(),
                 ),
-                Center(child: watchVideoButton()),
                 _playedQuizList()
               ],
             ),
@@ -141,21 +136,6 @@ class DailyQuizChallengeScoreSummaryPageState
     );
   }
 
-  /// Play video ad button
-  Widget watchVideoButton(){
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.star,color: Colors.yellow,size: 24),
-            Text("View video to get extra 10 points", textAlign: TextAlign.center, style: TextStyle(color: Colors.white,fontFamily: 'Raleway',fontSize: 18,fontWeight: FontWeight.w700)),
-          ],
-        ),
-        FlatButton(color: Colors.green, child: Text("View", style: TextStyle(color: Colors.white,fontFamily: 'Raleway',fontWeight: FontWeight.w600),), onPressed: () => showVideoAd())
-      ],
-    );
-  }
   /// Event display widget
   Widget _playedQuizList() {
     List<DQCPlay> quizList = widget.dqcPlayList.values.toList();
@@ -277,7 +257,6 @@ class DailyQuizChallengeScoreSummaryPageState
   @override
   void initState() {
     super.initState();
-       GoogleAdManager().showQuizGameInterstitialAd(0.0, AnchorType.top);
       _userProfile = UserProfile();
       updateScoreForGamePlay();
       UserMemory().gamePlayed = true;
@@ -286,48 +265,7 @@ class DailyQuizChallengeScoreSummaryPageState
 
   @override
   void dispose(){
-    GoogleAdManager().disposeQuizGameInterstitialAd();
     super.dispose();
-  }
-
-  bool rewarded = false;
-  ///Show video ad
-  showVideoAd() async {
-    CustomProgressbarWidget customProgressbarWidget = CustomProgressbarWidget();
-    customProgressbarWidget.startProgressBar(
-        context, "Please wait while we load video ...", Colors.white, Colors.blueGrey);
-    MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(childDirected: false);
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) async {
-      if (event == RewardedVideoAdEvent.rewarded) {
-        rewarded = true;
-        AppHelper.showSnackBar("Rewarded 10 points", _scaffoldKey);
-        LeaderboardManager().saveForAllTimeScore(UserMemory().getPlayer().membershipId, 10, (value){
-
-        });
-        LeaderboardManager().saveForWeeklyScore(UserMemory().getPlayer().membershipId,10, (value){
-
-        });
-      }
-      if(event == RewardedVideoAdEvent.loaded){
-        await RewardedVideoAd.instance.show();
-        customProgressbarWidget.stopAndEndProgressBar(context);
-      }
-
-      if(event == RewardedVideoAdEvent.failedToLoad){
-        AppHelper.showSnackBar("Failed to load ad. Try again!", _scaffoldKey);
-        customProgressbarWidget.stopAndEndProgressBar(context);
-      }
-
-      if(event == RewardedVideoAdEvent.closed){
-        if(rewarded){
-          AppHelper.showSnackBar("Rewarded 10 points", _scaffoldKey);
-          rewarded = false;
-        }
-        customProgressbarWidget.stopAndEndProgressBar(context);
-      }
-    };
-   await RewardedVideoAd.instance.load(adUnitId: GoogleAdManager.rewardedVideoAdId, targetingInfo: targetingInfo);
   }
 
 

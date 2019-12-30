@@ -644,7 +644,6 @@ class LeaderboardPageState extends State<LeaderboardPage> {
     getWeeklyScorer();
     getDQCScorers();
     getSurprizePlayer();
-    GoogleAdManager().showLeaderboardInterstitialAd(0.0, AnchorType.bottom);
   }
 
   /// Get all time scorer

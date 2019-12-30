@@ -72,7 +72,7 @@ class PlayerDashboardState extends State<PlayerDashboard>
     super.initState();
     Admob.initialize(GoogleAdManager.appId);
     _admobBanner = AdmobBanner(
-      adUnitId: GoogleAdManager.dashboardBannerId,
+      adUnitId: GoogleAdManager.bannerAdId,
       adSize: AdmobBannerSize.BANNER,
       listener: (AdmobAdEvent event, Map<String, dynamic> args) {
         handleBannerAdEvent(event, args);

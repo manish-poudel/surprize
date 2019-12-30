@@ -7,25 +7,20 @@ import 'package:firebase_admob/firebase_admob.dart';
 /// Handles all operation related to different google advertisement display mechanism.
 class GoogleAdManager {
 
-  static String appId = "ca-app-pub-2130188164225142~4388816314";
+  static String appId = "ca-app-pub-6438481805852201~9665170019";
 
-  static String quizLetterInterstitialAdId = "ca-app-pub-2130188164225142/4408997619";
-  static String leaderboardInterstitialAdId = "ca-app-pub-2130188164225142/8895037531";
-  static String quizGameInterstitialAdId ="ca-app-pub-2130188164225142/7434873367";
-  static String dailyQuizExitInterstitialAd = "ca-app-pub-2130188164225142~4388816314";
+  static String interstitialAdId = "ca-app-pub-6438481805852201/9282026631";
 
-  static String dashboardBannerId = "ca-app-pub-2130188164225142/9852895986";
-  static String quizLetterBannerAdId = "ca-app-pub-2130188164225142/3287487633";
-  static String noticeBannerAdId = "ca-app-pub-2130188164225142/9745084773";
+  static String bannerAdId = "ca-app-pub-6438481805852201/2908189979";
 
-  static String rewardedVideoAdId = "ca-app-pub-2130188164225142/4381077450";
+  static String rewardedVideoAdId = "ca-app-pub-6438481805852201/8831628164";
 
   GoogleAdFormats _googleQuizLetterInterstitialAdId;
-  GoogleAdFormats _googleLeaderboardInterstitialAdId;
-  GoogleAdFormats _googleDQCExitInterstitialAdId;
-  GoogleAdFormats _quizGameInterstitialAd;
+ // GoogleAdFormats _googleLeaderboardInterstitialAdId;
+  //GoogleAdFormats _googleDQCExitInterstitialAdId;
+  //GoogleAdFormats _quizGameInterstitialAd;
 
-  GoogleAdFormats _googleBannerAdForQuizLetters;
+  //GoogleAdFormats _googleBannerAdForQuizLetters;
   GoogleAdFormats _googleBannerAdForNotice;
 
   CurrentPage currentPage;
@@ -53,14 +48,14 @@ class GoogleAdManager {
     }
   }
 
-
+  /// Show banner for notice
   showBannerForNotice(double offset, AnchorType anchorType){
     if(_googleBannerAdForNotice != null)
       return;
     try{
       init();
       _googleBannerAdForNotice = GoogleBannerAds(AdSize.smartBanner);
-      _googleBannerAdForNotice.initAd(noticeBannerAdId, null, (MobileAdEvent event){
+      _googleBannerAdForNotice.initAd(GoogleAdManager.bannerAdId, null, (MobileAdEvent event){
         if(event == MobileAdEvent.loaded) {
           noticeBannerLoaded = true;
         }
@@ -75,13 +70,25 @@ class GoogleAdManager {
     }
   }
 
+  /// Dispose banner ad id
+  disposeNoticeBannerAd(){
+    if(_googleBannerAdForNotice == null || noticeBannerLoaded == false){
+      return;
+    }
+    _googleBannerAdForNotice.dispose();
+    _googleBannerAdForNotice = null;
+    noticeBannerLoaded = false;
+  }
+
+
+/*
   showBannerForQuizLetter(double offset, AnchorType anchorType){
     if(_googleBannerAdForQuizLetters != null)
       return;
     try{
       init();
       _googleBannerAdForQuizLetters = GoogleBannerAds(AdSize.smartBanner);
-      _googleBannerAdForQuizLetters.initAd(quizLetterBannerAdId, null, (MobileAdEvent event){
+      _googleBannerAdForQuizLetters.initAd(GoogleAdManager.interstitialAdId, null, (MobileAdEvent event){
         if(event == MobileAdEvent.loaded) {
           quizLetterBannerLoaded = true;
         }
@@ -95,16 +102,10 @@ class GoogleAdManager {
 
     }
   }
+*/
 
-  disposeNoticeBannerAd(){
-    if(_googleBannerAdForNotice == null || noticeBannerLoaded == false){
-      return;
-    }
-    _googleBannerAdForNotice.dispose();
-    _googleBannerAdForNotice = null;
-      noticeBannerLoaded = false;
-  }
 
+/*
   disposeQuizLetterBannerAd(){
     if(_googleBannerAdForQuizLetters == null || quizLetterBannerLoaded == false){
       return;
@@ -114,32 +115,33 @@ class GoogleAdManager {
     quizLetterBannerLoaded = false;
 
   }
+*/
 
-  /// Leaderboard interstitial ad
+/*  /// Leaderboard interstitial ad
   showLeaderboardInterstitialAd(double offSet, AnchorType anchorType){
     try{
       init();
       _googleQuizLetterInterstitialAdId = GoogleInterstitialAds();
-      _googleQuizLetterInterstitialAdId.initAd(leaderboardInterstitialAdId,
+      _googleQuizLetterInterstitialAdId.initAd(InterstitialAd.testAdUnitId,
            null, (MobileAdEvent event) {});
       _googleQuizLetterInterstitialAdId.showAd(offSet, anchorType);
     }
     catch(error){
     }
-  }
+  }*/
 
-  /// Leaderboard interstitial ad
+/*  /// Leaderboard interstitial ad
   showDQCExitInterstitialAd(double offSet, AnchorType anchorType){
     try{
       init();
       _googleDQCExitInterstitialAdId = GoogleInterstitialAds();
-      _googleDQCExitInterstitialAdId.initAd(dailyQuizExitInterstitialAd,
+      _googleDQCExitInterstitialAdId.initAd(InterstitialAd.testAdUnitId,
           null, (MobileAdEvent event) {});
       _googleDQCExitInterstitialAdId.showAd(offSet, anchorType);
     }
     catch(error){
     }
-  }
+  }*/
 
   /// Show Interstitial ad
   void showQuizLetterInterstitialAd(double offSet, AnchorType anchorType){
@@ -147,25 +149,10 @@ class GoogleAdManager {
       init();
       _googleQuizLetterInterstitialAdId = GoogleInterstitialAds();
       _googleQuizLetterInterstitialAdId.initAd(
-          quizLetterInterstitialAdId, null, (MobileAdEvent event) {
+          GoogleAdManager.interstitialAdId, null, (MobileAdEvent event) {
 
       });
       _googleQuizLetterInterstitialAdId.showAd(offSet, anchorType);
-
-    }
-    catch(error){}
-  }
-
-  /// Show Interstitial ad
-  void showQuizGameInterstitialAd(double offSet, AnchorType anchorType){
-    try {
-      init();
-      _quizGameInterstitialAd = GoogleInterstitialAds();
-      _quizGameInterstitialAd.initAd(
-          quizGameInterstitialAdId, null, (MobileAdEvent event) {
-
-      });
-      _quizGameInterstitialAd.showAd(offSet, anchorType);
 
     }
     catch(error){}
@@ -177,6 +164,24 @@ class GoogleAdManager {
     _googleQuizLetterInterstitialAdId = null;
   }
 
+/*  /// Show Interstitial ad
+  void showQuizGameInterstitialAd(double offSet, AnchorType anchorType){
+    try {
+      init();
+      _quizGameInterstitialAd = GoogleInterstitialAds();
+      _quizGameInterstitialAd.initAd(
+          GoogleAdManager.interstitialAdId, null, (MobileAdEvent event) {
+
+      });
+      _quizGameInterstitialAd.showAd(offSet, anchorType);
+
+    }
+    catch(error){}
+  }*/
+
+
+
+/*
   /// Dispose interstitial ad
   void disposeDQCInterstitialAd(){
     if(_googleDQCExitInterstitialAdId == null)
@@ -184,17 +189,20 @@ class GoogleAdManager {
     _googleDQCExitInterstitialAdId.dispose();
     _googleDQCExitInterstitialAdId = null;
   }
+*/
 
+/*
   /// Dispose interstitial ad
   void disposeLeaderboardInterstitialAd(){
     _googleLeaderboardInterstitialAdId.dispose();
     _googleLeaderboardInterstitialAdId = null;
   }
-
+*/
+/*
   /// Dispose interstitial ad
   void disposeQuizGameInterstitialAd(){
     _quizGameInterstitialAd.dispose();
     _quizGameInterstitialAd = null;
-  }
+  }*/
 
 }

@@ -180,7 +180,7 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
         .collection(FirestoreResources.docChallengePlayerList).document(dLeaderboard.playerId).setData(dLeaderboard.toMap());
     if(_totalScore != 0){
       if(!_isScoreSaved){
-        updateScoreLeaderboard();
+      updateScoreLeaderboard();
         _isScoreSaved = true;
       }
     }
@@ -802,7 +802,7 @@ class _DQCGamePlayPageState extends State<DQCGamePlayPage>
       if (event == RewardedVideoAdEvent.closed) {
         if (_chancedUsed == true) {
           showResumeDialogBox(
-              "Congratulation! You've earn one more chance!",
+              "Congratulation! You've earned one more chance!",
               "Resume");
         }
       }
